@@ -24,14 +24,6 @@
 | 012 | [MoneyPrinterTurbo](https://github.com/harry0703/MoneyPrinterTurbo) | **能力：** 输入主题、脚本或自有素材，自动完成文案、画面、配音、字幕、配乐和短视频合成。**原理：** 大模型生成脚本与素材线索；画面可用现成视频、静态图片加动画，或外部模型生成的短视频片段，再由程序剪辑合成。**场景：** 知识科普、品牌内容初稿、系列短视频。**对我的意义：** 复用成片流水线验证自有产品；精确的物理图解需另加规则与图形动画层。 | [完整研究](projects/012-moneyprinterturbo/README.md) · [在线网页与真实案例](https://yydshly.github.io/0925_codex_project/projects/012-moneyprinterturbo/) · [完整引导图](docs/projects/012-moneyprinterturbo/assets/capability-map.png) |
 | 013 | [Toolify](https://www.toolify.ai/) | **目录能力：** Toolify 通过类别、榜单和产品页帮助发现 AI 工具；实际生成、识别和执行能力由所收录产品提供。**产品方向：** 本次快照的 22 个大类、459 个细分类可按对话与知识、多媒体创作、开发与流程、增长与商业、研究与识别、生活与专业场景六条方向理解，并有 57 款精选案例。**对我的意义：** 为现有语音、数字人、视频、知识与智能体项目定位候选能力和缺口，用同题测试决定如何接入。 | [研究笔记](projects/013-toolify-ai-atlas/README.md) · [整体引导图](https://yydshly.github.io/0925_codex_project/projects/013-toolify-ai-atlas/overview.html) · [能力网页](https://yydshly.github.io/0925_codex_project/projects/013-toolify-ai-atlas/) |
 
-## 013 · Toolify AI 产品能力整体引导图
-
-Toolify 是发现 AI 产品的目录。下图汇总本次快照中的六条产品方向、22 个大类与 459 个细分类，并说明如何用这份目录寻找候选产品、补齐现有项目的能力，以及按具体任务验证选择。
-
-![Toolify AI 产品能力整体引导图：目录能力、六条产品方向、22 个大类、产品示例与对我的意义](docs/projects/013-toolify-ai-atlas/overview.svg)
-
-[放大查看引导图](https://yydshly.github.io/0925_codex_project/projects/013-toolify-ai-atlas/overview.svg) · [阅读图文导读](https://yydshly.github.io/0925_codex_project/projects/013-toolify-ai-atlas/overview.html) · [查看细分类与产品](https://yydshly.github.io/0925_codex_project/projects/013-toolify-ai-atlas/)
-
 ## 001 · Retrieval-based-Voice-Conversion-WebUI 图文导读
 
 源库：[Retrieval-based-Voice-Conversion-WebUI](https://github.com/RVC-Project/Retrieval-based-Voice-Conversion-WebUI)。下面依次说明能力、实现原理、环境与使用意义，三张图分别配合对应文字阅读。
@@ -198,6 +190,14 @@ MoneyPrinterTurbo 是从创作意图到短视频成片的自动化流水线，�
 图：MoneyPrinterTurbo 的能力与技术原理概览。图中的视频画面为结构示意；[网页中的手冲咖啡视频](https://yydshly.github.io/0925_codex_project/projects/012-moneyprinterturbo/#demo)是上游公开的真实生成案例，本站未运行上游程序复现。
 
 [查看在线网页](https://yydshly.github.io/0925_codex_project/projects/012-moneyprinterturbo/) · [打开引导图原图](docs/projects/012-moneyprinterturbo/assets/capability-map.svg) · [阅读完整研究](projects/012-moneyprinterturbo/README.md)
+
+## 013 · Toolify AI 产品能力整体引导图
+
+Toolify 是发现 AI 产品的目录。下图汇总本次快照中的六条产品方向、22 个大类与 459 个细分类，并说明如何用这份目录寻找候选产品、补齐现有项目的能力，以及按具体任务验证选择。
+
+![Toolify AI 产品能力整体引导图：目录能力、六条产品方向、22 个大类、产品示例与对我的意义](docs/projects/013-toolify-ai-atlas/overview.svg)
+
+[放大查看引导图](https://yydshly.github.io/0925_codex_project/projects/013-toolify-ai-atlas/overview.svg) · [阅读图文导读](https://yydshly.github.io/0925_codex_project/projects/013-toolify-ai-atlas/overview.html) · [查看细分类与产品](https://yydshly.github.io/0925_codex_project/projects/013-toolify-ai-atlas/)
 
 ## 添加项目
 
