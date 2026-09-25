@@ -12,6 +12,7 @@
 | :--: | --- | --- | --- |
 | 001 | [Retrieval-based-Voice-Conversion-WebUI](https://github.com/RVC-Project/Retrieval-based-Voice-Conversion-WebUI) | **能力：** 已有语音 / 歌声换声、实时变声与声线训练。**原理：** 提取发音与音高，由目标模型重建波形，并可用检索辅助。**对我的意义：** 可复用为换声模块；先理解方案，实际效果按需验证。 | [完整研究](projects/001-rvc-voice-conversion/README.md) · [查看网页](https://yydshly.github.io/0925_codex_project/projects/001-rvc-voice-conversion/) |
 | 002 | [social-auto-upload](https://github.com/dreammis/social-auto-upload) | **能力：** 11 个平台列有视频上传能力，抖音、小红书、快手还支持图文。**原理：** 用户先登录并保存状态；9 个平台由 Patchright / Playwright 根据网页元素操作创作者后台，B站委托 biliup，TikTok 为旧示例。**对我的意义：** 内容做好后可减少个人 IP 多平台重复上传与排期。 | [完整研究](projects/002-social-auto-upload/README.md) · [在线网页](https://yydshly.github.io/0925_codex_project/projects/002-social-auto-upload/) · [一图总览](https://yydshly.github.io/0925_codex_project/projects/002-social-auto-upload/overview.svg) |
+| 003 | [Voicebox](https://github.com/jamiepine/voicebox) | **能力：**本地 Whisper 听写、7 类 TTS 引擎的克隆或预置音色配音、本地 Qwen3 文本整理，并通过 REST/MCP 接入应用。**原理：**首次下载模型后，由本地 FastAPI 调度 MLX/PyTorch 推理；参考录音只为克隆提供音色条件。**对我的意义：**可放在个人 IP 的口述与配音环节，衔接换声与发布工具。 | [完整研究](projects/003-voicebox/README.md) · [在线网页](https://yydshly.github.io/0925_codex_project/projects/003-voicebox/) · [完整引导图](https://yydshly.github.io/0925_codex_project/projects/003-voicebox/overview.svg) |
 
 ## 001 · Retrieval-based-Voice-Conversion-WebUI 图文导读
 
@@ -75,6 +76,11 @@ HuBERT 等特征模型从输入录音中提取与发音相关的线索；使用�
 
 [查看在线能力地图](https://yydshly.github.io/0925_codex_project/projects/002-social-auto-upload/) · [打开完整引导图](https://yydshly.github.io/0925_codex_project/projects/002-social-auto-upload/overview.svg) · [阅读研究笔记](projects/002-social-auto-upload/README.md)
 
+## 003 · Voicebox 能力导读
+
+源库：[jamiepine/voicebox](https://github.com/jamiepine/voicebox)。Voicebox 把“语音 → 文字”和“文字 → 指定音色语音”放在同一套本地工作台中，还提供 REST/MCP 接口。它与 001 RVC 的“已有语音换声”不同，适合研究中文口述输入、自己的声音配音及 AI 助手发声；与 002 的多平台发布工具可组合成内容工作流。具体语言和克隆能力取决于所选引擎，实际音质与速度仍需在本机验证。
+
+[查看在线能力地图](https://yydshly.github.io/0925_codex_project/projects/003-voicebox/) · [打开完整引导图](https://yydshly.github.io/0925_codex_project/projects/003-voicebox/overview.svg) · [阅读完整研究笔记](projects/003-voicebox/README.md)
 ## 添加项目
 
 从 [子项目模板](projects/_template/README.md) 开始，按 [收录说明](ADDING_PROJECTS.md) 更新索引。静态网页演示统一放在 docs/projects/ 下，便于通过一个 GitHub Pages 站点按子路径访问。
