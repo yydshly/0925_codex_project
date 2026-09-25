@@ -18,6 +18,7 @@
 | 006 | [Fay](https://github.com/xszyou/Fay) | **能力：** 接收语音与文字，管理会话、长期记忆和主动播报，按需查询知识或调用 MCP 业务工具，输出文字、语音与终端信号。**本质：** 面向数字人等终端的 Agent 交互编排框架；人物画面由终端渲染，RAG 是可选知识分支。**场景：** 导览、教学、客服、虚拟主播和语音硬件。**对我的意义：** 可串联 005 实时转写与 004 数字人画面；先跑通最小闭环，再验证延迟和接口。 | [完整研究](projects/006-fay/README.md) · [在线网页](https://yydshly.github.io/0925_codex_project/projects/006-fay/) · [摘要架构图](https://yydshly.github.io/0925_codex_project/projects/006-fay/assets/fay-internal-architecture.svg) |
 | 007 | [Calibre-Web](https://github.com/janeczku/calibre-web) | **定位与能力：** 自托管图书管理库，接入已有 Calibre 藏书，提供编目、查找、阅读、下载、OPDS 与 Kobo 供书；软件本身不附带书籍。**场景：** 个人藏书、家庭共读、阅读器供书和内容创作资料管理。**对我的意义：** 给现有内容创作项目补上长期资料入口；正文检索与 AI 问答仍需另建。 | [在线网页](https://yydshly.github.io/0925_codex_project/projects/007-calibre-web/) · [我们生成的引导图](https://yydshly.github.io/0925_codex_project/projects/007-calibre-web/assets/overview.svg) · [完整研究](projects/007-calibre-web/README.md) |
 | 008 | [video-use](https://github.com/browser-use/video-use) | **能力：** 逐词转写辅助选段，按 EDL 粗剪、调色、叠加动画、加字幕并渲染。**原理：** Scribe 识别音频与时间戳，代码代理理解文本并生成 EDL，FFmpeg 同步剪辑音画。**隐患：** 时间对齐不保证画面连续，切点可能跳变；原版转写依赖云 API。**场景：** 口播、访谈、教程、产品讲解。**对我的意义：** 有望衔接 Voicebox / LiveTalking 素材与 social-auto-upload 发布；中文和 Windows 效果待实测。 | [完整研究](projects/008-video-use/README.md) · [能力网页（部署后）](https://yydshly.github.io/0925_codex_project/projects/008-video-use/) |
+| 009 | [system-design-primer](https://github.com/donnemartin/system-design-primer) | **定位与能力：** 高性能与大规模系统设计资料库，涵盖性能、扩展、可用性、一致性、缓存、数据库等主题，以及设计方法、案例练习和 Anki 卡片。**对我的意义：** 为现有项目的并发、延迟与扩容讨论提供知识索引和提问清单；它不是可直接部署的框架。 | [摘要笔记](projects/009-system-design-primer/README.md) · [查看引导图](docs/projects/009-system-design-primer/assets/overview.png) · [网页导读](https://yydshly.github.io/0925_codex_project/#guide-system-design-primer) |
 
 ## 001 · Retrieval-based-Voice-Conversion-WebUI 图文导读
 
@@ -141,6 +142,18 @@ HuBERT 等特征模型从输入录音中提取与发音相关的线索；使用�
 图：我们制作的 video-use 总览图。点击图片可查看原始 SVG。
 
 [查看在线能力网页](https://yydshly.github.io/0925_codex_project/projects/008-video-use/) · [打开我们生成的一图总览](docs/projects/008-video-use/assets/overview.svg) · [阅读完整研究笔记](projects/008-video-use/README.md) · [查看能力清单](projects/008-video-use/docs/capabilities.md) · [查看技术原理](projects/008-video-use/docs/architecture.md)
+
+## 009 · System Design Primer 系统设计资料库导读
+
+源库：[donnemartin/system-design-primer](https://github.com/donnemartin/system-design-primer)。它可理解为一套高性能与大规模系统设计的资料库和练习题库，汇集性能、扩展、可用性、一致性、缓存、数据库、消息队列等知识，也提供“明确需求 → 估算规模 → 设计架构 → 找出瓶颈 → 权衡迭代”的方法和典型案例。
+
+**对我的意义：** 在准备面试或评审现有语音、数字人、内容发布项目的架构时，用它建立检查清单和共同语言，帮助判断什么时候需要缓存、队列或扩容。案例是设计思路，具体系统仍要用真实流量和成本验证。
+
+![System Design Primer 引导图：知识体系、设计方法、案例练习、使用价值与扩展方向](docs/projects/009-system-design-primer/assets/overview.png)
+
+图：我们制作的能力摘要图；扩展方向是后续建议，不是上游现成功能。
+
+[阅读摘要笔记](projects/009-system-design-primer/README.md) · [打开引导图](docs/projects/009-system-design-primer/assets/overview.png)
 
 ## 添加项目
 
