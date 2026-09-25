@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#101c35">
+  <meta name="description" content="Calibre-Web 是面向已有 Calibre 藏书的网页图书管理库。用一张图了解书库管理、阅读与分发、使用场景、运行资源及个人价值。">
+  <title>Calibre-Web · 图书管理库能力地图</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='13' fill='%23101c35'/%3E%3Cpath d='M17 16h30v7H17zm0 12h30v7H17zm0 12h30v7H17z' fill='%23dcfb68'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">跳转到正文</a>
+  <header class="site-header">
+    <div class="shell header-row">
+      <a class="brand" href="#top" aria-label="Calibre-Web 能力与资源地图，返回顶部"><span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span><span>CALIBRE<span class="brand-light">/WEB</span></span></a>
+      <nav aria-label="页面导航" class="main-nav">
+        <a href="#overview">一图</a><a href="#capabilities">能力</a><a href="#resources">资源</a><a href="#mechanism">原理</a><a href="#meaning">对我的意义</a><a href="#directions">扩展</a>
+      </nav>
+      <a class="header-source" href="https://github.com/janeczku/calibre-web" target="_blank" rel="noopener noreferrer">源仓库 <span aria-hidden="true">↗</span></a>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="intro shell" id="top" aria-labelledby="page-title">
+      <div class="intro-copy">
+        <p class="eyebrow"><span class="eyebrow-rule"></span> PROJECT 007 · 开源项目研究</p>
+        <h1 id="page-title">管理已有藏书，<br><em>从网页开始。</em></h1>
+        <p class="lead"><strong>一句话理解：它是自托管的图书管理库。</strong>接入你已有的 Calibre 书库后，可以编目、找书、阅读、下载和向阅读器分发。项目提供软件，不附带书籍；下面用我们生成的引导图梳理能力、场景与采用价值。</p>
+        <div class="intro-links"><a class="button button-primary" href="#overview">查看一图总览 <span aria-hidden="true">↓</span></a><a class="button button-outline" href="#meaning">直接看我的价值 <span aria-hidden="true">↗</span></a></div>
+      </div>
+      <div class="intro-aside" aria-label="项目定位摘要">
+        <div class="aside-top"><span>一眼判断</span><span>01 / 03</span></div>
+        <div class="aside-statement">已有书库<br><strong>→ 管理入口</strong></div>
+        <p>先准备自己的 Calibre 书库：<code>metadata.db</code> 和书籍文件。Calibre-Web 本身没有预装的书。</p>
+        <div class="aside-facts"><div><b>现有能力</b><span>编目 · 阅读 · 分发</span></div><div><b>建议新增</b><span>正文检索 · AI 阅读</span></div></div>
+      </div>
+    </section>
+
+    <section class="snapshot shell" aria-label="三个关键结论">
+      <div class="snapshot-item"><span class="snapshot-number">01</span><p><strong>能力</strong>是管理自己的图书：编目、搜索、阅读、下载与设备供书。</p></div>
+      <div class="snapshot-item"><span class="snapshot-number">02</span><p><strong>场景</strong>是个人藏书、家庭共读、阅读器供书与创作资料库。</p></div>
+      <div class="snapshot-item"><span class="snapshot-number">03</span><p><strong>对我的意义</strong>是长期资料入口；书籍问答还需另建正文检索。</p></div>
+    </section>
+
+        <section class="section section-overview" id="overview" aria-labelledby="overview-title">
+      <div class="shell">
+        <div class="section-heading"><div><p class="kicker">START HERE / 我们生成的引导图</p><h2 id="overview-title">从输入到输出，看清整套能力</h2><p>一张图汇总书库输入、首次操作、内部模块、功能、资源、使用场景与个人价值。点击图片可打开原始 SVG 放大阅读。</p></div><a class="overview-open" href="./assets/overview.svg" target="_blank" rel="noopener noreferrer">打开高清原图 ↗</a></div>
+        <figure class="overview-figure"><a href="./assets/overview.svg" target="_blank" rel="noopener noreferrer" aria-label="打开 Calibre-Web 一图总览高清原图"><img src="./assets/overview.svg" width="1800" height="3260" alt="Calibre-Web 总览图：Calibre 书库、用户操作与外部元数据进入服务；Flask、书目查询、用户权限、书籍处理和阅读分发模块产生网页、OPDS、Kobo 与邮件输出。下方总结操作步骤、六类功能、运行资源、个人价值和能力边界。" loading="eager"></a><figcaption>根据 <a href="https://github.com/janeczku/calibre-web" target="_blank" rel="noopener noreferrer">官方 README ↗</a>、<a href="https://github.com/janeczku/calibre-web/wiki" target="_blank" rel="noopener noreferrer">Wiki ↗</a> 与 <a href="https://github.com/janeczku/calibre-web/tree/master/cps" target="_blank" rel="noopener noreferrer">cps 代码 ↗</a>整理。图中“对我的意义”是应用判断，不代表现成的跨项目集成。</figcaption></figure>
+      </div>
+    </section>
+<section class="section section-light" id="capabilities" aria-labelledby="capabilities-title">
+      <div class="shell">
+        <div class="section-heading"><div><p class="kicker">01 / WHAT IT DOES</p><h2 id="capabilities-title">它已经有哪些能力？</h2><p>从一份书库出发，覆盖整理、阅读、分发与协作。卡片中的功能均来自现有项目；附加条件写在每项下面。</p></div><span class="count-label">06 个能力域</span></div>
+        <div class="capability-grid">
+          <article class="cap-card cap-card-feature"><div class="card-top"><span class="card-index">01 / ORGANIZE</span><span class="card-symbol" aria-hidden="true">▤</span></div><h3>浏览与整理</h3><p>按书名、作者、标签等元数据搜索和筛选；编辑书籍信息，使用自定义列与书架组织资料。</p><div class="card-bottom"><span class="status status-core">现有</span><span>元数据搜索</span></div></article>
+          <article class="cap-card"><div class="card-top"><span class="card-index">02 / READ</span><span class="card-symbol" aria-hidden="true">◫</span></div><h3>网页阅读</h3><p>在浏览器中阅读 EPUB、PDF、TXT 与漫画等格式，也可下载原文件，继续用熟悉的阅读器阅读。</p><div class="card-bottom"><span class="status status-core">现有</span><span>格式体验有差异</span></div></article>
+          <article class="cap-card"><div class="card-top"><span class="card-index">03 / DELIVER</span><span class="card-symbol" aria-hidden="true">↗</span></div><h3>设备分发</h3><p>通过 OPDS 目录供兼容阅读器找书；支持发送电子书，并提供 Kobo 书库与阅读状态同步。</p><div class="card-bottom"><span class="status status-extra">按需配置</span><span>设备兼容需验证</span></div></article>
+          <article class="cap-card"><div class="card-top"><span class="card-index">04 / MANAGE</span><span class="card-symbol" aria-hidden="true">⊞</span></div><h3>上传与转换</h3><p>上传新书、编辑封面与元数据；需要转换格式时，调用另外安装的 Calibre 工具。</p><div class="card-bottom"><span class="status status-extra">部分依赖外部程序</span></div></article>
+          <article class="cap-card"><div class="card-top"><span class="card-index">05 / SHARE</span><span class="card-symbol" aria-hidden="true">◎</span></div><h3>用户与权限</h3><p>管理员配置账号、下载权限、可见内容与公开注册；还可按需接入 LDAP 或 OAuth 登录。</p><div class="card-bottom"><span class="status status-core">现有</span><span>外部登录需配置</span></div></article>
+          <article class="cap-card"><div class="card-top"><span class="card-index">06 / ENRICH</span><span class="card-symbol" aria-hidden="true">✦</span></div><h3>元数据补全</h3><p>从外部来源查找书籍信息；开发者可添加自己的元数据提供者，仓库已有豆瓣提供者示例。</p><div class="card-bottom"><span class="status status-extra">可扩展</span><span>匹配质量需核对</span></div></article>
+        </div>
+        <p class="source-note">功能依据：<a href="https://github.com/janeczku/calibre-web#features" target="_blank" rel="noopener noreferrer">官方功能列表 ↗</a> · <a href="https://github.com/janeczku/calibre-web/wiki" target="_blank" rel="noopener noreferrer">官方 Wiki ↗</a> · <a href="https://github.com/janeczku/calibre-web/wiki/Developer's-corner" target="_blank" rel="noopener noreferrer">开发者说明 ↗</a></p>
+      </div>
+    </section>
+
+    <section class="section section-ink" id="resources" aria-labelledby="resources-title">
+      <div class="shell">
+        <div class="section-heading heading-inverse"><div><p class="kicker">02 / WHAT IT NEEDS</p><h2 id="resources-title">运行它，需要哪些资源？</h2><p>先准备完整书库和一台运行设备；封面提取、格式转换、设备同步与外部登录按需求增加。</p></div></div>
+        <div class="resources-layout">
+          <div class="resource-primary"><span class="resource-level">基础资源 · 必备</span><h3>书库 + 服务 + 备份</h3><div class="resource-list">
+            <div><span class="resource-icon">01</span><div><h4>Calibre 书库</h4><p><code>metadata.db</code> 保存书目；书库目录同时保留电子书文件。只有散落文件时，先建立有效书库。</p></div></div>
+            <div><span class="resource-icon">02</span><div><h4>运行设备</h4><p>电脑、NAS 或服务器运行 Calibre-Web。官方要求 Python 3.7 或更新版本；浏览器负责访问界面。</p></div></div>
+            <div><span class="resource-icon">03</span><div><h4>数据与访问</h4><p>备份整个 Calibre 书库和 Calibre-Web 的 <code>app.db</code>；跨设备访问还需要网络地址，对外使用应配置 HTTPS。</p></div></div>
+          </div></div>
+          <div class="resource-optional"><span class="resource-level">可选资源 · 随功能增加</span><div class="optional-grid">
+            <article><span>封面</span><h4>ImageMagick</h4><p>提取封面；Windows 处理 PDF 封面可能需要 Ghostscript。</p></article>
+            <article><span>转换</span><h4>Calibre / Kepubify</h4><p><code>ebook-convert</code> 负责格式转换；Kobo 的 KEPUB 可用 Kepubify。</p></article>
+            <article><span>连接</span><h4>设备与邮件</h4><p>OPDS 客户端或 Kobo 设备；邮件推书需邮件服务与收件配置。</p></article>
+            <article><span>集成</span><h4>可选依赖</h4><p>LDAP、OAuth、Google Drive 等功能需要相应依赖和服务配置。</p></article>
+          </div></div>
+        </div>
+        <div class="repo-kit"><div><span class="resource-level">仓库已提供 · 可复用的资料与代码</span><h3>从哪里继续研究？</h3></div><div class="repo-kit-links"><a href="https://github.com/janeczku/calibre-web/tree/master/cps" target="_blank" rel="noopener noreferrer">网页与服务代码 ↗</a><a href="https://github.com/janeczku/calibre-web/tree/master/cps/metadata_provider" target="_blank" rel="noopener noreferrer">元数据提供者示例 ↗</a><a href="https://github.com/janeczku/calibre-web/wiki" target="_blank" rel="noopener noreferrer">安装与设备指南 ↗</a><a href="https://github.com/janeczku/calibre-web#docker-images" target="_blank" rel="noopener noreferrer">Docker 镜像入口 ↗</a></div></div>        <p class="source-note source-note-inverse">资源依据：<a href="https://github.com/janeczku/calibre-web#requirements" target="_blank" rel="noopener noreferrer">官方要求 ↗</a> · <a href="https://github.com/janeczku/calibre-web/blob/master/optional-requirements.txt" target="_blank" rel="noopener noreferrer">可选依赖 ↗</a> · <a href="https://manual.calibre-ebook.com/faq.html" target="_blank" rel="noopener noreferrer">Calibre 书库结构 ↗</a></p>
+      </div>
+    </section>
+
+    <section class="section section-light" id="mechanism" aria-labelledby="mechanism-title">
+      <div class="shell"><div class="section-heading"><div><p class="kicker">03 / HOW IT WORKS</p><h2 id="mechanism-title">书、用户和设备如何连接？</h2><p>Calibre-Web 读取书库元数据和书籍文件，同时在自己的数据库中保存用户侧信息。</p></div></div>
+        <div class="system-map" role="img" aria-label="Calibre 书库中的 metadata.db 和书籍文件进入 Calibre-Web；Calibre-Web 使用独立的 app.db 保存用户与设置，并向网页浏览器、OPDS 阅读器和 Kobo 设备提供访问。">
+          <div class="map-node map-library"><span class="map-label">SOURCE / 原始书库</span><strong>Calibre 书库</strong><span><code>metadata.db</code> + 电子书文件</span></div>
+          <div class="map-connector"><span aria-hidden="true">→</span><small>读取 / 编辑</small></div>
+          <div class="map-center"><span class="map-label">APPLICATION / 网页服务</span><strong>Calibre-Web</strong><span>Flask · SQLAlchemy</span><div class="map-database"><b>独立的 app.db</b><small>用户 · 权限 · 书架 · 阅读状态</small></div></div>
+          <div class="map-connector"><span aria-hidden="true">→</span><small>提供访问</small></div>
+          <div class="map-clients"><span class="map-label">OUTPUT / 使用终端</span><div>浏览器阅读</div><div>OPDS 阅读器</div><div>Kobo 同步</div></div>
+        </div>
+        <div class="mechanism-bottom"><p><b>格式转换：</b>调用本机 Calibre <code>ebook-convert</code> 或 Kepubify，不是网页服务自行重新实现转换器。</p><p><b>高级搜索：</b>现有代码按标题、作者、标签、简介等书目字段查询；正文检索和语义问答需要独立提取与索引流程。</p></div>
+        <p class="source-note">实现依据：<a href="https://github.com/janeczku/calibre-web/blob/master/cps/db.py" target="_blank" rel="noopener noreferrer">书库数据代码 ↗</a> · <a href="https://github.com/janeczku/calibre-web/blob/master/cps/ub.py" target="_blank" rel="noopener noreferrer">用户数据代码 ↗</a> · <a href="https://github.com/janeczku/calibre-web/blob/master/cps/search.py" target="_blank" rel="noopener noreferrer">搜索代码 ↗</a> · <a href="https://github.com/janeczku/calibre-web/blob/master/cps/tasks/convert.py" target="_blank" rel="noopener noreferrer">转换任务 ↗</a></p>
+      </div>
+    </section>
+
+    <section class="section section-warm" id="scenarios" aria-labelledby="scenarios-title">
+      <div class="shell"><div class="section-heading"><div><p class="kicker">04 / WHERE IT FITS</p><h2 id="scenarios-title">哪些场景值得用？</h2><p>这些场景使用的都是已经具备的书库、阅读和分发能力。</p></div></div>
+        <div class="scenario-grid">
+          <article><span>01</span><h3>个人藏书</h3><p>把长期积累的 EPUB、PDF 分类编目，在电脑与手机上快速找到、打开或下载。</p></article>
+          <article><span>02</span><h3>家庭或团队共读</h3><p>用账号、权限和书架组织阅读资料，让成员看到适合自己的内容。</p></article>
+          <article><span>03</span><h3>阅读器供书</h3><p>通过 OPDS 目录找书，或在官方兼容范围内配置 Kobo 同步。</p></article>
+          <article><span>04</span><h3>内容创作资料库</h3><p>按主题和来源管理参考书，供选题、查证、写作时回到原始资料。</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-meaning" id="meaning" aria-labelledby="meaning-title">
+      <div class="shell meaning-layout"><div class="meaning-heading"><p class="kicker">05 / WHY IT MATTERS TO ME</p><h2 id="meaning-title">它在你的项目地图里，<br><em>补上资料这一层。</em></h2><p>现有研究已经覆盖语音输入、配音、数字人画面、对话编排和内容发布。Calibre-Web 可让书籍与参考资料先有稳定的整理入口。</p><a class="text-link" href="https://github.com/yydshly/0925_codex_project/blob/main/README.md" target="_blank" rel="noopener noreferrer">查看现有项目索引 ↗</a></div>
+        <div class="meaning-content"><div class="chain"><div><span>资料</span><strong>007 Calibre-Web</strong><small>书目、标签、书架、原文件</small></div><span class="chain-arrow" aria-hidden="true">↓</span><div><span>理解与创作</span><strong>人工阅读与内容制作</strong><small>003 Voicebox · 006 Fay（组合设想）</small></div><span class="chain-arrow" aria-hidden="true">↓</span><div><span>呈现与发布</span><strong>内容交付</strong><small>004 LiveTalking · 002 social-auto-upload</small></div></div><p class="chain-caption">上面是可探索的内容工作流，项目之间的接口与效果尚未实测。</p></div></div>
+      <div class="shell judgement"><div><span>直接价值</span><p>资料多、需要反复查阅时，先用它把书找得到、拿得出。</p></div><div><span>使用边界</span><p>若目标是让 Fay 回答整本书的问题，还需正文提取、索引、检索与引用校验。</p></div><div><span>采用建议</span><p>先用一份小书库试用，再决定是否把它变成长期资料入口。</p></div></div>
+    </section>
+
+    <section class="section section-light" id="directions" aria-labelledby="directions-title"><div class="shell"><div class="section-heading"><div><p class="kicker">06 / NEXT POSSIBILITIES</p><h2 id="directions-title">可以继续扩展什么？</h2><p>以下属于建议建设项。网页展示这些机会，不把它们算作仓库现有能力。</p></div><span class="planned-label">扩展设想</span></div>
+      <div class="direction-list"><article><span>01</span><div><h3>中文元数据质量</h3><p>改善中文图书匹配、去重、作者名与分类；可从现有元数据提供者机制入手。</p></div><small>较近</small></article><article><span>02</span><div><h3>自动整理与入库</h3><p>把来源记录、命名、标签、封面与格式处理串成可重复的流程。</p></div><small>中期</small></article><article><span>03</span><div><h3>正文检索与引用</h3><p>解析 EPUB / PDF，建立章节级全文索引，让查询能回到具体原文。</p></div><small>独立开发</small></article><article><span>04</span><div><h3>AI 阅读辅助</h3><p>在可靠检索的基础上增加摘要、跨书主题关联与问答，并核查引用。</p></div><small>独立开发</small></article></div>
+    </div></section>
+
+    <section class="section section-last" id="boundaries" aria-labelledby="boundaries-title"><div class="shell boundary-layout"><div><p class="kicker">BEFORE YOU ADOPT</p><h2 id="boundaries-title">试用前，记住这些边界。</h2></div><div class="boundary-list"><p><b>一个实例对应一份书库：</b>官方 FAQ 建议多书库使用多个 Calibre-Web 实例。<a href="https://github.com/janeczku/calibre-web/wiki/FAQ" target="_blank" rel="noopener noreferrer">查看说明 ↗</a></p><p><b>避免同时修改元数据：</b>Calibre 桌面端与网页端并发编辑可能出现不可预期结果。<a href="https://github.com/janeczku/calibre-web/wiki/FAQ" target="_blank" rel="noopener noreferrer">查看说明 ↗</a></p><p><b>Kobo 先做设备验证：</b>官方说明列有大书库同步超时问题，PDF 不参加同步。<a href="https://github.com/janeczku/calibre-web/wiki/Kobo-Integration" target="_blank" rel="noopener noreferrer">查看说明 ↗</a></p><p><b>开放访问先改默认密码：</b>官方快速开始列出的管理员默认凭据是 <code>admin / admin123</code>。<a href="https://github.com/janeczku/calibre-web#quick-start" target="_blank" rel="noopener noreferrer">查看说明 ↗</a></p></div></div></section>
+  </main>
+  <footer class="site-footer"><div class="shell footer-row"><div><span class="footer-title">007 / CALIBRE-WEB</span><p>基于官方仓库、Wiki 与关键代码整理 · 2026.09</p><p>本页是资料研究与静态网页，尚未部署 Calibre-Web 服务或验证设备同步。</p></div><div class="footer-links"><a href="../../index.html">返回研究索引 ↗</a><a href="https://github.com/yydshly/0925_codex_project/blob/main/projects/007-calibre-web/README.md" target="_blank" rel="noopener noreferrer">完整研究笔记 ↗</a><a href="https://github.com/janeczku/calibre-web" target="_blank" rel="noopener noreferrer">原仓库 ↗</a><a href="#top">返回顶部 ↑</a></div></div></footer>
+</body>
+</html>

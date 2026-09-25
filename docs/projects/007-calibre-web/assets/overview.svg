@@ -1,0 +1,207 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1800" height="3260" viewBox="0 0 1800 3260" role="img" aria-labelledby="title desc">
+<title id="title">Calibre-Web 能力、操作、输入输出与内部原理一图总览</title>
+<desc id="desc">上方展示 Calibre 书库、用户操作与外部元数据输入，经 Calibre-Web 的路由、权限、书目查询、书籍处理和分发模块，输出到浏览器、OPDS、Kobo 和邮件。下方列出首次操作步骤、六类功能、运行资源、个人价值及能力边界。</desc>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="10" markerHeight="10" orient="auto-start-reverse"><path d="M0 0L10 5L0 10Z" fill="#4274c4"/></marker></defs>
+<style>text{font-family:Inter,"Microsoft YaHei","PingFang SC","Noto Sans CJK SC",sans-serif} .heavy{font-weight:800}.semibold{font-weight:700}.mono{font-family:Consolas,"Microsoft YaHei",monospace}</style>
+<rect x="0" y="0" width="1800" height="296" rx="0" fill="#11213d" stroke="none" stroke-width="2"/>
+<rect x="72" y="60" width="13" height="34" rx="3" fill="#ddfb68" stroke="none" stroke-width="2"/>
+<text x="104" y="89" font-size="26" fill="#ddfb68" font-weight="800">PROJECT 007  /  OPEN-SOURCE ATLAS</text>
+<text x="72" y="174" font-size="76" fill="#ffffff" font-weight="800">Calibre-Web 一图总览</text>
+<text x="75" y="229" font-size="31" fill="#d7e3f5" font-weight="500">已有书库 → 网页管理与阅读 → 阅读器分发</text>
+<rect x="1401" y="64" width="327" height="57" rx="28" fill="#203456" stroke="#607395" stroke-width="2"/>
+<text x="1565" y="102" font-size="23" fill="#ffffff" font-weight="650" text-anchor="middle">资料研究 · 2026.09</text>
+<line x1="72" y1="270" x2="1728" y2="270" stroke="#486080" stroke-width="2"/>
+<text x="72" y="289" font-size="21" fill="#b6c9e4" font-weight="650">INPUT  书库与操作</text>
+<text x="705" y="289" font-size="21" fill="#b6c9e4" font-weight="650">PROCESS  Flask 服务与独立用户库</text>
+<text x="1460" y="289" font-size="21" fill="#b6c9e4" font-weight="650">OUTPUT  多端获取</text>
+<text x="72" y="369" font-size="37" fill="#17243b" font-weight="800">01  /  数据与模块</text>
+<text x="1728" y="369" font-size="24" fill="#52627c" font-weight="500" text-anchor="end">一条主线看清内部原理</text>
+<rect x="72" y="406" width="440" height="764" rx="20" fill="#ffffff" stroke="#ced9ea" stroke-width="2"/>
+<rect x="554" y="406" width="692" height="764" rx="20" fill="#edf3fc" stroke="#a9c2e8" stroke-width="2"/>
+<rect x="1288" y="406" width="440" height="764" rx="20" fill="#ffffff" stroke="#ced9ea" stroke-width="2"/>
+<text x="102" y="455" font-size="23" fill="#235bb8" font-weight="800">INPUT / 输入</text>
+<text x="102" y="511" font-size="42" fill="#17243b" font-weight="800">先有一份书库</text>
+<line x1="102" y1="533" x2="482" y2="533" stroke="#ced9ea" stroke-width="2"/>
+<rect x="102" y="551" width="10" height="62" rx="5" fill="#235bb8" stroke="none" stroke-width="2"/>
+<text x="127" y="581" font-size="29" fill="#17243b" font-weight="750">Calibre metadata.db</text>
+<text x="127" y="616" font-size="23" fill="#52627c" font-weight="400">SQLite 书目：书名、作者、标签、</text>
+<text x="127" y="648" font-size="23" fill="#52627c" font-weight="400">格式、路径与自定义列</text>
+<rect x="102" y="677" width="10" height="62" rx="5" fill="#1a9297" stroke="none" stroke-width="2"/>
+<text x="127" y="707" font-size="29" fill="#17243b" font-weight="750">书籍与封面文件</text>
+<text x="127" y="742" font-size="23" fill="#52627c" font-weight="400">EPUB / PDF / TXT / 漫画 / 音频等</text>
+<text x="127" y="774" font-size="23" fill="#52627c" font-weight="400">保存在书库目录中</text>
+<rect x="102" y="803" width="10" height="62" rx="5" fill="#ef8a55" stroke="none" stroke-width="2"/>
+<text x="127" y="833" font-size="29" fill="#17243b" font-weight="750">用户与管理员操作</text>
+<text x="127" y="868" font-size="23" fill="#52627c" font-weight="400">上传、编辑、搜索、建书架；</text>
+<text x="127" y="900" font-size="23" fill="#52627c" font-weight="400">设置账号、权限与可见内容</text>
+<rect x="102" y="929" width="10" height="62" rx="5" fill="#235bb8" stroke="none" stroke-width="2"/>
+<text x="127" y="959" font-size="29" fill="#17243b" font-weight="750">外部元数据来源</text>
+<text x="127" y="994" font-size="23" fill="#52627c" font-weight="400">按需查询并补全书籍信息；</text>
+<text x="127" y="1026" font-size="23" fill="#52627c" font-weight="400">可自建元数据提供者</text>
+<rect x="101" y="1080" width="382" height="57" rx="9" fill="#e8f0ff" stroke="none" stroke-width="2"/>
+<text x="292" y="1117" font-size="24" fill="#235bb8" font-weight="750" text-anchor="middle">源码仓库不附带你的藏书</text>
+<line x1="519" y1="780" x2="546" y2="780" stroke="#4274c4" stroke-width="7" marker-end="url(#arrow)"/>
+<line x1="1252" y1="780" x2="1280" y2="780" stroke="#4274c4" stroke-width="7" marker-end="url(#arrow)"/>
+<text x="584" y="455" font-size="23" fill="#235bb8" font-weight="800">PROCESS / 核心服务</text>
+<text x="584" y="510" font-size="44" fill="#17243b" font-weight="800">Calibre-Web</text>
+<text x="584" y="549" font-size="23" fill="#52627c" font-weight="400">Flask 路由接收请求；SQLAlchemy 连接书库与应用数据</text>
+<rect x="584" y="573" width="632" height="70" rx="10" fill="#11213d" stroke="none" stroke-width="2"/>
+<text x="606" y="603" font-size="23" fill="#ddfb68" font-weight="800">请求入口</text>
+<text x="606" y="631" font-size="23" fill="#ffffff" font-weight="550">网页 / OPDS / Kobo → 登录与权限检查 → 调用功能模块</text>
+<rect x="584" y="666" width="308" height="135" rx="10" fill="#ffffff" stroke="#ced9ea" stroke-width="2"/>
+<text x="604" y="708" font-size="29" fill="#17243b" font-weight="800">书目查询</text>
+<text x="604" y="745" font-size="21" fill="#52627c" font-weight="400">db.py · search.py · shelf.py</text>
+<text x="604" y="775" font-size="21" fill="#52627c" font-weight="400">筛选 / 排序 / 自定义列</text>
+<rect x="908" y="666" width="308" height="135" rx="10" fill="#ffffff" stroke="#ced9ea" stroke-width="2"/>
+<text x="928" y="708" font-size="29" fill="#17243b" font-weight="800">用户与配置</text>
+<text x="928" y="745" font-size="21" fill="#52627c" font-weight="400">ub.py · admin.py · 登录服务</text>
+<text x="928" y="775" font-size="21" fill="#52627c" font-weight="400">账号 / 权限 / 内容隐藏</text>
+<rect x="584" y="816" width="308" height="135" rx="10" fill="#ffffff" stroke="#ced9ea" stroke-width="2"/>
+<text x="604" y="858" font-size="29" fill="#17243b" font-weight="800">书籍处理</text>
+<text x="604" y="895" font-size="21" fill="#52627c" font-weight="400">editbooks.py · uploader.py</text>
+<text x="604" y="925" font-size="21" fill="#52627c" font-weight="400">上传 / 元数据 / 封面 / 转换</text>
+<rect x="908" y="816" width="308" height="135" rx="10" fill="#ffffff" stroke="#ced9ea" stroke-width="2"/>
+<text x="928" y="858" font-size="29" fill="#17243b" font-weight="800">阅读与分发</text>
+<text x="928" y="895" font-size="21" fill="#52627c" font-weight="400">web.py · opds.py · kobo.py</text>
+<text x="928" y="925" font-size="21" fill="#52627c" font-weight="400">阅读 / 下载 / 同步 / 推送</text>
+<rect x="584" y="973" width="632" height="127" rx="10" fill="#dfeaff" stroke="#b5cbed" stroke-width="2"/>
+<text x="606" y="1016" font-size="28" fill="#235bb8" font-weight="800">应用数据 + 后台任务</text>
+<text x="606" y="1053" font-size="22" fill="#52627c" font-weight="400">app.db：用户、书架、阅读状态、设置；与书库分开</text>
+<text x="606" y="1084" font-size="22" fill="#52627c" font-weight="400">worker / tasks：转换、上传、邮件等耗时工作</text>
+<text x="584" y="1142" font-size="22" fill="#235bb8" font-weight="700">格式转换调用外部 ebook-convert / Kepubify 程序</text>
+<text x="1318" y="455" font-size="23" fill="#235bb8" font-weight="800">OUTPUT / 输出</text>
+<text x="1318" y="511" font-size="42" fill="#17243b" font-weight="800">从浏览器到设备</text>
+<line x1="1318" y1="533" x2="1698" y2="533" stroke="#ced9ea" stroke-width="2"/>
+<rect x="1318" y="551" width="10" height="62" rx="5" fill="#235bb8" stroke="none" stroke-width="2"/>
+<text x="1343" y="581" font-size="29" fill="#17243b" font-weight="750">浏览器</text>
+<text x="1343" y="616" font-size="23" fill="#52627c" font-weight="400">书目页面、在线阅读、</text>
+<text x="1343" y="648" font-size="23" fill="#52627c" font-weight="400">下载原书与查看封面</text>
+<rect x="1318" y="677" width="10" height="62" rx="5" fill="#1a9297" stroke="none" stroke-width="2"/>
+<text x="1343" y="707" font-size="29" fill="#17243b" font-weight="750">OPDS XML 目录</text>
+<text x="1343" y="742" font-size="23" fill="#52627c" font-weight="400">供兼容阅读器订阅、</text>
+<text x="1343" y="774" font-size="23" fill="#52627c" font-weight="400">搜索和获取电子书</text>
+<rect x="1318" y="803" width="10" height="62" rx="5" fill="#235bb8" stroke="none" stroke-width="2"/>
+<text x="1343" y="833" font-size="29" fill="#17243b" font-weight="750">Kobo 同步</text>
+<text x="1343" y="868" font-size="23" fill="#52627c" font-weight="400">同步书籍、书架与阅读状态；</text>
+<text x="1343" y="900" font-size="23" fill="#52627c" font-weight="400">需要启用并完成设备配置</text>
+<rect x="1318" y="929" width="10" height="62" rx="5" fill="#ef8a55" stroke="none" stroke-width="2"/>
+<text x="1343" y="959" font-size="29" fill="#17243b" font-weight="750">邮件与文件更新</text>
+<text x="1343" y="994" font-size="23" fill="#52627c" font-weight="400">发书到阅读器；上传 / 编辑时</text>
+<text x="1343" y="1026" font-size="23" fill="#52627c" font-weight="400">更新书库文件和元数据</text>
+<rect x="1317" y="1080" width="382" height="57" rx="9" fill="#fff1e9" stroke="none" stroke-width="2"/>
+<text x="1508" y="1117" font-size="24" fill="#a94b25" font-weight="750" text-anchor="middle">Kobo 不同步 PDF</text>
+<text x="72" y="1246" font-size="37" fill="#17243b" font-weight="800">02  /  如何操作</text>
+<text x="1728" y="1246" font-size="24" fill="#52627c" font-weight="500" text-anchor="end">先配置一次，再围绕书籍日常使用</text>
+<rect x="72" y="1282" width="1656" height="356" rx="20" fill="#11213d" stroke="none" stroke-width="2"/>
+<rect x="94" y="1354" width="300" height="178" rx="12" fill="#203456" stroke="#4b6487" stroke-width="2"/>
+<text x="112" y="1395" font-size="27" fill="#ddfb68" font-weight="800">01</text>
+<text x="112" y="1443" font-size="30" fill="#ffffff" font-weight="800">准备书库</text>
+<text x="112" y="1484" font-size="21" fill="#c9d7ea" font-weight="400">已有 Calibre 目录：</text>
+<text x="112" y="1515" font-size="21" fill="#c9d7ea" font-weight="400">metadata.db + 书籍文件</text>
+<text x="402" y="1455" font-size="33" fill="#ddfb68" font-weight="700" text-anchor="middle">›</text>
+<rect x="412" y="1354" width="300" height="178" rx="12" fill="#203456" stroke="#4b6487" stroke-width="2"/>
+<text x="430" y="1395" font-size="27" fill="#ddfb68" font-weight="800">02</text>
+<text x="430" y="1443" font-size="30" fill="#ffffff" font-weight="800">安装启动</text>
+<text x="430" y="1484" font-size="21" fill="#c9d7ea" font-weight="400">pip install calibreweb</text>
+<text x="430" y="1515" font-size="21" fill="#c9d7ea" font-weight="400">运行 cps；也可用 Docker</text>
+<text x="720" y="1455" font-size="33" fill="#ddfb68" font-weight="700" text-anchor="middle">›</text>
+<rect x="730" y="1354" width="300" height="178" rx="12" fill="#203456" stroke="#4b6487" stroke-width="2"/>
+<text x="748" y="1395" font-size="27" fill="#ddfb68" font-weight="800">03</text>
+<text x="748" y="1443" font-size="30" fill="#ffffff" font-weight="800">首次配置</text>
+<text x="748" y="1484" font-size="21" fill="#c9d7ea" font-weight="400">打开 localhost:8083</text>
+<text x="748" y="1515" font-size="21" fill="#c9d7ea" font-weight="400">选择书库目录，修改密码</text>
+<text x="1038" y="1455" font-size="33" fill="#ddfb68" font-weight="700" text-anchor="middle">›</text>
+<rect x="1048" y="1354" width="300" height="178" rx="12" fill="#203456" stroke="#4b6487" stroke-width="2"/>
+<text x="1066" y="1395" font-size="27" fill="#ddfb68" font-weight="800">04</text>
+<text x="1066" y="1443" font-size="30" fill="#ffffff" font-weight="800">整理与发现</text>
+<text x="1066" y="1484" font-size="21" fill="#c9d7ea" font-weight="400">上传、编辑、搜索</text>
+<text x="1066" y="1515" font-size="21" fill="#c9d7ea" font-weight="400">按标签与书架分类</text>
+<text x="1356" y="1455" font-size="33" fill="#ddfb68" font-weight="700" text-anchor="middle">›</text>
+<rect x="1366" y="1354" width="300" height="178" rx="12" fill="#203456" stroke="#4b6487" stroke-width="2"/>
+<text x="1384" y="1395" font-size="27" fill="#ddfb68" font-weight="800">05</text>
+<text x="1384" y="1443" font-size="30" fill="#ffffff" font-weight="800">阅读与分发</text>
+<text x="1384" y="1484" font-size="21" fill="#c9d7ea" font-weight="400">浏览器、下载、OPDS</text>
+<text x="1384" y="1515" font-size="21" fill="#c9d7ea" font-weight="400">按需配置 Kobo / 邮件</text>
+<text x="100" y="1590" font-size="23" fill="#dce7f7" font-weight="400">可选：安装封面 / 转换依赖，配置 OAuth、Google Drive、邮件和 Kobo；对外访问建议 HTTPS。</text>
+<text x="72" y="1720" font-size="37" fill="#17243b" font-weight="800">03  /  包含的功能</text>
+<text x="1728" y="1720" font-size="24" fill="#52627c" font-weight="500" text-anchor="end">官方功能按使用任务归为六类</text>
+<rect x="72" y="1757" width="540" height="254" rx="14" fill="#ffffff" stroke="#ced9ea" stroke-width="2"/>
+<rect x="72" y="1757" width="540" height="8" rx="4" fill="#235bb8" stroke="none" stroke-width="2"/>
+<text x="97" y="1808" font-size="23" fill="#235bb8" font-weight="800">01</text>
+<text x="154" y="1812" font-size="34" fill="#17243b" font-weight="800">发现与搜索</text>
+<text x="99" y="1869" font-size="25" fill="#52627c" font-weight="400">浏览、排序、高级搜索与筛选</text>
+<text x="99" y="1909" font-size="25" fill="#52627c" font-weight="400">书名 / 作者 / 标签 / 简介等字段</text>
+<text x="99" y="1949" font-size="25" fill="#52627c" font-weight="400">支持 Calibre 自定义列</text>
+<rect x="630" y="1757" width="540" height="254" rx="14" fill="#ffffff" stroke="#ced9ea" stroke-width="2"/>
+<rect x="630" y="1757" width="540" height="8" rx="4" fill="#1a9297" stroke="none" stroke-width="2"/>
+<text x="655" y="1808" font-size="23" fill="#1a9297" font-weight="800">02</text>
+<text x="712" y="1812" font-size="34" fill="#17243b" font-weight="800">书库管理</text>
+<text x="657" y="1869" font-size="25" fill="#52627c" font-weight="400">上传（含音频）、编辑或删除书籍</text>
+<text x="657" y="1909" font-size="25" fill="#52627c" font-weight="400">封面、分类、书架和阅读状态</text>
+<text x="657" y="1949" font-size="25" fill="#52627c" font-weight="400">可查找外部元数据</text>
+<rect x="1188" y="1757" width="540" height="254" rx="14" fill="#ffffff" stroke="#ced9ea" stroke-width="2"/>
+<rect x="1188" y="1757" width="540" height="8" rx="4" fill="#ef8a55" stroke="none" stroke-width="2"/>
+<text x="1213" y="1808" font-size="23" fill="#ef8a55" font-weight="800">03</text>
+<text x="1270" y="1812" font-size="34" fill="#17243b" font-weight="800">在线阅读</text>
+<text x="1215" y="1869" font-size="25" fill="#52627c" font-weight="400">浏览器阅读 EPUB / PDF / TXT</text>
+<text x="1215" y="1909" font-size="25" fill="#52627c" font-weight="400">漫画格式阅读与原文件下载</text>
+<text x="1215" y="1949" font-size="25" fill="#52627c" font-weight="400">也可限制下载权限</text>
+<rect x="72" y="2031" width="540" height="254" rx="14" fill="#ffffff" stroke="#ced9ea" stroke-width="2"/>
+<rect x="72" y="2031" width="540" height="8" rx="4" fill="#235bb8" stroke="none" stroke-width="2"/>
+<text x="97" y="2082" font-size="23" fill="#235bb8" font-weight="800">04</text>
+<text x="154" y="2086" font-size="34" fill="#17243b" font-weight="800">设备连接</text>
+<text x="99" y="2143" font-size="25" fill="#52627c" font-weight="400">OPDS 供阅读器浏览书目</text>
+<text x="99" y="2183" font-size="25" fill="#52627c" font-weight="400">Kobo 书籍 / 书架 / 阅读状态同步</text>
+<text x="99" y="2223" font-size="25" fill="#52627c" font-weight="400">邮件发送到电子阅读器</text>
+<rect x="630" y="2031" width="540" height="254" rx="14" fill="#ffffff" stroke="#ced9ea" stroke-width="2"/>
+<rect x="630" y="2031" width="540" height="8" rx="4" fill="#1a9297" stroke="none" stroke-width="2"/>
+<text x="655" y="2082" font-size="23" fill="#1a9297" font-weight="800">05</text>
+<text x="712" y="2086" font-size="34" fill="#17243b" font-weight="800">用户与安全</text>
+<text x="657" y="2143" font-size="25" fill="#52627c" font-weight="400">管理员和细粒度用户权限</text>
+<text x="657" y="2183" font-size="25" fill="#52627c" font-weight="400">权限、可见内容、可选公开注册</text>
+<text x="657" y="2223" font-size="25" fill="#52627c" font-weight="400">LDAP / OAuth / 代理登录、魔术链接</text>
+<rect x="1188" y="2031" width="540" height="254" rx="14" fill="#ffffff" stroke="#ced9ea" stroke-width="2"/>
+<rect x="1188" y="2031" width="540" height="8" rx="4" fill="#ef8a55" stroke="none" stroke-width="2"/>
+<text x="1213" y="2082" font-size="23" fill="#ef8a55" font-weight="800">06</text>
+<text x="1270" y="2086" font-size="34" fill="#17243b" font-weight="800">处理与扩展</text>
+<text x="1215" y="2143" font-size="25" fill="#52627c" font-weight="400">Calibre 工具转换、Kepubify</text>
+<text x="1215" y="2183" font-size="25" fill="#52627c" font-weight="400">元数据提供者可扩展</text>
+<text x="1215" y="2223" font-size="25" fill="#52627c" font-weight="400">Google Drive、主题、多语言与更新</text>
+<text x="72" y="2357" font-size="37" fill="#17243b" font-weight="800">04  /  运行资源</text>
+<text x="1728" y="2357" font-size="24" fill="#52627c" font-weight="500" text-anchor="end">必要资源与按功能增加的组件</text>
+<rect x="72" y="2396" width="810" height="359" rx="16" fill="#ffffff" stroke="#ced9ea" stroke-width="2"/>
+<rect x="900" y="2396" width="828" height="359" rx="16" fill="#e9f1ff" stroke="#bfd0ea" stroke-width="2"/>
+<rect x="100" y="2422" width="181" height="41" rx="8" fill="#dceaff" stroke="none" stroke-width="2"/>
+<text x="115" y="2451" font-size="23" fill="#235bb8" font-weight="750">基础 · 必需</text>
+<rect x="928" y="2422" width="181" height="41" rx="8" fill="#d7eeed" stroke="none" stroke-width="2"/>
+<text x="943" y="2451" font-size="23" fill="#147276" font-weight="750">功能 · 可选</text>
+<text x="100" y="2493" font-size="32" fill="#17243b" font-weight="800">先准备能被读取的书库</text>
+<text x="100" y="2541" font-size="25" fill="#52627c" font-weight="400">• Calibre 书库目录：metadata.db + 书籍文件</text>
+<text x="100" y="2584" font-size="25" fill="#52627c" font-weight="400">• Python 运行环境、存储空间与浏览器</text>
+<text x="100" y="2627" font-size="25" fill="#52627c" font-weight="400">• app.db 保存设置；连同整份书库备份</text>
+<text x="100" y="2670" font-size="25" fill="#52627c" font-weight="400">• 跨设备访问需要网络地址；公网建议 HTTPS</text>
+<text x="928" y="2493" font-size="32" fill="#17243b" font-weight="800">需要时再加入</text>
+<text x="928" y="2541" font-size="25" fill="#52627c" font-weight="400">• ebook-convert / Kepubify：格式与 Kobo 转换</text>
+<text x="928" y="2584" font-size="25" fill="#52627c" font-weight="400">• ImageMagick / Ghostscript：封面提取</text>
+<text x="928" y="2627" font-size="25" fill="#52627c" font-weight="400">• SMTP、OPDS 客户端或 Kobo 设备</text>
+<text x="928" y="2670" font-size="25" fill="#52627c" font-weight="400">• LDAP / OAuth / Google Drive 可选依赖</text>
+<text x="72" y="2820" font-size="37" fill="#17243b" font-weight="800">05  /  场景、价值与边界</text>
+<text x="1728" y="2820" font-size="24" fill="#52627c" font-weight="500" text-anchor="end">把它放进现有内容创作项目地图</text>
+<rect x="72" y="2859" width="810" height="306" rx="16" fill="#11213d" stroke="none" stroke-width="2"/>
+<rect x="900" y="2859" width="828" height="306" rx="16" fill="#ffffff" stroke="#ced9ea" stroke-width="2"/>
+<text x="104" y="2908" font-size="34" fill="#ddfb68" font-weight="800">对我的意义</text>
+<text x="104" y="2957" font-size="25" fill="#e3eaf5" font-weight="400">书籍 / PDF → 编目、标签、书架与阅读 → 选题和查证</text>
+<text x="104" y="3001" font-size="25" fill="#e3eaf5" font-weight="400">可为 Voicebox、Fay、LiveTalking 与发布流程</text>
+<text x="104" y="3045" font-size="25" fill="#e3eaf5" font-weight="400">提供整理好的资料入口；跨项目接口仍需实测。</text>
+<text x="104" y="3089" font-size="25" fill="#e3eaf5" font-weight="400">场景：个人藏书 / 家庭共读 / 阅读器 / 创作资料</text>
+<text x="104" y="3133" font-size="25" fill="#e3eaf5" font-weight="400">建议先拿一份小书库试用，再决定长期部署。</text>
+<text x="930" y="2908" font-size="34" fill="#17243b" font-weight="800">它目前不负责</text>
+<text x="930" y="2957" font-size="25" fill="#52627c" font-weight="400">• 提供现成藏书；你需要接入自己的 Calibre 书库</text>
+<text x="930" y="3001" font-size="25" fill="#52627c" font-weight="400">• 书籍正文全文 / 语义搜索和 AI 问答</text>
+<text x="930" y="3045" font-size="25" fill="#52627c" font-weight="400">• 自动把藏书变成 Fay 的可引用知识库</text>
+<text x="930" y="3089" font-size="25" fill="#52627c" font-weight="400">• 多书库官方建议运行多个实例</text>
+<text x="930" y="3133" font-size="25" fill="#52627c" font-weight="400">• 同库并发修改元数据需谨慎</text>
+<line x1="72" y1="3201" x2="1728" y2="3201" stroke="#ced9ea" stroke-width="2"/>
+<text x="72" y="3238" font-size="22" fill="#52627c" font-weight="400">依据：janeczku/calibre-web README、Wiki、cps 模块代码  ·  图中“扩展方向”不计入已有能力</text>
+<text x="1728" y="3238" font-size="22" fill="#235bb8" font-weight="800" text-anchor="end">007  /  CALIBRE-WEB</text>
+</svg>
