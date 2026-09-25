@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="video-use 能力地图：ElevenLabs 识别音频并提供逐词时间戳，代码代理生成 EDL，FFmpeg 同步剪辑音画；梳理能力、跳切等隐藏问题、适用场景与个人价值。">
+  <meta name="theme-color" content="#101a15">
+  <title>video-use 能力地图 · 008 开源项目研究</title>
+  <link rel="stylesheet" href="./style.css">
+  <script defer src="./app.js"></script>
+</head>
+<body id="top">
+<a class="skip-link" href="#main">跳到正文</a>
+<header class="site-header">
+  <div class="shell nav-row">
+    <a class="brand" href="../../index.html" aria-label="返回开源项目研究索引"><span class="brand-mark">008</span><span>PROJECT RESEARCH<small>VIDEO-USE / 能力地图</small></span></a>
+    <nav class="nav-links" aria-label="页面导航">
+      <a href="#overview">一图总览</a><a href="#model-location">模型位置</a><a href="#workflow">工作流程</a><a href="#capabilities">能力清单</a><a href="#meaning">我的价值</a><a href="#directions">扩展方向</a><a class="nav-index" href="../../index.html">全部项目 ↗</a>
+    </nav>
+  </div>
+</header>
+<main id="main">
+  <section class="hero" aria-labelledby="hero-title">
+    <div class="shell hero-grid">
+      <div>
+        <p class="eyebrow">008 / VIDEO EDITING AGENT</p>
+        <h1 id="hero-title">让代码代理<br><em>按文字剪视频。</em></h1>
+        <p class="hero-lead">video-use 先把音频识别成带时间戳的文字，再由代码代理选择片段、生成 EDL，交给 FFmpeg 同步剪辑音画。它适合口播和讲解；画面跳切、识别错误等问题仍需审片。</p>
+        <div class="hero-actions"><a class="button button-primary" href="#capabilities">浏览能力清单 <span aria-hidden="true">↘</span></a><a class="button button-outline" href="#overview">看一图总览 <span aria-hidden="true">→</span></a></div>
+        <p class="hero-note">基于 <a href="https://github.com/browser-use/video-use" target="_blank" rel="noopener noreferrer">browser-use/video-use 源码 ↗</a> 整理 · 2026.09.25 · 尚未运行真实素材</p>
+      </div>
+      <div class="editor" role="img" aria-label="剪辑工作流程示意：视频预览、带时间戳的转写、波形和片段时间线">
+        <div class="editor-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span>edit / final.mp4</span><span>00:42 / 01:12</span></div>
+        <div class="editor-stage"><span class="play" aria-hidden="true">▶ PREVIEW</span><div class="stage-caption"><span>TRANSCRIPT-DRIVEN EDIT</span><strong>保留精彩的，<br><mark>剪掉多余的。</mark></strong></div><span class="timecode">00:00:42:18</span></div>
+        <div class="editor-lower"><div class="editor-meta"><span>WORDS / CUT POINT</span><span>EDL → RENDER</span></div><div class="transcript"><b>[42.18–45.06]</b>把这段讲清楚，再进入产品演示。</div><div class="wave" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i class="quiet"></i><i class="quiet"></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="timeline" aria-hidden="true"><span>HOOK</span><span>CUT</span><span>DEMO</span><span>CTA</span></div></div>
+      </div>
+    </div>
+  </section>
+  <div class="intro-strip"><div class="shell intro-inner"><div class="intro-item"><small>它是什么</small><strong>代理 Skill + Python 脚本</strong></div><div class="intro-item"><small>它最擅长</small><strong>口播、访谈、教程与讲解</strong></div><div class="intro-item"><small>交付形式</small><strong>EDL 决策表 + MP4 成片</strong></div></div></div>
+
+  <section class="section overview" id="overview" aria-labelledby="overview-title"><div class="shell">
+    <div class="section-head"><div><span class="kicker">00 / ONE-PAGE SUMMARY</span><h2 id="overview-title">我们现在怎样理解 video-use？</h2><p>它是以语音内容为主线的代理视频剪辑工作流：识别音频，得到“说了什么、何时说”；代理结合剪辑目标生成 EDL；FFmpeg 据此同步裁剪音画、制作字幕并导出成片。它擅长口播、访谈、教程和产品讲解，可补上我们从素材制作到发布之间的粗剪环节。画面按需抽样核查，并非全片逐帧理解。</p></div><a class="overview-open" href="./assets/overview.svg" target="_blank" rel="noopener noreferrer">打开高清总览图 ↗</a></div>
+    <div class="understanding-callout"><span class="callout-key">核心判断</span><strong>Scribe 类似 Whisper，负责识别和原始时间戳；真正的剪辑决定由代理做，实际裁剪由脚本做。</strong></div>
+    <div class="continuity-note"><strong>隐藏问题：时间对齐 ≠ 画面连续。</strong><span>剪掉一句话后，人物姿态、手势或屏幕画面可能突然跳变；字幕与切点也会受识别错误影响。必须预览切点，必要时调整 EDL、插入补充画面或人工精剪。</span></div>
+    <figure class="overview-figure"><a href="./assets/overview.svg" target="_blank" rel="noopener noreferrer" aria-label="打开 video-use 一图总览高清原图"><img src="./assets/overview.svg" width="1600" height="2280" alt="video-use 总览图：输入为原视频、剪辑目标和可选素材；FFmpeg 提取音轨，ElevenLabs Scribe 生成逐词文字和时间戳，代理参考文字和按需抽样的画面生成 EDL，再由 FFmpeg 同步处理音画，输出 MP4、EDL、SRT 和项目记录。下方汇总主要能力、适用场景、范围以及与现有项目的可能衔接。" loading="eager"></a><figcaption>图中橙色代表代理工作流程、绿色代表仓库脚本、紫色代表外部工具。依据上游 <a href="https://github.com/browser-use/video-use#how-it-works" target="_blank" rel="noopener noreferrer">README 原理说明 ↗</a>、<a href="https://github.com/browser-use/video-use/blob/main/helpers/transcribe.py" target="_blank" rel="noopener noreferrer">转写脚本 ↗</a>、<a href="https://github.com/browser-use/video-use/blob/main/helpers/render.py" target="_blank" rel="noopener noreferrer">渲染脚本 ↗</a>整理；跨项目衔接是我们的使用设想，尚未实测。</figcaption></figure>
+  </div></section>
+
+  <section class="section runtime" id="model-location" aria-labelledby="runtime-title"><div class="shell">
+    <div class="section-head"><div><span class="kicker">MODEL / WHERE IT RUNS</span><h2 id="runtime-title">模型在哪里运行？</h2><p>video-use 本身不附带通用大模型权重，也不要求部署一台专属的 video-use 大模型服务器。它借用你选用的代码代理做判断，另用专门的语音服务做转写。</p></div></div>
+    <div class="runtime-grid">
+      <article class="runtime-card"><span class="runtime-tag">剪辑判断 / 外部代理</span><h3>大模型由代理提供</h3><p>Claude Code、Codex 等代理阅读转写、提出策略并写 EDL。模型实际在云端还是本地，取决于所用代理；仓库没有内置或指定一个本地 LLM。</p><a href="https://github.com/browser-use/video-use#setup-prompt" target="_blank" rel="noopener noreferrer">查看支持的代理 ↗</a></article>
+      <article class="runtime-card"><span class="runtime-tag">语音识别 / 云端 API</span><h3>默认调用 ElevenLabs</h3><p>现成的转写脚本把提取的音频上传到 ElevenLabs Scribe，取回逐词时间戳。这是专门的语音识别服务，不是负责剪辑决策的通用大模型。</p><a href="https://github.com/browser-use/video-use/blob/main/helpers/transcribe.py" target="_blank" rel="noopener noreferrer">查看 API 调用 ↗</a></article>
+      <article class="runtime-card"><span class="runtime-tag">音视频处理 / 执行环境</span><h3>Python + FFmpeg 处理素材</h3><p>抽帧、波形、切片、拼接、字幕和导出由脚本在代理能执行命令的机器上运行；可以是你的电脑，也可以是你选择的远程环境。</p><a href="https://github.com/browser-use/video-use/tree/main/helpers" target="_blank" rel="noopener noreferrer">查看辅助脚本 ↗</a></article>
+    </div>
+    <p class="runtime-foot">仓库 README 提到的 Browser Use Cloud / Box 是可选运行方式；手动安装路径使用本机代理、FFmpeg 和 ElevenLabs API key。<a href="https://github.com/browser-use/video-use/blob/main/install.md" target="_blank" rel="noopener noreferrer">查看安装说明 ↗</a></p>
+  </div></section>
+
+  <section class="section" id="workflow" aria-labelledby="workflow-title"><div class="shell">
+    <div class="section-head"><div><span class="kicker">01 / HOW IT WORKS</span><h2 id="workflow-title">视频不必逐帧读完。</h2><p>它以语音文本作为主要索引；遇到拿不准的停顿、重录或切点，再查看局部画面与波形。编辑决定由代理形成，确定性的音视频处理交给脚本。</p></div><span class="section-number" aria-hidden="true">01</span></div>
+    <div class="flow-grid" aria-label="六阶段工作流程">
+      <article class="flow-step"><span class="num">01 / INPUT</span><h3>导入素材</h3><p>盘点视频、时长与音轨，明确内容目标。</p></article>
+      <article class="flow-step"><span class="num">02 / SPEECH</span><h3>逐词转写</h3><p>提取音频，调用 Scribe 取得词级时间戳。</p></article>
+      <article class="flow-step"><span class="num">03 / PACK</span><h3>压缩阅读</h3><p>按停顿和说话人合并成短句表。</p></article>
+      <article class="flow-step"><span class="num">04 / DECIDE</span><h3>代理写 EDL</h3><p>按确认的策略，选择片段、顺序与切点。</p></article>
+      <article class="flow-step"><span class="num">05 / RENDER</span><h3>合成成片</h3><p>FFmpeg 切片、拼接、调色、加字幕与叠加层。</p></article>
+      <article class="flow-step"><span class="num">06 / REVIEW</span><h3>检查修改</h3><p>核对切点附近的画面和波形，再返工。</p></article>
+    </div>
+    <p class="flow-note"><strong>这里的“看视频”是按需抽帧。</strong>仓库的主设计是文字驱动剪辑，尤其适合有讲话的素材。<a href="https://github.com/browser-use/video-use/blob/main/SKILL.md" target="_blank" rel="noopener noreferrer">查看上游工作流程 ↗</a></p>
+  </div></section>
+
+  <section class="section capabilities" id="capabilities" aria-labelledby="capabilities-title"><div class="shell">
+    <div class="section-head"><div><span class="kicker">02 / CAPABILITY EXPLORER</span><h2 id="capabilities-title">它的能力，分三种来源。</h2><p>“脚本已实现”表示仓库里有实际代码；“代理流程”取决于代理按 Skill 执行；“外部工具”表示渲染器可以使用其产物，制作过程另需工具。</p></div><span class="section-number" aria-hidden="true">02</span></div>
+    <div class="legend" aria-label="能力状态说明"><span class="badge badge-script">脚本已实现</span><span class="badge badge-agent">代理流程</span><span class="badge badge-external">外部工具</span></div>
+    <div class="filter-row" role="group" aria-label="按制作阶段筛选能力"><button class="filter-button" type="button" data-filter="all" aria-pressed="true">全部能力</button><button class="filter-button" type="button" data-filter="understand" aria-pressed="false">理解素材</button><button class="filter-button" type="button" data-filter="edit" aria-pressed="false">形成剪辑</button><button class="filter-button" type="button" data-filter="deliver" aria-pressed="false">交付检查</button><span class="filter-count" id="filter-count" aria-live="polite">显示 12 项</span></div>
+    <div class="cap-grid" id="cap-grid">
+      <article class="cap-card" data-group="understand"><div class="cap-top"><span class="cap-icon" aria-hidden="true">⌁</span><span class="badge badge-script">脚本已实现</span></div><h3>逐词转写</h3><p>提取指定音轨并上传 Scribe，得到词级时间、说话人和声音事件。需要 ElevenLabs API key。</p><a href="https://github.com/browser-use/video-use/blob/main/helpers/transcribe.py" target="_blank" rel="noopener noreferrer">查看转写脚本 ↗</a></article>
+      <article class="cap-card" data-group="understand"><div class="cap-top"><span class="cap-icon" aria-hidden="true">≡</span><span class="badge badge-script">脚本已实现</span></div><h3>多条素材批量处理</h3><p>批量转写常见视频格式，默认并发处理 4 条；已有转写 JSON 会被跳过。</p><a href="https://github.com/browser-use/video-use/blob/main/helpers/transcribe_batch.py" target="_blank" rel="noopener noreferrer">查看批量脚本 ↗</a></article>
+      <article class="cap-card" data-group="understand"><div class="cap-top"><span class="cap-icon" aria-hidden="true">▤</span><span class="badge badge-script">脚本已实现</span></div><h3>短句索引</h3><p>按停顿或说话人变化，把词合并为带时间范围的短句，便于代理比较不同 take。</p><a href="https://github.com/browser-use/video-use/blob/main/helpers/pack_transcripts.py" target="_blank" rel="noopener noreferrer">查看打包脚本 ↗</a></article>
+      <article class="cap-card" data-group="understand"><div class="cap-top"><span class="cap-icon" aria-hidden="true">▥</span><span class="badge badge-script">脚本已实现</span></div><h3>局部画面概览</h3><p>对指定时间段抽帧，生成胶片条、波形、词标签与静音区，供切点核查。</p><a href="https://github.com/browser-use/video-use/blob/main/helpers/timeline_view.py" target="_blank" rel="noopener noreferrer">查看时间线脚本 ↗</a></article>
+      <article class="cap-card" data-group="edit"><div class="cap-top"><span class="cap-icon" aria-hidden="true">✂</span><span class="badge badge-agent">代理流程</span></div><h3>挑选内容与重录版本</h3><p>代理从转写中识别失误、口头禅和更好的表达，提出策略并选择保留区间；需要用户确认。</p><a href="https://github.com/browser-use/video-use/blob/main/SKILL.md" target="_blank" rel="noopener noreferrer">查看剪辑规则 ↗</a></article>
+      <article class="cap-card" data-group="edit"><div class="cap-top"><span class="cap-icon" aria-hidden="true">▦</span><span class="badge badge-script">脚本已实现</span></div><h3>EDL 驱动渲染</h3><p>JSON 描述素材、切点、顺序和效果；脚本逐段编码，再无二次编码地拼接这些片段。</p><a href="https://github.com/browser-use/video-use/blob/main/helpers/render.py" target="_blank" rel="noopener noreferrer">查看渲染脚本 ↗</a></article>
+      <article class="cap-card" data-group="edit"><div class="cap-top"><span class="cap-icon" aria-hidden="true">◐</span><span class="badge badge-script">脚本已实现</span></div><h3>基础调色</h3><p>可用固定预设或按抽样亮度、对比度和饱和度做有限修正，也支持自定义 FFmpeg 滤镜。</p><a href="https://github.com/browser-use/video-use/blob/main/helpers/grade.py" target="_blank" rel="noopener noreferrer">查看调色脚本 ↗</a></article>
+      <article class="cap-card" data-group="edit"><div class="cap-top"><span class="cap-icon" aria-hidden="true">◇</span><span class="badge badge-external">外部工具</span></div><h3>动画与图形叠加</h3><p>渲染器可在指定时段叠加动画；内容可由代理另用 HyperFrames、Remotion、Manim 或 PIL 制作。</p><a href="https://github.com/browser-use/video-use/blob/main/SKILL.md" target="_blank" rel="noopener noreferrer">查看动画方案 ↗</a></article>
+      <article class="cap-card" data-group="deliver"><div class="cap-top"><span class="cap-icon" aria-hidden="true">▱</span><span class="badge badge-script">脚本已实现</span></div><h3>字幕生成与烧录</h3><p>把源词时间映射到成片时间线，生成 SRT；字幕在动画后叠加。默认短词组样式偏英文。</p><a href="https://github.com/browser-use/video-use/blob/main/helpers/render.py" target="_blank" rel="noopener noreferrer">查看字幕代码 ↗</a></article>
+      <article class="cap-card" data-group="deliver"><div class="cap-top"><span class="cap-icon" aria-hidden="true">◖</span><span class="badge badge-script">脚本已实现</span></div><h3>音频边缘与响度</h3><p>每段切点加入短暂淡入淡出，成片可做响度归一化；最终听感仍需人工检查。</p><a href="https://github.com/browser-use/video-use/blob/main/helpers/render.py" target="_blank" rel="noopener noreferrer">查看音频处理 ↗</a></article>
+      <article class="cap-card" data-group="deliver"><div class="cap-top"><span class="cap-icon" aria-hidden="true">◎</span><span class="badge badge-agent">代理流程</span></div><h3>成片自检与返工</h3><p>Skill 要求代理检查每个切点附近的画面、波形和字幕；发现问题后修改并重渲染。</p><a href="https://github.com/browser-use/video-use/blob/main/SKILL.md" target="_blank" rel="noopener noreferrer">查看自检流程 ↗</a></article>
+      <article class="cap-card" data-group="deliver"><div class="cap-top"><span class="cap-icon" aria-hidden="true">↺</span><span class="badge badge-agent">代理流程</span></div><h3>保留项目记忆</h3><p>按 Skill 把每次剪辑的选择与反馈追加到项目笔记，下次继续沿用；取决于代理执行。</p><a href="https://github.com/browser-use/video-use/blob/main/SKILL.md" target="_blank" rel="noopener noreferrer">查看项目约定 ↗</a></article>
+    </div>
+  </div></section>
+
+  <aside class="coverage-band" aria-label="能力覆盖说明"><div class="shell coverage-inner"><div><span>这 12 张卡片是<strong>主要能力域</strong>，不是所有参数和制作技巧。</span><p>仓库还提供草稿与预览质量、帧率设置、自动或自定义调色、HDR 到 SDR 处理、音轨选择等细项；在线素材下载与音乐、音效制作属于可选工具或代理流程。它也不是 browser-use 旗下所有产品的合集。</p></div><a href="https://github.com/browser-use/video-use/blob/main/SKILL.md" target="_blank" rel="noopener noreferrer">阅读完整 Skill ↗</a></div></aside>
+
+  <section class="section method" id="mechanism" aria-labelledby="mechanism-title"><div class="shell">
+    <div class="section-head"><div><span class="kicker">03 / UNDER THE HOOD</span><h2 id="mechanism-title">两份关键数据，把判断和执行接起来。</h2><p>短句表帮助代理理解素材；EDL 让剪辑决定成为可重复执行的结构化输入。</p></div><span class="section-number" aria-hidden="true">03</span></div>
+    <div class="method-grid"><article class="method-panel"><span class="label">01 / takes_packed.md</span><h3>用时间戳阅读内容</h3><p>逐词结果按至少 0.5 秒停顿或说话人变化分组。代理先比较要讲什么，再去核查少量画面。</p><div class="mini-code"><span>## TAKE_03</span><br>[02.52–05.36] S0 先看用户遇到了什么问题。<br>[06.08–08.74] S0 然后展示我们如何解决。</div></article><article class="method-panel"><span class="label">02 / edl.json</span><h3>把选择写成剪辑表</h3><p>每个区间注明源视频、起止秒数和叙事作用；渲染器据此切片、拼接和生成字幕。</p><div class="mini-code">{<br>&nbsp;&nbsp;"source": <span>"take_03"</span>,<br>&nbsp;&nbsp;"start": 2.52,<br>&nbsp;&nbsp;"end": 8.74,<br>&nbsp;&nbsp;"beat": <span>"问题 → 解决方案"</span><br>}</div></article></div>
+    <div class="method-callout"><strong>模型没有逐帧看完整视频。</strong><span>视觉信息来自指定区间的抽帧与波形；因此它在口播内容剪辑上更有优势，动作或音乐主导的视频仍需额外索引能力。</span></div>
+  </div></section>
+
+  <section class="section" id="scenarios" aria-labelledby="scenarios-title"><div class="shell">
+    <div class="section-head"><div><span class="kicker">04 / WHERE IT FITS</span><h2 id="scenarios-title">哪些素材，值得交给它？</h2><p>判断的核心是：视频的信息主要由讲话承载，还是由画面动作、节奏和镜头语言承载。</p></div><span class="section-number" aria-hidden="true">04</span></div>
+    <div class="scenario-grid"><article class="scenario"><span class="fit">适配度高</span><h3>产品讲解与教程</h3><p>按讲述结构保留关键句，删掉重说与等待，配合字幕和演示图形。</p></article><article class="scenario"><span class="fit">适配度高</span><h3>口播与访谈</h3><p>跨多个 take 选择更清楚的表达，保留问答和情绪重点。</p></article><article class="scenario conditional"><span class="fit">需要补充能力</span><h3>音乐与少对白蒙太奇</h3><p>音频转写提供的信息有限；选镜头还需要动作、画面语义与节拍分析。</p></article></div>
+  </div></section>
+
+  <section class="section value" id="meaning" aria-labelledby="meaning-title"><div class="shell value-layout">
+    <div class="section-head"><div><span class="kicker">05 / WHY IT MATTERS TO ME</span><h2 id="meaning-title">它补上的是<br>内容制作的剪辑环节。</h2><p>当前研究已经覆盖声音制作、数字人画面和多平台发布。video-use 有望把“录好素材”推进到“可以审阅的成片”。这些项目之间的接口尚未实测。</p></div></div>
+    <div class="chain" aria-label="现有项目与 video-use 的可能衔接"><div class="chain-node"><span class="chain-id">003<br>004</span><div><strong>Voicebox / LiveTalking</strong><small>配音或数字人讲述素材</small></div></div><span class="chain-arrow" aria-hidden="true">↓</span><div class="chain-node active"><span class="chain-id">008</span><div><strong>video-use</strong><small>选内容 · 粗剪 · 字幕 · 成片</small></div></div><span class="chain-arrow" aria-hidden="true">↓</span><div class="chain-node"><span class="chain-id">002</span><div><strong>social-auto-upload</strong><small>多平台发布与排期</small></div></div><p class="chain-note">这是建议验证的工作流，不代表上游项目提供现成集成。</p></div>
+  </div></section>
+
+  <section class="section roadmap" id="directions" aria-labelledby="directions-title"><div class="shell">
+    <div class="section-head"><div><span class="kicker">06 / EXTENSION ROADMAP</span><h2 id="directions-title">下一步可扩展什么？</h2><p>以下是基于现有实现提出的建设方向，不计入仓库已完成能力。</p></div><span class="section-number" aria-hidden="true">06</span></div>
+    <div class="roadmap-grid"><article class="road-card"><span class="priority">P0 / 先解决</span><h3>中文与可靠缓存</h3><ul><li>中文断句、标点、字体与专有名词校对。</li><li>用源文件指纹使转写缓存正确失效。</li><li>在 Windows 上验证路径与字幕滤镜。</li></ul></article><article class="road-card"><span class="priority">P1 / 便于采用</span><h3>可控与可审核</h3><ul><li>增加可替换或本地运行的转写服务。</li><li>做可视化 EDL 审稿和逐切点修改。</li><li>建立黑帧、静音、字幕越界等质量门禁。</li></ul></article><article class="road-card"><span class="priority">P2 / 拓宽场景</span><h3>理解更多画面</h3><ul><li>加入镜头切换、OCR、动作与节拍索引。</li><li>导出到专业剪辑软件继续精剪。</li><li>沉淀品牌模板与多比例批量出片。</li></ul></article></div>
+  </div></section>
+
+  <section class="section boundary" id="boundaries" aria-labelledby="boundaries-title"><div class="shell">
+    <div class="section-head"><div><span class="kicker">BEFORE YOU ADOPT</span><h2 id="boundaries-title">试用前，记住这些边界。</h2><p>文档区分源码已实现、Skill 指导和未来扩展；发布级视频仍需视听复核。</p></div></div>
+    <div class="boundary-list"><article class="boundary-item"><h3>切点可能让画面跳变</h3><p>FFmpeg 能按同一时间戳裁切音频和视频，但相邻片段的人物姿态、镜头和屏幕内容可能不连贯。抽帧与波形只辅助检查，成片仍需逐切点预览和人工修正。<a href="https://github.com/browser-use/video-use/blob/main/SKILL.md" target="_blank" rel="noopener noreferrer">查看切点检查流程 ↗</a></p></article><article class="boundary-item"><h3>音频上传到第三方</h3><p>默认转写通过 ElevenLabs Scribe API 完成，涉及网络、API 成本和素材保密要求。<a href="https://github.com/browser-use/video-use/blob/main/helpers/transcribe.py" target="_blank" rel="noopener noreferrer">查看代码 ↗</a></p></article><article class="boundary-item"><h3>同名素材可能复用旧转写</h3><p>当前缓存只检查输出 JSON 是否存在，源视频变化后需主动处理。<a href="https://github.com/browser-use/video-use/blob/main/helpers/transcribe.py" target="_blank" rel="noopener noreferrer">查看代码 ↗</a></p></article><article class="boundary-item"><h3>中文与 Windows 尚待验证</h3><p>默认字幕分组偏英文；安装说明主要列出 macOS/Linux 命令。本研究尚未在本机跑通。<a href="https://github.com/browser-use/video-use/blob/main/install.md" target="_blank" rel="noopener noreferrer">查看安装说明 ↗</a></p></article><article class="boundary-item"><h3>完整项目时间线尚未实现</h3><p>时间线图片目前面向指定区间；脚本的 EDL 全项目视图会明确提示未实现。<a href="https://github.com/browser-use/video-use/blob/main/helpers/timeline_view.py" target="_blank" rel="noopener noreferrer">查看代码 ↗</a></p></article></div>
+    <div class="source-list" aria-label="主要研究来源"><a href="https://github.com/browser-use/video-use" target="_blank" rel="noopener noreferrer">原仓库 ↗</a><a href="https://github.com/browser-use/video-use/blob/main/SKILL.md" target="_blank" rel="noopener noreferrer">Skill 工作流程 ↗</a><a href="https://github.com/browser-use/video-use/tree/main/helpers" target="_blank" rel="noopener noreferrer">辅助脚本 ↗</a><a href="https://github.com/yydshly/0925_codex_project/blob/main/projects/008-video-use/README.md" target="_blank" rel="noopener noreferrer">完整研究笔记 ↗</a></div>
+  </div></section>
+</main>
+<footer class="site-footer"><div class="shell footer-row"><div><strong>008 / VIDEO-USE</strong><p>基于上游仓库与源码整理 · 2026.09.25</p><p>本页是能力研究，尚未安装上游项目或运行真实素材。</p></div><div class="footer-links"><a href="../../index.html">返回研究索引 ↗</a><a href="https://github.com/browser-use/video-use" target="_blank" rel="noopener noreferrer">原仓库 ↗</a><a href="#top">返回顶部 ↑</a></div></div></footer>
+</body>
+</html>

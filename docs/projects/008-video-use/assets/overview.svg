@@ -1,0 +1,129 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="2280" viewBox="0 0 1600 2280" role="img" aria-labelledby="title description">
+<title id="title">video-use 一图总览：能力、原理、范围、输入输出、场景和个人价值</title>
+<desc id="description">原视频和剪辑目标进入工作流，FFmpeg 提取音频，ElevenLabs Scribe 返回逐词文本和时间戳；代码代理参考转写和按需抽样的画面生成 EDL，FFmpeg 同步裁剪音频与画面并导出 MP4。图中也列出主要能力、适用场景、边界及与 Voicebox、LiveTalking 和 social-auto-upload 的可能衔接。</desc>
+<defs>
+  <style>
+    text{font-family:"Microsoft YaHei","Noto Sans CJK SC","PingFang SC",Arial,sans-serif}
+    .top-label{font-size:22px;font-weight:800;letter-spacing:4px;fill:#d9f37a}
+    .title{font-size:66px;font-weight:850;letter-spacing:-2px;fill:#f5fbef}
+    .subtitle{font-size:27px;fill:#c5d5c3}
+    .kicker{font-size:23px;font-weight:850;letter-spacing:3px;fill:#31725b}
+    .section-title{font-size:39px;font-weight:850;fill:#16251c}
+    .card-title{font-size:30px;font-weight:850;fill:#17251d}
+    .card-text{font-size:22px;fill:#526458}
+    .dark-title{font-size:27px;font-weight:850;fill:#ecf8e8}
+    .dark-text{font-size:20px;fill:#bcd0bf}
+    .tiny{font-size:17px;fill:#779180}
+    .small{font-size:20px;fill:#48614e}
+    .chip{font-size:17px;font-weight:800}
+  </style>
+  <marker id="arrow-light" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0 0L10 5L0 10Z" fill="#a4c681"/></marker>
+  <marker id="arrow-dark" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0 0L10 5L0 10Z" fill="#4d8263"/></marker>
+  <linearGradient id="header-gradient" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#101b15"/><stop offset="1" stop-color="#253d29"/></linearGradient>
+</defs>
+<rect width="1600" height="2280" fill="#f4f6ef"/>
+<rect width="1600" height="264" fill="url(#header-gradient)"/>
+<circle cx="1430" cy="-32" r="230" fill="none" stroke="#78966e" stroke-width="2" opacity=".32"/>
+<circle cx="1510" cy="188" r="130" fill="none" stroke="#78966e" stroke-width="2" opacity=".32"/>
+<text x="90" y="66" class="top-label">008  /  OPEN SOURCE CAPABILITY MAP</text>
+<text x="90" y="148" class="title">video-use：以语音为索引的视频剪辑</text>
+<text x="90" y="206" class="subtitle">识别“说了什么、什么时候说” → 代理决定怎么剪 → 脚本同步处理音画</text>
+
+<text x="90" y="338" class="kicker">01 / INPUT</text>
+<text x="90" y="390" class="section-title">输入：素材、目标和可选创作资源</text>
+<rect x="90" y="428" width="445" height="154" rx="18" fill="#fff" stroke="#d5dfd0" stroke-width="2"/>
+<rect x="112" y="452" width="62" height="62" rx="12" fill="#e1edd8"/>
+<text x="131" y="494" font-size="31" fill="#417a56">▶</text>
+<text x="195" y="475" class="card-title">原始视频</text>
+<text x="195" y="512" class="card-text">画面 + 原声，多条 take</text>
+<text x="195" y="545" class="small">音轨是主要分析入口</text>
+<rect x="558" y="428" width="445" height="154" rx="18" fill="#fff" stroke="#d5dfd0" stroke-width="2"/>
+<rect x="580" y="452" width="62" height="62" rx="12" fill="#e1edd8"/>
+<text x="597" y="495" font-size="35" fill="#417a56">◎</text>
+<text x="663" y="475" class="card-title">剪辑目标</text>
+<text x="663" y="512" class="card-text">内容、时长、节奏、比例</text>
+<text x="663" y="545" class="small">先确认策略，再执行</text>
+<rect x="1026" y="428" width="484" height="154" rx="18" fill="#fff" stroke="#d5dfd0" stroke-width="2"/>
+<rect x="1048" y="452" width="62" height="62" rx="12" fill="#e1edd8"/>
+<text x="1066" y="495" font-size="33" fill="#417a56">✦</text>
+<text x="1131" y="475" class="card-title">可选素材</text>
+<text x="1131" y="512" class="card-text">品牌元素、配乐、动画</text>
+<text x="1131" y="545" class="small">按作品需要准备</text>
+
+<text x="90" y="655" class="kicker">02 / MECHANISM</text>
+<text x="90" y="707" class="section-title">原理：声音定位内容，画面辅助核查</text>
+<rect x="90" y="746" width="1420" height="493" rx="28" fill="#14231a"/>
+<text x="130" y="794" font-size="20" font-weight="750" letter-spacing="2" fill="#b9d3b2">主要路径 / 音频 → 带时间戳的文字 → 剪辑决策</text>
+<rect x="130" y="831" width="273" height="170" rx="16" fill="#203629" stroke="#466c4d"/>
+<text x="154" y="869" font-size="18" font-weight="800" fill="#d9f37a">01 / LOCAL</text>
+<text x="154" y="915" class="dark-title">FFmpeg 提取音轨</text>
+<text x="154" y="951" class="dark-text">从源视频提取声音</text>
+<text x="154" y="977" class="dark-text">视频画面仍保留</text>
+<path d="M410 915H438" fill="none" stroke="#a4c681" stroke-width="5" marker-end="url(#arrow-light)"/>
+<rect x="455" y="831" width="273" height="170" rx="16" fill="#203629" stroke="#466c4d"/>
+<text x="479" y="869" font-size="18" font-weight="800" fill="#f8b58b">02 / CLOUD API</text>
+<text x="479" y="915" class="dark-title">Scribe 识别语音</text>
+<text x="479" y="951" class="dark-text">类似 Whisper 的 ASR</text>
+<text x="479" y="977" class="dark-text">原版需要上传音频</text>
+<path d="M735 915H763" fill="none" stroke="#a4c681" stroke-width="5" marker-end="url(#arrow-light)"/>
+<rect x="780" y="831" width="273" height="170" rx="16" fill="#203629" stroke="#466c4d"/>
+<text x="804" y="869" font-size="18" font-weight="800" fill="#d9f37a">03 / INDEX</text>
+<text x="804" y="915" class="dark-title">逐词文字 + 时间戳</text>
+<text x="804" y="951" class="dark-text">说了什么 · 何时说</text>
+<text x="804" y="977" class="dark-text">说话人 · 声音事件</text>
+<path d="M1060 915H1088" fill="none" stroke="#a4c681" stroke-width="5" marker-end="url(#arrow-light)"/>
+<rect x="1105" y="831" width="364" height="170" rx="16" fill="#29452f" stroke="#87ab6f" stroke-width="2"/>
+<text x="1130" y="869" font-size="18" font-weight="800" fill="#d9f37a">04 / AGENT</text>
+<text x="1130" y="915" class="dark-title">代码代理决定怎么剪</text>
+<text x="1130" y="951" class="dark-text">挑句子、比较重录版本</text>
+<text x="1130" y="977" class="dark-text">生成 EDL 剪辑决策表</text>
+<rect x="130" y="1039" width="525" height="112" rx="14" fill="#1c3023" stroke="#4c7052"/>
+<text x="155" y="1082" font-size="23" font-weight="800" fill="#e2efdc">画面按需抽样核查</text>
+<text x="155" y="1118" class="dark-text">胶片条 + 波形，检查切点是否自然</text>
+<path d="M1287 1005V1028" fill="none" stroke="#739c70" stroke-width="4" marker-end="url(#arrow-light)"/>
+<rect x="750" y="1039" width="719" height="112" rx="14" fill="#29452f" stroke="#87ab6f"/>
+<text x="778" y="1082" font-size="23" font-weight="800" fill="#e2efdc">脚本按 EDL 同步裁剪声音与画面</text>
+<text x="778" y="1118" class="dark-text">FFmpeg 分段处理、拼接、加字幕与图形、导出成片</text>
+<text x="130" y="1204" font-size="20" fill="#bdd2b8">Scribe 负责识别与原始时间戳；代理负责判断；FFmpeg 负责真正的音视频处理。</text>
+
+<text x="90" y="1316" class="kicker">03 / CAPABILITIES</text>
+<text x="90" y="1368" class="section-title">能力：粗剪、后期与交付检查</text>
+<rect x="90" y="1405" width="445" height="86" rx="12" fill="#fff" stroke="#d5dfd0" stroke-width="2"/>
+<circle cx="121" cy="1448" r="9" fill="#e9a660"/><text x="145" y="1459" font-size="25" font-weight="750" fill="#26362a">选片、去口头禅与空白</text>
+<rect x="558" y="1405" width="445" height="86" rx="12" fill="#fff" stroke="#d5dfd0" stroke-width="2"/>
+<circle cx="589" cy="1448" r="9" fill="#67ab81"/><text x="613" y="1459" font-size="25" font-weight="750" fill="#26362a">按 EDL 切片与拼接</text>
+<rect x="1026" y="1405" width="484" height="86" rx="12" fill="#fff" stroke="#d5dfd0" stroke-width="2"/>
+<circle cx="1057" cy="1448" r="9" fill="#67ab81"/><text x="1081" y="1459" font-size="25" font-weight="750" fill="#26362a">基础调色与音量处理</text>
+<rect x="90" y="1506" width="445" height="86" rx="12" fill="#fff" stroke="#d5dfd0" stroke-width="2"/>
+<circle cx="121" cy="1549" r="9" fill="#67ab81"/><text x="145" y="1560" font-size="25" font-weight="750" fill="#26362a">生成并烧录字幕</text>
+<rect x="558" y="1506" width="445" height="86" rx="12" fill="#fff" stroke="#d5dfd0" stroke-width="2"/>
+<circle cx="589" cy="1549" r="9" fill="#9892c9"/><text x="613" y="1560" font-size="25" font-weight="750" fill="#26362a">外部制作动画叠加</text>
+<rect x="1026" y="1506" width="484" height="86" rx="12" fill="#fff" stroke="#d5dfd0" stroke-width="2"/>
+<circle cx="1057" cy="1549" r="9" fill="#e9a660"/><text x="1081" y="1560" font-size="25" font-weight="750" fill="#26362a">代理检查切点并返工</text>
+<circle cx="105" cy="1629" r="8" fill="#67ab81"/><text x="122" y="1636" class="small">脚本已实现</text>
+<circle cx="300" cy="1629" r="8" fill="#e9a660"/><text x="317" y="1636" class="small">代理工作流程</text>
+<circle cx="554" cy="1629" r="8" fill="#9892c9"/><text x="571" y="1636" class="small">需外部工具</text>
+
+<text x="90" y="1714" class="kicker">04 / OUTPUT</text>
+<text x="90" y="1766" class="section-title">输出：成片，以及可追溯的编辑资料</text>
+<rect x="90" y="1800" width="445" height="119" rx="16" fill="#e1efd7" stroke="#bdd7b5"/>
+<text x="119" y="1847" class="card-title">final.mp4</text><text x="119" y="1886" class="card-text">可预览、可交付的视频</text>
+<rect x="558" y="1800" width="445" height="119" rx="16" fill="#fff" stroke="#d5dfd0"/>
+<text x="587" y="1847" class="card-title">EDL + SRT + 转写</text><text x="587" y="1886" class="card-text">切点、字幕与逐词记录</text>
+<rect x="1026" y="1800" width="484" height="119" rx="16" fill="#fff" stroke="#d5dfd0"/>
+<text x="1055" y="1847" class="card-title">project.md</text><text x="1055" y="1886" class="card-text">保留决策与下次编辑的上下文</text>
+
+<rect x="90" y="1964" width="680" height="149" rx="16" fill="#ddefd5"/>
+<text x="121" y="2007" font-size="23" font-weight="850" fill="#237b68">05 / 适用场景</text>
+<text x="121" y="2057" font-size="30" font-weight="850" fill="#18321f">口播 · 访谈 · 教程 · 产品讲解</text>
+<text x="121" y="2091" class="card-text">讲话承载主要信息时，价值最高。</text>
+<rect x="792" y="1964" width="718" height="149" rx="16" fill="#fff0e5" stroke="#f1d5bd"/>
+<text x="823" y="2007" font-size="23" font-weight="850" fill="#b96c42">06 / 范围与边界</text>
+<text x="823" y="2057" font-size="27" font-weight="850" fill="#4b2d20">语音优先，视觉只按需抽样</text>
+<text x="823" y="2091" font-size="20" fill="#735949">少对白、画面跳切需额外检查；原版转写依赖云 API。</text>
+
+<rect x="0" y="2160" width="1600" height="120" fill="#13241a"/>
+<text x="90" y="2200" class="top-label">07 / 对我们的意义</text>
+<text x="90" y="2241" font-size="26" font-weight="800" fill="#f2f8ed">003 Voicebox / 004 LiveTalking  →  008 video-use 剪辑  →  002 social-auto-upload 发布</text>
+<text x="1225" y="2241" font-size="18" fill="#b4c8b3">跨项目衔接待实测</text>
+</svg>
