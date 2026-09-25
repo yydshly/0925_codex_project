@@ -111,14 +111,26 @@ HuBERT 等特征模型从输入录音中提取与发音相关的线索；使用�
 
 [打开在线能力网页](https://yydshly.github.io/0925_codex_project/projects/005-whisperlivekit/) · [打开我们生成的一图总览](https://yydshly.github.io/0925_codex_project/projects/005-whisperlivekit/assets/overview.svg) · [阅读完整研究笔记](projects/005-whisperlivekit/README.md)
 
-## 添加项目
-
-从 [子项目模板](projects/_template/README.md) 开始，按 [收录说明](ADDING_PROJECTS.md) 更新索引。静态网页演示统一放在 docs/projects/ 下，便于通过一个 GitHub Pages 站点按子路径访问。
-
 ## 006 · Fay 数字人交互与业务连接导读
+
+源库：[xszyou/Fay](https://github.com/xszyou/Fay)。
 
 **能力：** 接收文字和语音，管理会话、长期记忆与主动播报，按需查询知识或调用 MCP 业务工具，再把回复送往数字人等终端。**本质：** 一个 Agent 交互编排框架；RAG 是可选知识分支，角色画面由接入终端渲染。**场景：** 导览、教学、客服、虚拟主播与语音硬件。**对我的意义：** 可连接 005 实时转写与 004 数字人画面；先实测一条最小交互链，再决定如何组合现有项目。
 
 ![Fay 内部架构与能力摘要图](docs/projects/006-fay/assets/fay-internal-architecture.svg)
 
 [打开在线 Fay 研究网页](https://yydshly.github.io/0925_codex_project/projects/006-fay/) · [阅读完整研究笔记](projects/006-fay/README.md) · [放大架构图](https://yydshly.github.io/0925_codex_project/projects/006-fay/assets/fay-internal-architecture.svg)
+
+## 007 · Calibre-Web 图书管理库导读
+
+源库：[janeczku/calibre-web](https://github.com/janeczku/calibre-web)。
+
+**定位与能力：** Calibre-Web 是管理已有 Calibre 书库的自托管网页应用。它提供书籍编目、元数据搜索、书架、网页阅读、下载、OPDS 目录和 Kobo 供书；仓库提供软件，本身不附带书籍。**使用场景：** 个人藏书、家庭共读、阅读器供书，以及内容创作时的参考资料管理。**对我的意义：** 为现有项目补上长期资料入口，让书籍和 PDF 更容易找到、阅读与复用；若要让 Fay 回答书籍正文问题，还需另外建立文本提取、索引和引用链路。
+
+![Calibre-Web 引导图：已有书库输入、操作步骤、内部模块、功能、资源、使用场景及个人价值。](docs/projects/007-calibre-web/assets/overview.svg)
+
+[打开在线 Calibre-Web 研究网页](https://yydshly.github.io/0925_codex_project/projects/007-calibre-web/) · [放大我们生成的引导图](https://yydshly.github.io/0925_codex_project/projects/007-calibre-web/assets/overview.svg) · [阅读完整研究笔记](projects/007-calibre-web/README.md)
+
+## 添加项目
+
+从 [子项目模板](projects/_template/README.md) 开始，按 [收录说明](ADDING_PROJECTS.md) 更新索引。静态网页演示统一放在 docs/projects/ 下，便于通过一个 GitHub Pages 站点按子路径访问。
