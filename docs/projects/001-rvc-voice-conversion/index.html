@@ -1,0 +1,484 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <meta name="description" content="研究 Retrieval-based-Voice-Conversion-WebUI：语音与歌声换声能力、多模型协作原理、运行环境，以及作为自建软件换声模块的意义。">
+  <title>Retrieval-based-Voice-Conversion-WebUI · RVC 能力、原理与使用价值</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="stylesheet" href="style.css">
+  <script src="sound-basics.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">跳到正文</a>
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <a class="brand" href="../../index.html" aria-label="返回项目研究索引">
+        <span class="brand-mark" aria-hidden="true">R</span>
+        <span>项目研究 <strong>/ 001</strong></span>
+      </a>
+      <nav class="site-nav" aria-label="页面导航">
+        <a href="#understanding">总结</a>
+        <a href="#capabilities">能力</a>
+        <a href="#mechanism">原理</a>
+        <a href="#environment">环境</a>
+        <a href="#scenarios">场景</a>
+        <a href="#limits">边界</a>
+      </nav>
+      <a class="header-source" href="https://github.com/RVC-Project/Retrieval-based-Voice-Conversion-WebUI" target="_blank" rel="noopener noreferrer">原项目 ↗</a>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="hero wrap" aria-labelledby="page-title">
+      <div class="hero-copy">
+        <p class="eyebrow"><span class="eyebrow-line"></span> 源库：<a href="https://github.com/RVC-Project/Retrieval-based-Voice-Conversion-WebUI" target="_blank" rel="noopener">RVC-Project / Retrieval-based-Voice-Conversion-WebUI</a></p>
+        <h1 id="page-title">RVC <span>音色转换</span><br>能力地图</h1>
+        <p class="hero-lead">给它一段已经说出或唱出的声音，再选择目标声线，RVC 会尽量保留原来的内容与节奏，把声音转换成另一种音色。</p>
+        <p class="hero-note">核心定位：音频 → 音频。它不单靠文字生成讲话。<a href="#visual-guide">三张图看完整理解 ↓</a></p>
+        <div class="hero-actions">
+          <a class="button primary" href="#understanding">先看理解总结 <span aria-hidden="true">↓</span></a>
+          <a class="button secondary" href="#decision">判断是否适用 <span aria-hidden="true">↗</span></a>
+        </div>
+      </div>
+      <div class="flow-panel" aria-label="RVC 输入与输出示意">
+        <div class="flow-panel-top">
+          <span class="panel-label">它在流程里的位置</span>
+          <span class="panel-tag">语音到语音</span>
+        </div>
+        <div class="flow-stack">
+          <div class="flow-item">
+            <span class="flow-index">01 / 输入</span>
+            <strong>已有的讲话或歌声</strong>
+            <span>词句、节奏、旋律来自原始录音</span>
+          </div>
+          <div class="flow-connector" aria-hidden="true"><span></span>提取内容与音高<span></span></div>
+          <div class="flow-item flow-engine">
+            <span class="flow-index">02 / 转换</span>
+            <strong>目标音色模型 + 特征检索</strong>
+            <span>用目标声音特征辅助合成</span>
+          </div>
+          <div class="flow-connector" aria-hidden="true"><span></span>生成波形<span></span></div>
+          <div class="flow-item output">
+            <span class="flow-index">03 / 输出</span>
+            <strong>目标音色的音频</strong>
+            <span>仍需试听清晰度和相似度</span>
+          </div>
+        </div>
+        <p class="diagram-caption">流程示意，不代表真实音频或性能测量。</p>
+      </div>
+    </section>
+
+
+<section class="section wrap research-abstract" id="research-abstract" aria-labelledby="research-abstract-title">
+ <div class="section-heading"><div><p class="section-kicker">研究摘要 · 001</p><h2 id="research-abstract-title">能力、实现原理与对我的意义</h2></div><p>源库：<a href="https://github.com/RVC-Project/Retrieval-based-Voice-Conversion-WebUI" target="_blank" rel="noopener">Retrieval-based-Voice-Conversion-WebUI</a></p></div>
+ <div class="abstract-grid"><article><h3>能力</h3><p>把已有讲话或歌声转换成目标声线，支持离线批量转换、实时变声和目标声线训练，并提供人声分离等辅助功能。</p></article><article><h3>实现原理</h3><p>HuBERT 提取发音特征，RMVPE 等方法估计音高，RVC 目标声线模型生成新波形；可选特征检索减轻原声残留，多个模型通过同一套程序协作。</p></article><article><h3>对我的意义</h3><p>可作为自建软件的换声模块，也可借鉴预训练模型、目标微调与检索协作的方法。当前以理解为主，无需立即安装；实际音质、相似度和设备延迟需日后验证。</p></article></div>
+ <p class="abstract-links"><a href="#visual-guide">查看三张引导图 ↓</a> · <a href="#understanding">阅读我们的理解总结 ↓</a></p>
+</section>
+
+    <section class="section wrap understanding" id="understanding" aria-labelledby="understanding-title">
+      <div class="section-heading">
+        <div><p class="section-kicker">讨论汇总 · 先看结论</p><h2 id="understanding-title">我们现在理解了什么？</h2></div>
+        <p>从声音是什么，一直追到核心模型、运行环境与使用价值，把容易混淆的概念串起来。</p>
+      </div>
+      <div class="understanding-lead">
+        <span class="understanding-label">一句话概括</span>
+        <p>RVC 把<strong>发音特征提取、音高估计与目标声线生成</strong>组织成换声流程：输入已有录音，输出尽量保留内容和节奏、具有目标声线特点的新音频。</p>
+        <span>本地或服务器描述计算发生在哪里；多个模型如何协作，才是这项能力的实现方式。</span>
+      </div>
+      <div class="understanding-grid">
+        <article><span class="understanding-index">01 / 声音基础</span><h3>录音是一条波形，信息交织其中</h3><p>振幅主要影响响度，基频主要影响音高；谐波比例、噪声及时间变化共同影响音色。谐波本身也有频率和振幅。内容、音高、音色共同体现在波形中，并没有各自独立保存成音轨。</p><a href="#sound-nature">回看声音基础与 A/B 试听 →</a></article>
+        <article><span class="understanding-index">02 / 换声动作</span><h3>提取所需线索，再生成新的波形</h3><p>RVC 提取按时间排列的发音特征，以及可选的音高走势，再让学过目标声线的模型生成声音。它不必先把录音转成文字；信息分离是近似的，转换也可能影响咬字、气声和细节。</p><a href="#voice-rebuild">回看训练与转换过程 →</a></article>
+        <article><span class="understanding-index">03 / 核心模型</span><h3>目标声线 .pth 就是生成模型的权重</h3><p>HuBERT 提供发音线索；RMVPE 等方法提供音高；RVC 生成器加载目标 <code>.pth</code>，输出新波形。配套 <code>.index</code> 是由 FAISS 查询的可选特征数据。常见流程由这些组件分工完成。</p><a href="#environment">回看模型与依赖对应图 →</a></article>
+        <article><span class="understanding-index">04 / 运行环境</span><h3>模型文件、运行框架与设备各有作用</h3><p>权重文件保存学到的参数，RVC 代码定义和组织计算，Python、PyTorch 等环境让代码运行，CPU 或显卡执行计算。通常共用一套环境；浏览器提供操作界面，计算也可以部署在服务器。</p><a href="#environment">查看共用环境与硬件路线 →</a></article>
+        <article><span class="understanding-index">05 / 实际准备</span><h3>程序已写好调用方式，需要提供模型文件</h3><p>基础换声通常准备 HuBERT、所选音高方案的资源和至少一个兼容的目标声线模型，再按需加载索引。基础模型可共用；目标声线可获取现成模型或自行训练。常规使用主要是放好文件并在界面选择。</p><a href="#understanding-resources">查看哪些要装、哪些要选 →</a></article>
+        <article><span class="understanding-index">06 / 对我的意义</span><h3>可以作为自己软件中的换声环节</h3><p>可以复用这套模型流程，围绕它实现录音、声线选择、试听和导出等功能。仓库的价值包括模型整合、音频处理和操作入口；产品是否可用，还需要验证效果、速度和稳定性。</p><a href="#scenarios">查看可以组合的应用流程 →</a></article>
+      </div>
+
+      <details class="understanding-resources" id="understanding-resources">
+        <summary>基础换声到底要准备什么？展开看安装与资源的区别</summary>
+        <div class="understanding-table-scroll" role="region" aria-label="基础换声准备清单" tabindex="0">
+          <table class="understanding-table">
+            <thead><tr><th scope="col">类别</th><th scope="col">具体资源</th><th scope="col">需要做什么</th></tr></thead>
+            <tbody>
+              <tr><th scope="row">安装的环境</th><td>Python、匹配硬件的 PyTorch、音频处理与界面依赖</td><td>按对应版本的依赖清单安装，通常多个声线共用。</td></tr>
+              <tr><th scope="row">下载的基础模型</th><td>HuBERT；采用 RMVPE 时准备对应模型文件</td><td>按项目指定格式和路径放置；程序已有调用方式。</td></tr>
+              <tr><th scope="row">选择的目标声线</th><td>兼容的目标 <code>.pth</code> 与可选配套 <code>.index</code></td><td>获取现成模型，或用目标录音训练；安装依赖不会自动产生想要的声线。</td></tr>
+              <tr><th scope="row">额外能力</th><td>训练底模、训练录音，或人声分离模型</td><td>需要训练自己的声线或分离人声时，再准备对应资源。</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>常规换声无需自己编程接入每个模型。自己研发新模型或改造转换流程，则属于进一步的开发工作。具体版本和目录见下方“环境”章节。</p>
+      </details>
+
+      <div class="understanding-decision">
+        <p class="section-kicker">当前阶段的判断</p>
+        <h3>以探索和理解为目标，现在可以先不安装</h3>
+        <p>目前可以把 RVC 作为以后开发换声功能的候选方案。理解原理和组件关系，已经能帮助判断它在产品中承担哪个环节；是否值得部署，等有明确用途后再验证。</p>
+        <div class="understanding-evidence">
+          <div><strong>通过资料可以理解</strong><p>能力范围、基本原理、模型分工、环境组成，以及如何放进自己的软件。</p></div>
+          <div><strong>需要实际结果才能确认</strong><p>目标声线是否相似、咬字是否清楚、语气是否自然，以及自己设备的速度、延迟和稳定性。</p></div>
+        </div>
+        <p class="understanding-status">本项目已完成资料整理、原理图和基础合成音教学演示；尚未部署 RVC 模型，也未验证本机实际换声效果。</p>
+      </div>
+
+      <div class="visual-guide" id="visual-guide" aria-labelledby="visual-guide-title">
+ <h3 id="visual-guide-title">三张图，串起我们的理解</h3>
+ <p>按“能做什么 → 怎样实现 → 依赖什么”阅读。点击缩略图跳到本页完整图片和对应讲解。</p>
+ <div class="understanding-gallery">
+<a href="#capability-diagram"><span>图 01 · 能力总览</span><img src="assets/rvc-capabilities-overview.png" width="1070" height="1470" loading="lazy" alt="能力总览完整图缩略图"><strong>阅读完整图与说明 ↓</strong><small>把输入、输出、适用场景和能力边界对应起来。</small></a><a href="#principle-diagram"><span>图 02 · 完整原理</span><img src="assets/rvc-principle-overview.png" width="2400" height="3420" loading="lazy" alt="完整原理完整图缩略图"><strong>阅读完整图与说明 ↓</strong><small>从声音基础，到训练目标声线，再到生成新波形。</small></a><a href="#environment-diagram"><span>图 03 · 模型与环境</span><img src="assets/rvc-model-environment-map.png" width="2700" height="4410" loading="lazy" alt="模型与环境完整图缩略图"><strong>阅读完整图与说明 ↓</strong><small>找出核心模型，理解权重、框架和计算设备的分工。</small></a></div></div>
+      <p class="section-source">汇总依据：<a href="#mechanism">声音与换声原理</a>、<a href="#environment">模型与运行环境</a>中的官方代码和声学资料。“是否现在安装”是结合本次探索目标给出的判断。</p>
+    </section>
+
+    <div class="section-divider wrap"><span>CAPABILITY / 01</span></div>
+    <section class="section wrap" id="capabilities" aria-labelledby="capabilities-title">
+      <div class="section-heading">
+        <div>
+          <p class="section-kicker">它具备哪些能力</p>
+          <h2 id="capabilities-title">从素材到变声，覆盖两条使用路径</h2>
+        </div>
+        <p>可以加载现成目标声线，也可以自行训练模型，再处理录音；需要现场使用时，可使用实时变声流程。</p>
+      </div>
+<article class="diagram-article" id="capability-diagram" aria-labelledby="capability-diagram-title">
+ <div class="diagram-heading"><p class="section-kicker">图 01 / 能力总览</p><h3 id="capability-diagram-title">先看输入与输出，再看可以组合的用途</h3>
+ <p>这张图回答“我可以拿它做什么”。最上方是核心换声动作，中间列出可用功能，下方说明资源、应用组合和边界。</p></div>
+<figure class="explainer-figure">
+  <a class="explainer-image-link" href="assets/rvc-capabilities-overview.png" target="_blank" rel="noopener" aria-label="打开高清原图：RVC 能力总览：已有音频经目标模型转换为新声线，包含录音与歌声转换、实时变声、声线训练、批量参数控制、人声分离及应用组合。">
+   <img src="assets/rvc-capabilities-overview.png" width="1070" height="1470" loading="lazy" decoding="async" alt="RVC 能力总览：已有音频经目标模型转换为新声线，包含录音与歌声转换、实时变声、声线训练、批量参数控制、人声分离及应用组合。">
+  </a>
+  <figcaption>完整能力图，点击图片可放大阅读。 <a href="assets/rvc-capabilities-overview.png" target="_blank" rel="noopener">打开高清原图 ↗</a></figcaption>
+ </figure>
+ <ol class="diagram-reading">
+  <li><span>先看输入</span><h4>需要已有声音和目标模型</h4><p>例如先录好一句台词，再选择一个兼容的目标声线模型。输出的新录音尽量延续你的发音和节奏。文字配音要先由其他 TTS 工具生成声音。</p></li>
+  <li><span>再看功能</span><h4>使用现成声线与训练声线是两条路径</h4><p>已有模型时可直接进行录音或实时转换；没有合适声线时，才需要准备目标录音训练。训练功能不代表每次换声都要重新学习。</p></li>
+  <li><span>最后看组合</span><h4>完整作品还会经过其他步骤</h4><p>歌曲通常先分离人声，换声后另行混回伴奏；直播要配置音频路由。图中的应用是可组合的工作流，效果与延迟仍需要实际验证。</p></li>
+ </ol>
+ <div class="diagram-key"><strong>读完这张图应当理解</strong><p>RVC 可以作为自己的软件中的换声环节。先确定你要转换的声音与目标声线，再决定是否需要训练、分离或实时处理等额外功能。</p></div>
+ <p class="diagram-next"><a href="#principle-diagram">下一张：它怎样把原录音变成目标声线？ →</a></p>
+</article>
+
+      <div class="capability-grid">
+        <article class="capability-card featured">
+          <span class="card-num">01</span>
+          <div class="card-icon" aria-hidden="true">◎</div>
+          <h3>训练目标音色</h3>
+          <p>用目标人物的清晰录音微调预训练模型，并建立声音特征索引。官方 FAQ 建议常规准备 10–50 分钟低噪、音色统一的素材。</p>
+          <span class="card-meta">输入：目标声音录音</span>
+        </article>
+        <article class="capability-card">
+          <span class="card-num">02</span>
+          <div class="card-icon" aria-hidden="true">↝</div>
+          <h3>离线转换录音</h3>
+          <p>把已有的讲话或歌声转换为目标音色；支持音高调整、单文件和批量处理。</p>
+          <span class="card-meta">输入：来源音频 + 目标模型</span>
+        </article>
+        <article class="capability-card">
+          <span class="card-num">03</span>
+          <div class="card-icon" aria-hidden="true">◉</div>
+          <h3>实时变声</h3>
+          <p>持续处理麦克风输入，用于直播、互动或现场试音。实际延迟取决于算力、设备、驱动与设置。</p>
+          <span class="card-meta">输入：麦克风 + 目标模型</span>
+        </article>
+        <article class="capability-card">
+          <span class="card-num">04</span>
+          <div class="card-icon" aria-hidden="true">≋</div>
+          <h3>处理歌曲素材</h3>
+          <p>提供人声与伴奏分离、去混响等辅助步骤，方便先整理歌声，再转换并与伴奏混合。</p>
+          <span class="card-meta">输入：歌曲或混合音频</span>
+        </article>
+        <article class="capability-card">
+          <span class="card-num">05</span>
+          <div class="card-icon" aria-hidden="true">◫</div>
+          <h3>组织多个音色</h3>
+          <p>当前命令行文档支持单说话人与多说话人模型；多人模型为各说话人分别建立索引。</p>
+          <span class="card-meta">用途：多个可选声线</span>
+        </article>
+        <article class="capability-card">
+          <span class="card-num">06</span>
+          <div class="card-icon" aria-hidden="true">⌘</div>
+          <h3>接入制作流程</h3>
+          <p>可使用 WebUI 进行人工试验，也可用命令行批量转换。模型融合是仓库提供的另一项音色处理能力。</p>
+          <span class="card-meta">方式：网页界面 / 命令行</span>
+        </article>
+      </div>
+      <p class="section-source">依据：<a href="https://github.com/RVC-Project/Retrieval-based-Voice-Conversion-WebUI" target="_blank" rel="noopener noreferrer">项目 README</a>、<a href="https://github.com/RVC-Project/Retrieval-based-Voice-Conversion-WebUI/blob/main/docs/cn/cli.md" target="_blank" rel="noopener noreferrer">官方 CLI 文档</a>、<a href="https://github.com/RVC-Project/Retrieval-based-Voice-Conversion-WebUI/blob/main/docs/cn/faq.md" target="_blank" rel="noopener noreferrer">官方 FAQ</a>。</p>
+    </section>
+
+    <div class="section-divider wrap"><span>MECHANISM / 02</span></div>
+    <section class="section wrap" id="mechanism" aria-labelledby="mechanism-title">
+      <div class="section-heading">
+        <div><p class="section-kicker">实现原理 · 从基础开始</p><h2 id="mechanism-title">先理解声音，再理解换声</h2></div>
+        <p>沿着声波、声音特征、人声形成的顺序，理解 RVC 为什么能保留发音、重建目标声线。</p>
+      </div>
+
+      <nav class="learning-path" aria-label="声音与换声的理解顺序">
+        <a href="#sound-nature"><span>01</span>声音是什么</a>
+        <a href="#sound-properties"><span>02</span>区分声音特征</a>
+        <a href="#human-voice"><span>03</span>人声怎样形成</a>
+        <a href="#voice-rebuild"><span>04</span>换声改变什么</a>
+      </nav>
+
+      <p class="diagram-inline-link">也可以先看 <a href="#principle-diagram">完整原理图与逐步讲解 ↓</a>，再回来逐项试听声音特征。</p>
+      <article class="lesson-block" id="sound-nature" aria-labelledby="sound-nature-title">
+        <p class="lesson-number">01 / 从物理声音到数字录音</p>
+        <h3 id="sound-nature-title">声音，是随时间传播的压力变化</h3>
+        <p>以空气中的声音为例：物体振动，让周围空气交替压缩、变稀，这种变化向外传播，传到耳朵后引起鼓膜振动。我们由此听到声音。</p>
+        <ol class="sound-chain" aria-label="声音被记录的过程">
+          <li><strong>声源振动</strong><span>例如扬声器振膜</span></li>
+          <li><strong>空气压力变化</strong><span>声波传到麦克风</span></li>
+          <li><strong>麦克风变成电信号</strong><span>电信号随声音变化</span></li>
+          <li><strong>采样成一串数字</strong><span>电脑记录每个时刻的数值</span></li>
+        </ol>
+        <div class="lesson-takeaway"><strong>电脑实际拿到什么？</strong><p>一条数字波形。把这些数值按时间画出来，横轴是时间，纵轴是信号大小。词句、音高和音色的信息都共同体现在波形里，需要进一步分析才能提取。</p></div>
+        <p class="section-source">基础资料：<a href="https://openstax.org/books/university-physics-volume-1/pages/17-1-sound-waves" target="_blank" rel="noopener noreferrer">OpenStax：声波</a>、<a href="https://developer.mozilla.org/en-US/docs/Web/API/AudioBuffer" target="_blank" rel="noopener noreferrer">MDN：数字音频波形</a>。</p>
+      </article>
+
+      <article class="lesson-block" id="sound-properties" aria-labelledby="sound-properties-title">
+        <p class="lesson-number">02 / 同一段声音的不同特征</p>
+        <h3 id="sound-properties-title">音高、音量、音色，分别在说什么？</h3>
+        <div class="concept-grid">
+          <div><h4>音高：听起来高还是低</h4><p>对有明确音高的声音，主要与基频有关。每秒重复越快，通常越高。220 Hz 表示每秒重复 220 次。</p><small>例子：同一个人从低音唱到高音。这里的音高，就是常说的“音调高低”；语调则是一句话里音高起伏的走向。</small></div>
+          <div><h4>音量：听起来响还是轻</h4><p>波动幅度更大，通常更响。但听觉响度也受频率、持续时间和听音环境影响，不能只看波形高度。</p><small>例子：同一个音，小声说或大声说。</small></div>
+          <div><h4>音色：声音有什么质感</h4><p>即使音高、响度接近，两种声音仍能听出区别。这与各频率成分的比例、起音衰减、噪声等有关。</p><small>例子：钢琴与小提琴奏同一个音；两个人唱同一个“啊”。</small></div>
+        </div>
+
+        <div class="lesson-takeaway"><strong>为什么“音色”更复杂？</strong><p>真实人声会同时含有多种频率。例如基频是 220 Hz 时，还可以包含 440、660 Hz 等谐波（整数倍频率），这些属于泛音。它们各有多强，加上气息噪声和随时间变化的发声方式，共同影响音色。改变音高，只改变了其中一个方面。</p></div>
+
+        <div class="sound-lab" aria-labelledby="sound-lab-title">
+          <div class="sound-lab-heading"><div><span class="lane-label">看波形，也听区别</span><h4 id="sound-lab-title">每次只改一个因素</h4></div><p>先选一组，再分别播放 A、B。</p></div>
+          <div class="sound-mode-buttons" role="group" aria-label="选择声音对比">
+            <button type="button" data-sound-mode="pitch" aria-pressed="true">只改音高</button>
+            <button type="button" data-sound-mode="volume" aria-pressed="false">只改振幅</button>
+            <button type="button" data-sound-mode="timbre" aria-pressed="false">只改泛音比例</button>
+          </div>
+          <p class="sound-observation" id="sound-observation">A 为 220 Hz，B 为 440 Hz；数字振幅相同。观察 B 在同样时间内重复更多次，听起来更高。</p>
+          <div class="sound-samples">
+            <div class="sound-sample">
+              <div class="sample-heading"><strong id="sample-a-title">A · 较低的音</strong><button type="button" class="audio-play" data-play-sample="a" aria-label="播放声音 A">播放 A</button></div>
+              <p class="sample-meta" id="sample-a-meta">基频 220 Hz · RMS 0.06</p>
+              <svg id="wave-a" class="sound-wave" viewBox="0 0 560 150" role="img" aria-label="声音 A 的波形，横轴时间，纵轴相对信号幅度"></svg>
+              <div class="wave-axis"><span>0 ms</span><span>时间 →</span><span>20 ms</span></div>
+              <div class="harmonic-label">频率成分强度（相对值）</div><div class="harmonic-bars" id="harmonics-a"></div>
+            </div>
+            <div class="sound-sample">
+              <div class="sample-heading"><strong id="sample-b-title">B · 较高的音</strong><button type="button" class="audio-play" data-play-sample="b" aria-label="播放声音 B">播放 B</button></div>
+              <p class="sample-meta" id="sample-b-meta">基频 440 Hz · RMS 0.06</p>
+              <svg id="wave-b" class="sound-wave" viewBox="0 0 560 150" role="img" aria-label="声音 B 的波形，横轴时间，纵轴相对信号幅度"></svg>
+              <div class="wave-axis"><span>0 ms</span><span>时间 →</span><span>20 ms</span></div>
+              <div class="harmonic-label">频率成分强度（相对值）</div><div class="harmonic-bars" id="harmonics-b"></div>
+            </div>
+          </div>
+          <div class="sound-player-status"><button type="button" id="stop-sound" disabled>停止播放</button><span id="sound-status" role="status" aria-live="polite">点击按钮播放短音，不会自动播放。</span></div>
+          <p class="sound-lab-note">这是本地合成音教学示意，不是 RVC 变声结果。两幅波形使用相同的时间和幅度刻度。“RMS”是数字信号的有效幅度；相同 RMS 不保证听起来完全一样响。泛音实验只演示音色的一部分。</p>
+          <noscript><p>启用 JavaScript 后可查看波形并试听；上面的文字定义仍可直接阅读。</p></noscript>
+        </div>
+
+        <p class="section-source">基础资料：<a href="https://openstax.org/books/university-physics-volume-1/pages/17-3-sound-intensity" target="_blank" rel="noopener noreferrer">OpenStax：频率、响度与音色</a>。</p>
+      </article>
+
+      <article class="lesson-block" id="human-voice" aria-labelledby="human-voice-title">
+        <p class="lesson-number">03 / 把这些概念放回人声</p>
+        <h3 id="human-voice-title">声带提供振动，声道塑造声音</h3>
+        <p>发出有声的“啊”时，肺部气流驱动声带振动，产生包含基频与谐波的声音。声音经过咽喉、口腔等部位，不同频率被不同程度地增强或减弱，形成我们听见的人声。</p>
+        <ol class="sound-chain voice-chain" aria-label="有声人声的形成">
+          <li><strong>肺部气流</strong><span>提供发声动力</span></li>
+          <li><strong>声带振动</strong><span>产生基频与谐波</span></li>
+          <li><strong>声道共鸣与发音动作</strong><span>舌头、嘴唇等改变声音</span></li>
+          <li><strong>最终人声</strong><span>同时带有内容和个人特征</span></li>
+        </ol>
+        <p>这些共鸣在频谱中形成的突出区域常称为<strong>共振峰</strong>。嘴形、舌位改变时，共振峰也会变化，帮助区分“啊”“衣”“乌”等元音。因此，声道既参与“发了什么音”，也参与“听起来像谁”。</p>
+        <div class="lesson-takeaway"><strong>为什么不能把音色直接抽走？</strong><p>发音内容和个人音色交织在同一条波形里，并没有独立保存成两条轨道。像“s”这样的清辅音还主要来自气流噪声，也不一定有稳定基频。换声需要模型估计哪些信息该保留、怎样生成新的声学细节。</p></div>
+        <p class="section-source">基础资料：<a href="https://www.nidcd.nih.gov/health/taking-care-your-voice" target="_blank" rel="noopener noreferrer">NIDCD：人声如何产生</a>、<a href="https://www.unsw.edu.au/news/2017/01/explainer--why-the-human-voice-is-so-versatile" target="_blank" rel="noopener noreferrer">UNSW：声源、声道与发音</a>。</p>
+      </article>
+
+      <article class="lesson-block rebuild-block" id="voice-rebuild" aria-labelledby="voice-rebuild-title">
+        <p class="lesson-number">04 / 现在再看 RVC 怎样换声</p>
+        <h3 id="voice-rebuild-title">用来源发音，重建目标声线的波形</h3>
+        <p>假设你说“今天晚上吃什么”，希望转换成 B 的声线。即使让你和 B 用相近的音高与音量说话，频谱和发声细节仍会不同。RVC 要生成这些符合 B 声线的新细节，同时尽量保持你的词句和时间节奏。</p>
+        <div class="rebuild-grid">
+          <div><span class="lane-label">来源录音提供</span><h4>发音和时间线</h4><p>提取模型估计每一时刻的发音特征；需要保留音高时，还会提取基频 F0 随时间的起伏。这些信息帮助保留原句与旋律。</p></div>
+          <div><span class="lane-label">目标录音教会模型</span><h4>怎样生成 B 的声音</h4><p>用 B 的录音训练：给模型发音与音高等条件，让它生成声音，再与 B 的真实录音比较并调整参数。</p></div>
+          <div><span class="lane-label">换声时重新生成</span><h4>一条新的数字波形</h4><p>输入你的发音条件，调用学过 B 的模型；目标特征检索可进一步减轻原声线残留，最后输出新音频。</p></div>
+        </div>
+        <div class="rebuild-line" aria-label="换声处理顺序"><span>你的录音</span><b aria-hidden="true">→</b><span>发音特征 + 可选音高</span><b aria-hidden="true">→</b><span>目标模型与可选检索</span><b aria-hidden="true">→</b><span>B 声线的新波形</span></div>
+        <p class="mechanism-options">“保留内容、改变音色”是模型努力达到的效果。内容与音色的分离并不完美，因此仍可能出现咬字变差、音色残留或失真。</p>
+        <p class="section-source">实现依据：<a href="https://github.com/RVC-Project/Retrieval-based-Voice-Conversion-WebUI/blob/main/docs/en/training_tips_en.md" target="_blank" rel="noopener noreferrer">RVC 训练说明</a>、<a href="https://github.com/RVC-Project/Retrieval-based-Voice-Conversion-WebUI/blob/main/infer/vc/pipeline.py" target="_blank" rel="noopener noreferrer">RVC 推理代码</a>。</p>
+      </article>
+
+<article class="diagram-article" id="principle-diagram" aria-labelledby="principle-diagram-title">
+ <div class="diagram-heading"><p class="section-kicker">图 02 / 完整原理</p><h3 id="principle-diagram-title">把声音基础、训练和转换连成一个完整过程</h3>
+ <p>沿着图中的 ①—④ 阅读。用“把你说的你好转换成目标声线”这个例子，区分声音是什么、模型怎样学、使用时怎样生成。</p></div>
+<figure class="explainer-figure">
+  <a class="explainer-image-link" href="assets/rvc-principle-overview.png" target="_blank" rel="noopener" aria-label="打开高清原图：RVC 完整原理图：声带与声道形成波形；目标录音训练出声线模型及可选索引；输入录音分支提取发音和音高，交给生成模型重建声音。">
+   <img src="assets/rvc-principle-overview.png" width="2400" height="3420" loading="lazy" decoding="async" alt="RVC 完整原理图：声带与声道形成波形；目标录音训练出声线模型及可选索引；输入录音分支提取发音和音高，交给生成模型重建声音。">
+  </a>
+  <figcaption>完整原理图；波形与箭头均为教学示意。 <a href="assets/rvc-principle-overview.png" target="_blank" rel="noopener">打开高清原图 ↗</a> · <a href="assets/rvc-principle-overview.svg" target="_blank" rel="noopener">可缩放矢量图 ↗</a></figcaption>
+ </figure>
+ <ol class="diagram-reading">
+  <li><span>图中 ①</span><h4>一条波形包含很多相互关联的特征</h4><p>基频影响音高，谐波比例等影响音色；每个谐波也有频率和振幅。真实声音还包含噪声与时间变化，无法只用三个固定数值概括。</p></li>
+  <li><span>图中 ②</span><h4>训练先让模型学到目标声线的生成规律</h4><p>给模型目标录音的发音、音高等条件，让它尝试生成声音，与真实录音比较后调整参数。训练后得到模型权重；检索索引则由提取的目标特征建立。</p></li>
+  <li><span>图中 ③—④</span><h4>转换时提取你的线索，再生成新声音</h4><p>HuBERT 提供发音特征，音高方法估计高低走势；可选检索参考目标特征。目标生成模型据此输出新波形，词句与节奏尽量延续原输入。</p></li>
+ </ol>
+ <div class="diagram-key"><strong>“拆分并复合”要分两层理解</strong><p>频率分析描述一段声音里哪些频率有多强；RVC 则提取有助于重新发声的条件，再通过学到的规律生成声音。因此“保留内容、改变声线”是一种近似能力，转换可能连带影响咬字、气声与细节。</p></div>
+ <div class="diagram-example"><strong>同一句“你好”，两阶段分工</strong><p><b>训练时：</b>目标人物的多段录音用于学习声线。<br><b>使用时：</b>你的“你好”提供发音与时间线，已训练模型负责生成目标声线的“你好”。不要求目标人物事先说过这句完整的话，实际泛化效果取决于模型和素材。</p></div>
+ <p class="diagram-next"><a href="#environment-diagram">下一张：这些模型放在哪里，依赖什么环境？ →</a></p>
+</article>
+
+      <details class="technical-details">
+        <summary>继续看：训练、检索与实时拼接怎样实现</summary>
+<div class="mechanism-grid">
+        <article class="lane">
+          <div class="lane-head"><span class="lane-label">01 / TRAINING</span><h3>训练时，怎样学到目标声音</h3></div>
+          <ol>
+            <li><span>01</span><div><strong>清理并切分目标录音</strong><p>将清晰的人声切成较短片段，统一采样率，准备与原始波形对应的训练材料。</p></div></li>
+            <li><span>02</span><div><strong>提取发音和音高</strong><p>用 HuBERT 提取每段录音的发音特征；带 F0 的配置再用音高算法提取 F0。它们与目标录音一起构成训练样本。</p></div></li>
+            <li><span>03</span><div><strong>微调生成模型</strong><p>从预训练权重继续训练基于 VITS 的生成模型，让它学习怎样根据发音特征、可选的 F0 和说话人信息，合成目标声线波形。</p></div></li>
+            <li><span>04</span><div><strong>建立特征索引</strong><p>把目标录音提取出的特征放进 FAISS 近邻索引，供之后转换时快速查找。</p></div></li>
+          </ol>
+        </article>
+        <article class="lane infer-lane">
+          <div class="lane-head"><span class="lane-label">02 / CONVERSION</span><h3>换声时，每段音频经历什么</h3></div>
+          <ol>
+            <li><span>01</span><div><strong>读入来源声音</strong><p>将录音或麦克风声音送入处理流程；长录音会分段，以便逐段转换后衔接。</p></div></li>
+            <li><span>02</span><div><strong>提取发音特征</strong><p>HuBERT 将来源声音编码为一串特征向量。它们不是文字稿，但包含与发音顺序相关的信息。</p></div></li>
+            <li><span>03</span><div><strong>估计并调整音高</strong><p>带 F0 的模型用 RMVPE 等算法提取音高；需要升调或降调时，在这一步改变音高轨迹。</p></div></li>
+            <li><span>04</span><div><strong>检索目标特征并混合</strong><p>启用索引时，当前离线代码寻找 8 个近邻，按距离加权，再按索引比例与来源特征混合；无声辅音等部分可保留更多原特征以减少失真。</p></div></li>
+            <li><span>05</span><div><strong>重新合成波形</strong><p>生成模型接收混合后的特征、F0 与目标说话人信息，输出新的音频；最后衔接分段并可调整音量、采样率。</p></div></li>
+          </ol>
+        </article>
+      </div>
+
+      <div class="model-outputs">
+        <span>训练完成后得到</span>
+        <div><strong>模型文件 .pth</strong><small>学到“如何合成这条声线”</small></div>
+        <div><strong>索引文件 .index</strong><small>可选的目标特征检索辅助</small></div>
+      </div>
+      <p class="mechanism-options">这页展示常见的带 F0、启用索引流程。项目也支持不使用 F0 的模型；索引比例设为 0 时可跳过检索，主要依靠训练模型完成转换。</p>
+
+      <div class="explain-grid">
+        <article><span class="explain-index">WHY / 01</span><h3>为什么原话大体保留？</h3><p>来源录音的发音特征按原有时间顺序进入模型，输入者说的词句、停顿和唱法因此构成转换的基础。RVC 不会替你编写或翻译内容。</p></article>
+        <article><span class="explain-index">WHY / 02</span><h3>为什么音色会变化？</h3><p>目标模型学过目标声线怎样发声，检索索引又用目标录音特征纠正来源音色残留。最终波形由模型重新生成，并非简单调高或调低原录音。</p></article>
+        <article><span class="explain-index">LIVE / 03</span><h3>实时变声怎样连续输出？</h3><p>麦克风声音按小块进入相同的转换流程；实时界面保留相邻片段的上下文，再用 SOLA 对齐和交叉渐变连接输出，减轻接缝。</p></article>
+      </div>
+
+      <div class="mechanism-note"><strong>效果如何调？</strong><span>索引比例控制目标特征的参与程度；半音变调控制 F0；辅音保护参数控制无声部分保留多少来源特征。参数越大并不必然越好，训练素材质量与原始录音同样重要。</span></div>
+      <p class="section-source">实现依据：<a href="https://github.com/RVC-Project/Retrieval-based-Voice-Conversion-WebUI/blob/main/docs/cn/cli.md" target="_blank" rel="noopener noreferrer">训练步骤</a>、<a href="https://github.com/RVC-Project/Retrieval-based-Voice-Conversion-WebUI/blob/main/train/train_index.py" target="_blank" rel="noopener noreferrer">索引构建</a>、<a href="https://github.com/RVC-Project/Retrieval-based-Voice-Conversion-WebUI/blob/main/infer/vc/pipeline.py" target="_blank" rel="noopener noreferrer">离线换声代码</a>、<a href="https://github.com/RVC-Project/Retrieval-based-Voice-Conversion-WebUI/blob/main/realtime_gui.py" target="_blank" rel="noopener noreferrer">实时音频处理代码</a>。</p>
+      </details>
+    </section>
+
+    <div class="section-divider wrap"><span>ENVIRONMENT / 03</span></div>
+
+    <section class="section wrap" id="environment" aria-labelledby="environment-title">
+      <div class="section-heading"><div><p class="section-kicker">本地运行 · 模型与环境</p><h2 id="environment-title">核心模型依赖什么，装好后能做什么？</h2></div><p>按当前 main 分支整理。三类模型通常共用一套 Python 环境，由 RVC 统一加载。</p></div>
+<article class="diagram-article environment-diagram" id="environment-diagram" aria-labelledby="environment-diagram-title">
+ <div class="diagram-heading"><p class="section-kicker">图 03 / 模型与环境</p><h3 id="environment-diagram-title">核心模型、权重文件、运行框架、设备分别是什么？</h3>
+ <p>先读上方 A / B / C 三个模型，再向下看共用环境、硬件路线和按需资源。图中的模型与依赖是不同类型的组件。</p></div>
+      <figure class="environment-figure explainer-figure">
+        <a href="assets/rvc-model-environment-map.png" target="_blank" rel="noopener" aria-label="打开高清模型与环境全景图">
+          <img src="assets/rvc-model-environment-map.png" width="2700" height="4410" loading="lazy" alt="RVC 本地模型、环境和能力架构图：HuBERT 提取发音，RMVPE 提取音高，目标声线生成模型输出新波形；三者共用 Python 和运行依赖，按 CPU、NVIDIA 或 Windows DirectML 选择执行路线。下方列出训练和人声分离的额外资源。">
+        </a>
+        <figcaption>从上到下阅读：核心模型 → 共用环境 → 硬件路线 → 按需资源 → 对应能力。<a href="assets/rvc-model-environment-map.png" target="_blank" rel="noopener">查看高清图片 ↗</a> · <a href="assets/rvc-model-environment-map.svg" target="_blank" rel="noopener">矢量图 ↗</a></figcaption>
+      </figure>
+ <ol class="diagram-reading">
+  <li><span>先读 A / B / C</span><h4>C 是实际生成声音的核心模型</h4><p>A 提取发音，B 提取音高，C 根据这些条件生成新声音。目标 .pth 是 C 的权重；RVC 代码定义网络结构。带 F0 的常见模型已包含波形生成部分。</p></li>
+  <li><span>再读共用环境与设备</span><h4>权重通过框架运行，计算由设备执行</h4><p>Python、PyTorch、Transformers 等组成运行环境，CPU 或兼容显卡执行计算。按设备选择依赖方案；多个声线通常共用环境和基础模型。</p></li>
+  <li><span>最后读资源与能力</span><h4>基础模型要准备，额外功能再追加资源</h4><p>普通换声也需要 HuBERT、所选音高资源和目标声线。训练和分离人声再增加对应底模或分离模型；.index 属于可选数据。</p></li>
+ </ol>
+ <div class="diagram-key"><strong>对“后期接入模型”的准确理解</strong><p>RVC 已写好常见模型的加载与调用流程。用户主要安装匹配环境、下载指定基础模型，并选择一个兼容的目标声线文件；目标声线可获取现成模型，也可自己训练。安装依赖本身不会自动产生想要的声线。</p></div>
+ <div class="diagram-example"><strong>本地是运行位置，多模型协作是实现方式</strong><p>这套流程可以运行在自己电脑，也可以部署在服务器上。当前以理解能力为目标，可以先不安装；只有要确认声音相似度、清晰度或本机延迟时，才需要实际结果。</p></div>
+ <p class="diagram-next"><a href="#visual-guide">返回三张图导航 ↑</a> · <a href="#understanding">回到理解总结 ↑</a></p>
+</article>
+
+      <div class="environment-notes">
+        <article><h3>核心生成模型在哪里？</h3><p><strong>目标声线 .pth 就是核心生成模型的权重。</strong> RVC 网络代码定义结构，PyTorch 加载参数并执行计算。HuBERT 与 RMVPE 提供它需要的发音、音高线索。</p></article>
+        <article><h3>为何有模型还要安装环境？</h3><p>模型文件保存学习到的参数；Python、PyTorch、Transformers 等让这些参数能够参与计算。多个声线通常共用基础模型和环境，不必为每个声线重新装一套软件。</p></article>
+        <article><h3>哪些只在需要时追加？</h3><p>训练增加匹配的预训练 G / D 权重和目标录音；人声分离增加对应分离模型；实时换声增加设备与音频路由配置。<code>.index</code> 是由 FAISS 读取的可选特征数据。</p></article>
+      </div>
+      <p class="environment-reference">依据：<a href="https://github.com/RVC-Project/Retrieval-based-Voice-Conversion-WebUI#环境配置" target="_blank" rel="noopener">官方环境说明</a>、<a href="https://github.com/RVC-Project/Retrieval-based-Voice-Conversion-WebUI/blob/main/infer/hubert.py" target="_blank" rel="noopener">HuBERT</a>、<a href="https://github.com/RVC-Project/Retrieval-based-Voice-Conversion-WebUI/blob/main/infer/rmvpe.py" target="_blank" rel="noopener">RMVPE</a>、<a href="https://github.com/RVC-Project/Retrieval-based-Voice-Conversion-WebUI/blob/main/infer/module/models.py" target="_blank" rel="noopener">RVC 生成网络</a>。说明日期：2026-09-25；尚未在本项目中部署模型。</p>
+    </section>
+
+    <div class="section-divider wrap"><span>APPLICATION / 04</span></div>
+    <section class="section wrap" id="scenarios" aria-labelledby="scenarios-title">
+      <div class="section-heading">
+        <div>
+          <p class="section-kicker">使用场景</p>
+          <h2 id="scenarios-title">它可以放进哪些工作流</h2>
+        </div>
+        <p>RVC 负责音色变化；台词、翻译、演唱与最终审听仍来自流程中的其他环节。</p>
+      </div>
+      <div class="scenario-list">
+        <article><span class="scenario-no">A</span><div><h3>视频、播客与角色内容</h3><p>录好台词，再转换为已获授权的角色音色；适合探索统一的声音风格。</p></div><span class="scenario-flow">录音 → 换声 → 审听</span></article>
+        <article><span class="scenario-no">B</span><div><h3>音乐制作与 AI 翻唱</h3><p>分离人声、转换歌声音色，再与伴奏混合；旋律和演唱表现主要来自原始人声。</p></div><span class="scenario-flow">分离 → 换声 → 混音</span></article>
+        <article><span class="scenario-no">C</span><div><h3>直播与实时互动</h3><p>通过实时界面处理麦克风声音。正式使用前，应在自己的设备上试听并测试延迟。</p></div><span class="scenario-flow">麦克风 → 换声 → 输出</span></article>
+        <article><span class="scenario-no">D</span><div><h3>文字驱动的语音产品</h3><p>先由文字转语音工具产生讲话，再由 RVC 统一音色；它是其中一个专门环节。</p></div><span class="scenario-flow">文字 → TTS → RVC</span></article>
+      </div>
+    </section>
+
+    <div class="section-divider wrap"><span>FIT / 05</span></div>
+    <section class="section wrap" id="decision" aria-labelledby="decision-title">
+      <div class="section-heading">
+        <div>
+          <p class="section-kicker">使用判断</p>
+          <h2 id="decision-title">你的目标需要它吗？</h2>
+        </div>
+        <p>先看输入材料，再看还需要哪些能力。</p>
+      </div>
+      <div class="decision-table-wrap">
+        <table class="decision-table">
+          <thead><tr><th scope="col">目标</th><th scope="col">RVC 的角色</th><th scope="col">还需要什么</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">已有录音，想换一种音色</th><td><span class="fit yes">核心能力</span></td><td>目标音色模型与清晰输入</td></tr>
+            <tr><th scope="row">直播时改变麦克风音色</th><td><span class="fit yes">可以使用</span></td><td>合适的音频设备与延迟测试</td></tr>
+            <tr><th scope="row">输入文字，让声音自动读出</th><td><span class="fit partial">负责换声</span></td><td>文字转语音（TTS）</td></tr>
+            <tr><th scope="row">自动听懂、翻译并配音</th><td><span class="fit partial">负责换声</span></td><td>语音识别、翻译、配音生成</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <div class="section-divider wrap"><span>REALITY CHECK / 06</span></div>
+    <section class="section wrap" id="limits" aria-labelledby="limits-title">
+      <div class="section-heading">
+        <div>
+          <p class="section-kicker">使用边界</p>
+          <h2 id="limits-title">效果与许可，都需要单独确认</h2>
+        </div>
+      </div>
+      <div class="limits-grid">
+        <article><span class="limit-mark">01</span><h3>素材质量决定上限</h3><p>低噪、音色统一的录音更重要。官方 FAQ 推荐常规准备 10–50 分钟；极短素材的成功个案不能当作稳定结果。</p></article>
+        <article><span class="limit-mark">02</span><h3>换声不等于重写内容</h3><p>它主要处理音色。原始录音中的发音、节奏、唱法和噪声，仍会影响转换结果。</p></article>
+        <article><span class="limit-mark">03</span><h3>实时延迟不是固定值</h3><p>官方报告约 170 毫秒、ASIO 条件下约 90 毫秒；设备、驱动和参数不同，实际体验会变化。</p></article>
+        <article><span class="limit-mark">04</span><h3>声音授权另行处理</h3><p>仓库代码采用 MIT 许可，不代表自动获得他人声音、训练素材或歌曲的使用权。公开或商用前应确认授权。</p></article>
+      </div>
+      <p class="section-source">依据：<a href="https://github.com/RVC-Project/Retrieval-based-Voice-Conversion-WebUI/blob/main/docs/cn/faq.md" target="_blank" rel="noopener noreferrer">官方 FAQ</a>、<a href="https://github.com/RVC-Project/Retrieval-based-Voice-Conversion-WebUI" target="_blank" rel="noopener noreferrer">项目 README</a>、<a href="https://github.com/RVC-Project/Retrieval-based-Voice-Conversion-WebUI/blob/main/LICENSE" target="_blank" rel="noopener noreferrer">代码许可证</a>。</p>
+    </section>
+
+    <section class="trial wrap" aria-labelledby="trial-title">
+      <div>
+        <p class="section-kicker">有具体用途之后 · 最小验证</p>
+        <h2 id="trial-title">需要确认实际效果时，再用短录音验证</h2>
+        <p>当前探索可以先停留在理解层面。之后若有明确用途，可先加载一个可用的目标声线模型，转换一段 20–30 秒的清晰讲话，试听相似度、咬字和气声；需要自定义声线时再准备素材训练，需要实时使用时再测设备延迟。</p>
+      </div>
+      <a class="button primary" href="https://github.com/RVC-Project/Retrieval-based-Voice-Conversion-WebUI" target="_blank" rel="noopener noreferrer">查看原项目 <span aria-hidden="true">↗</span></a>
+    </section>
+
+    <section class="section sources wrap" id="sources" aria-labelledby="sources-title">
+      <div class="section-heading"><div><p class="section-kicker">资料来源</p><h2 id="sources-title">继续查证</h2></div><p>换声实现参考 RVC 官方资料；声音基础的教材与研究机构来源见各段说明。</p></div>
+      <div class="source-grid">
+        <a href="https://github.com/RVC-Project/Retrieval-based-Voice-Conversion-WebUI" target="_blank" rel="noopener noreferrer"><strong>项目 README</strong><span>功能与运行环境 ↗</span></a>
+        <a href="https://github.com/RVC-Project/Retrieval-based-Voice-Conversion-WebUI/blob/main/docs/cn/cli.md" target="_blank" rel="noopener noreferrer"><strong>CLI 文档</strong><span>训练步骤、批量与多音色 ↗</span></a>
+        <a href="https://github.com/RVC-Project/Retrieval-based-Voice-Conversion-WebUI/blob/main/docs/cn/faq.md" target="_blank" rel="noopener noreferrer"><strong>常见问题</strong><span>数据量与索引比例 ↗</span></a>
+        <a href="https://github.com/RVC-Project/Retrieval-based-Voice-Conversion-WebUI/blob/main/infer/vc/pipeline.py" target="_blank" rel="noopener noreferrer"><strong>推理代码</strong><span>检索与合成实现 ↗</span></a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap footer-inner">
+      <span>001 / RVC 项目研究 · 2026-09-25</span>
+      <span>非官方整理 · <a href="../../index.html">返回研究索引</a></span>
+    </div>
+  </footer>
+</body>
+</html>
