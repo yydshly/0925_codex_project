@@ -1,0 +1,367 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="social-auto-upload 能力地图：用户手动登录后复用登录状态，程序按网页元素控制创作者后台，为 9 个网页平台上传内容；B站由 biliup 处理，TikTok 为旧示例。汇总 11 个平台的能力、原理与个人 IP 使用价值。">
+  <meta name="theme-color" content="#101f3b">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23101f3b'/%3E%3Cpath d='M15 32h23m-8-10 10 10-10 10M45 18v28' fill='none' stroke='%235ce1d3' stroke-width='5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+  <title>social-auto-upload 能力地图 · 项目研究 002</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">跳到主要内容</a>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="../../index.html" aria-label="返回 GitHub 项目研究索引">
+        <span class="brand-mark" aria-hidden="true">↗</span>
+        <span>项目研究 <strong>002</strong></span>
+      </a>
+      <nav class="top-nav" aria-label="页面导航">
+        <a href="#overview">总览图</a>
+        <a href="#capabilities">能力</a>
+        <a href="#platform-methods">发布方式</a>
+        <a href="#how-it-works">原理</a>
+        <a href="#for-you">对你的意义</a>
+        <a href="#limits">边界</a>
+      </nav>
+      <a class="header-source" href="https://github.com/dreammis/social-auto-upload" target="_blank" rel="noopener noreferrer">原仓库 <span aria-hidden="true">↗</span></a>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="hero section-pad">
+      <div class="container hero-grid">
+        <div class="hero-copy">
+          <p class="eyebrow"><span class="eyebrow-line"></span> 开源项目能力地图 · 2026.09.25 核对</p>
+          <h1>把内容发布，<br><span>变成可重复的流程。</span></h1>
+          <p class="hero-summary"><strong>social-auto-upload</strong> 让用户先在项目打开的浏览器中登录，再保存登录状态；后续依据创作者网页的上传框、输入框和按钮等元素，自动上传素材、填写信息并提交。</p>
+          <p class="hero-detail">仓库列有 11 个可上传视频的平台：其中 9 个统一 CLI 平台走浏览器网页操作；Bilibili 委托 biliup，TikTok 保留为独立旧示例。它适合承担个人 IP 内容做好之后的重复分发；统一命令行每次选择一个平台。</p>
+          <div class="hero-actions">
+            <a class="button button-primary" href="#overview">先看一张总览图 <span aria-hidden="true">↓</span></a>
+            <a class="button button-outline" href="#for-you">看是否适合我 <span aria-hidden="true">↗</span></a>
+          </div>
+        </div>
+        <aside class="hero-panel" aria-label="项目能力概览">
+          <div class="panel-topline">
+            <span class="panel-label">能力快照</span>
+            <span class="panel-version">仓库版本 0012d2c</span>
+          </div>
+          <div class="stat-grid">
+            <div class="stat"><strong>11</strong><span>平台可上传视频</span></div>
+            <div class="stat"><strong>3</strong><span>平台可上传图文</span></div>
+            <div class="stat"><strong>6</strong><span>平台列有定时能力*</span></div>
+            <div class="stat"><strong>10</strong><span>平台接入统一 CLI</span></div>
+          </div>
+          <p class="panel-note">* TikTok 的定时上传来自旧 Chrome 示例，尚未进入统一 CLI。表内“支持”依据仓库功能表，仍需在自己的账号上验证。</p>
+          <div class="panel-trace">
+            <span>人工登录</span><span aria-hidden="true">→</span><span>复用登录态</span><span aria-hidden="true">→</span><span>操作网页元素</span>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="section-pad section-overview" id="overview" aria-labelledby="overview-title">
+      <div class="container">
+        <div class="section-heading">
+          <div>
+            <p class="section-kicker">00 / ONE-PAGE MAP</p>
+            <h2 id="overview-title">一张图，看懂整个项目</h2>
+            <p>从人工登录与登录态复用，到按网页元素操作各平台的上传页、核对结果，以及它在个人 IP 流程中的位置。</p>
+          </div>
+          <a class="source-link" href="overview.svg" target="_blank" rel="noopener noreferrer">单独打开总览图 ↗</a>
+        </div>
+        <p class="overview-swipe-hint">总览图可左右滑动；也可以单独打开后放大阅读。</p>
+        <figure class="overview-figure">
+          <div class="overview-visual">
+            <img src="overview.svg" width="1600" height="1100" alt="social-auto-upload 总览图：11 个视频平台、3 个图文平台；9 个统一 CLI 浏览器平台，其中 Patchright 5 个、Playwright 4 个；Bilibili 由 biliup 发布，TikTok 是旧示例。人工在项目启动的浏览器中登录，保存登录状态，后续在新浏览器会话恢复状态，再由自动化程序操作上传和发布网页。工具负责重复分发，创作者负责选题、改写与复盘。">
+          </div>
+          <figcaption>图中平台与能力取自仓库固定版本 <a href="https://github.com/dreammis/social-auto-upload/blob/0012d2c355f88f683cc38dde2a2db209e14091bc/README.md#L218-L231" target="_blank" rel="noopener noreferrer">0012d2c 的功能表</a>和<a href="https://github.com/dreammis/social-auto-upload/blob/0012d2c355f88f683cc38dde2a2db209e14091bc/docs/CLI.md" target="_blank" rel="noopener noreferrer">CLI 文档</a>。手机上可左右滑动查看；点击右上角链接可单独放大。</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section class="section-pad section-light" id="capabilities" aria-labelledby="capabilities-title">
+      <div class="container">
+        <div class="section-heading">
+          <div>
+            <p class="section-kicker">01 / CAPABILITIES</p>
+            <h2 id="capabilities-title">平台能力，一眼看清</h2>
+            <p>“视频、图文、定时、命令行、Agent Skill”不是每个平台都有。按你计划制作的内容形式筛选。</p>
+          </div>
+          <a class="source-link" href="https://github.com/dreammis/social-auto-upload/blob/0012d2c355f88f683cc38dde2a2db209e14091bc/README.md#L64-L77" target="_blank" rel="noopener noreferrer">核对仓库功能表 ↗</a>
+        </div>
+        <div class="filters" role="group" aria-label="筛选平台能力">
+          <button class="filter active" type="button" data-filter="all" aria-pressed="true">全部平台</button>
+          <button class="filter" type="button" data-filter="note" aria-pressed="false">支持图文</button>
+          <button class="filter" type="button" data-filter="schedule" aria-pressed="false">支持定时</button>
+          <button class="filter" type="button" data-filter="skill" aria-pressed="false">有 Agent Skill</button>
+        </div>
+        <p class="filter-count" id="filter-count" aria-live="polite">显示 11 个平台</p>
+        <p class="matrix-hint">左右滑动表格，查看定时、CLI 和 Skill 等字段。</p>
+        <div class="matrix-scroll">
+          <table class="matrix">
+            <caption>social-auto-upload 平台能力矩阵，依据仓库版本 0012d2c 的 README</caption>
+            <thead>
+              <tr><th scope="col">平台</th><th scope="col">视频</th><th scope="col">图文</th><th scope="col">定时</th><th scope="col">CLI</th><th scope="col">Skill</th><th scope="col">实现备注</th></tr>
+            </thead>
+            <tbody>
+              <tr data-note="yes" data-schedule="yes" data-skill="yes"><th scope="row">抖音</th><td><span class="yes">支持</span></td><td><span class="yes">支持</span></td><td><span class="yes">支持</span></td><td><span class="yes">支持</span></td><td><span class="yes">支持</span></td><td>主线重构最完整</td></tr>
+              <tr data-note="no" data-schedule="yes" data-skill="yes"><th scope="row">Bilibili</th><td><span class="yes">支持</span></td><td><span class="no">—</span></td><td><span class="yes">支持</span></td><td><span class="yes">支持</span></td><td><span class="yes">支持</span></td><td>CLI 调用 biliup</td></tr>
+              <tr data-note="yes" data-schedule="yes" data-skill="yes"><th scope="row">小红书</th><td><span class="yes">支持</span></td><td><span class="yes">支持</span></td><td><span class="yes">支持</span></td><td><span class="yes">支持</span></td><td><span class="yes">支持</span></td><td>浏览器版适配</td></tr>
+              <tr data-note="yes" data-schedule="yes" data-skill="yes"><th scope="row">快手</th><td><span class="yes">支持</span></td><td><span class="yes">支持</span></td><td><span class="yes">支持</span></td><td><span class="yes">支持</span></td><td><span class="yes">支持</span></td><td>CLI / Skill 初版</td></tr>
+              <tr data-note="no" data-schedule="yes" data-skill="no"><th scope="row">视频号</th><td><span class="yes">支持</span></td><td><span class="no">—</span></td><td><span class="yes">支持</span></td><td><span class="yes">支持</span></td><td><span class="no">—</span></td><td>对应 tencent_uploader</td></tr>
+              <tr data-note="no" data-schedule="no" data-skill="no"><th scope="row">百家号</th><td><span class="yes">支持</span></td><td><span class="no">—</span></td><td><span class="no">—</span></td><td><span class="yes">支持</span></td><td><span class="no">—</span></td><td>浏览器自动化</td></tr>
+              <tr data-note="no" data-schedule="no" data-skill="no"><th scope="row">支付宝生活号</th><td><span class="yes">支持</span></td><td><span class="no">—</span></td><td><span class="no">—</span></td><td><span class="yes">支持</span></td><td><span class="no">—</span></td><td>需有生活号创作权限</td></tr>
+              <tr data-note="no" data-schedule="no" data-skill="no"><th scope="row">微博</th><td><span class="yes">支持</span></td><td><span class="no">—</span></td><td><span class="no">—</span></td><td><span class="yes">支持</span></td><td><span class="no">—</span></td><td>视频标题最多 30 字</td></tr>
+              <tr data-note="no" data-schedule="no" data-skill="no"><th scope="row">虎扑</th><td><span class="yes">支持</span></td><td><span class="no">—</span></td><td><span class="no">—</span></td><td><span class="yes">支持</span></td><td><span class="no">—</span></td><td>视频标题 4–40 字</td></tr>
+              <tr data-note="no" data-schedule="yes" data-skill="no"><th scope="row">TikTok</th><td><span class="yes">支持</span></td><td><span class="no">—</span></td><td><span class="yes">示例</span></td><td><span class="no">—</span></td><td><span class="no">—</span></td><td>旧 Chrome 示例，非主线 CLI</td></tr>
+              <tr data-note="no" data-schedule="no" data-skill="no"><th scope="row">YouTube</th><td><span class="yes">支持</span></td><td><span class="no">—</span></td><td><span class="no">—</span></td><td><span class="yes">支持</span></td><td><span class="no">—</span></td><td>Studio 网页发布</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="matrix-footnotes">
+          <p><strong>图文：</strong>这里指图片加标题、正文的笔记或作品，并非各平台所有文章类型。</p>
+          <p><strong>定时：</strong>已提交给支持的平台后，由平台按所设时间发布；TikTok 仅列在旧版示例中。</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section-pad section-methods" id="platform-methods" aria-labelledby="methods-title">
+      <div class="container">
+        <div class="section-heading">
+          <div>
+            <p class="section-kicker">02 / PUBLISHING ROUTES</p>
+            <h2 id="methods-title">11 个平台怎么发布？</h2>
+            <p>下列是仓库代码实际采用的接入路径。点击平台可看登录、上传、提交和已知边界；“支持”不等于已在你的账号上完成实测。</p>
+          </div>
+          <a class="source-link" href="https://github.com/dreammis/social-auto-upload/blob/0012d2c355f88f683cc38dde2a2db209e14091bc/docs/CLI.md#L1-L25" target="_blank" rel="noopener noreferrer">核对 CLI 覆盖 ↗</a>
+        </div>
+        <div class="route-summary" aria-label="三类接入路径">
+          <div><strong>9</strong><span>统一 CLI → 浏览器网页</span><small>5 个使用 Patchright，4 个仍使用 Playwright</small></div>
+          <div><strong>1</strong><span>统一 CLI → biliup</span><small>Bilibili：由外部程序处理登录与上传</small></div>
+          <div><strong>1</strong><span>旧示例 → 浏览器网页</span><small>TikTok：有代码示例，尚无 sau 命令</small></div>
+        </div>
+        <p class="method-instruction"><strong>Patchright / Playwright 是控制浏览器的程序库，不是浏览器本身。</strong>本项目另行安装并启动 Chromium，可显示窗口或在后台无窗口运行。各平台分别登录、保存状态；脚本复用状态后打开创作者后台，选文件、填表、点击发布。定时是填写平台提供的预约控件。</p>
+        <div class="platform-list">
+          <details class="platform-detail" id="method-douyin">
+            <summary><span class="method-name">抖音</span><span class="method-route">Patchright · 创作者网页</span><span class="method-flags">视频＋图文 · CLI / Skill · 定时</span></summary>
+            <div class="method-body">
+              <p><strong>登录：</strong>打开创作者中心，由你扫码；保存浏览器状态，之后加载状态并检查能否进入上传页。</p>
+              <p><strong>发布：</strong>视频经文件框上传，填标题、描述、话题，可设置封面、合集和商品信息；图文切换到图文发布页，上传多张图片。定时在网页上选择“定时发布”并填写时间。</p>
+              <p><strong>判断与边界：</strong>点击发布后以跳转内容管理页作为程序成功信号。视频上传在未给自主声明时会默认选“内容由AI生成”，与 CLI 帮助不一致。</p>
+              <p class="method-source"><a href="https://github.com/dreammis/social-auto-upload/blob/0012d2c355f88f683cc38dde2a2db209e14091bc/uploader/douyin_uploader/main.py#L895-L1024" target="_blank" rel="noopener noreferrer">上传与发布源码 ↗</a><a href="https://github.com/dreammis/social-auto-upload/blob/0012d2c355f88f683cc38dde2a2db209e14091bc/uploader/douyin_uploader/main.py#L339-L349" target="_blank" rel="noopener noreferrer">定时控件 ↗</a></p>
+            </div>
+          </details>
+          <details class="platform-detail" id="method-bilibili">
+            <summary><span class="method-name">Bilibili</span><span class="method-route">外部 biliup 程序</span><span class="method-flags">视频 · CLI / Skill · 定时</span></summary>
+            <div class="method-body">
+              <p><strong>登录：</strong>在本地交互终端运行 biliup 登录并扫码；账号文件交给 biliup 使用，不走本项目的浏览器表单路径。</p>
+              <p><strong>发布：</strong>统一 CLI 把视频、标题、描述、分区 tid、标签、封面交给 <code>biliup upload</code>；定时转换为 <code>--dtime</code> 时间戳。首次可自动下载 biliup，后续会检查更新。</p>
+              <p><strong>判断与边界：</strong>以 biliup 进程退出码为程序结果；其底层上传通道由 biliup 版本决定，不能把它当作本项目的 Patchright 发布流程。</p>
+              <p class="method-source"><a href="https://github.com/dreammis/social-auto-upload/blob/0012d2c355f88f683cc38dde2a2db209e14091bc/sau_cli.py#L520-L547" target="_blank" rel="noopener noreferrer">CLI 调用源码 ↗</a><a href="https://github.com/dreammis/social-auto-upload/blob/0012d2c355f88f683cc38dde2a2db209e14091bc/uploader/bilibili_uploader/runtime.py" target="_blank" rel="noopener noreferrer">biliup 运行封装 ↗</a></p>
+            </div>
+          </details>
+          <details class="platform-detail" id="method-xiaohongshu">
+            <summary><span class="method-name">小红书</span><span class="method-route">Patchright · 创作者网页</span><span class="method-flags">视频＋图文 · CLI / Skill · 定时</span></summary>
+            <div class="method-body">
+              <p><strong>登录：</strong>创作者后台扫码，保存浏览器状态；上传前重新访问后台，确认没有跳回登录页。</p>
+              <p><strong>发布：</strong>视频与图文分别进入对应上传页，选择文件，填写标题、正文、话题；视频可设置封面。定时打开平台页面开关、填日期，再提交定时发布。</p>
+              <p><strong>判断与边界：</strong>以进入发布成功页判断脚本完成；仍需到账号内容管理页确认审核与实际可见性。</p>
+              <p class="method-source"><a href="https://github.com/dreammis/social-auto-upload/blob/0012d2c355f88f683cc38dde2a2db209e14091bc/uploader/xiaohongshu_uploader/main.py" target="_blank" rel="noopener noreferrer">视频与图文 uploader ↗</a><a href="https://github.com/dreammis/social-auto-upload/blob/0012d2c355f88f683cc38dde2a2db209e14091bc/docs/CLI.md#L79-L90" target="_blank" rel="noopener noreferrer">CLI 用法 ↗</a></p>
+            </div>
+          </details>
+          <details class="platform-detail" id="method-kuaishou">
+            <summary><span class="method-name">快手</span><span class="method-route">Patchright · 创作者网页</span><span class="method-flags">视频＋图文 · CLI / Skill · 定时</span></summary>
+            <div class="method-body">
+              <p><strong>登录：</strong>创作者后台扫码并保存状态；上传前检查登录态是否仍有效。</p>
+              <p><strong>发布：</strong>视频通过文件选择器上传，填写一个描述编辑框和话题，可设封面、合集；图文切到图文页上传多张图片。定时通过平台日期控件设置。</p>
+              <p><strong>判断与边界：</strong>以跳转到内容管理页判断提交。视频的 <code>--title</code> 只是描述框的备用文本；图文标题虽能传入 CLI，但代码没有将其写入独立标题栏。</p>
+              <p class="method-source"><a href="https://github.com/dreammis/social-auto-upload/blob/0012d2c355f88f683cc38dde2a2db209e14091bc/uploader/ks_uploader/main.py" target="_blank" rel="noopener noreferrer">视频与图文 uploader ↗</a><a href="https://github.com/dreammis/social-auto-upload/blob/0012d2c355f88f683cc38dde2a2db209e14091bc/docs/CLI.md#L71-L78" target="_blank" rel="noopener noreferrer">CLI 用法 ↗</a></p>
+            </div>
+          </details>
+          <details class="platform-detail" id="method-tencent">
+            <summary><span class="method-name">视频号</span><span class="method-route">Patchright · 视频号助手网页</span><span class="method-flags">视频 · CLI · 定时 / 草稿</span></summary>
+            <div class="method-body">
+              <p><strong>登录：</strong>微信扫码进入视频号助手，保存浏览器状态；再次上传时检查是否跳回登录页。</p>
+              <p><strong>发布：</strong>上传视频，填写描述、话题和短标题，可设置横竖封面、合集、草稿或平台原生定时。提交后根据离开创建页或按钮变化判断。</p>
+              <p><strong>判断与边界：</strong>CLI 的 <code>--category</code> 在对象中保存，但当前发布流程没有使用。图文类仍是占位实现。视频流程默认尝试选“含AI生成内容”，操作失败时仍可能继续发布。</p>
+              <p class="method-source"><a href="https://github.com/dreammis/social-auto-upload/blob/0012d2c355f88f683cc38dde2a2db209e14091bc/uploader/tencent_uploader/main.py" target="_blank" rel="noopener noreferrer">视频号 uploader ↗</a><a href="https://github.com/dreammis/social-auto-upload/blob/0012d2c355f88f683cc38dde2a2db209e14091bc/docs/CLI.md#L110-L124" target="_blank" rel="noopener noreferrer">CLI 用法 ↗</a></p>
+            </div>
+          </details>
+          <details class="platform-detail" id="method-baijiahao">
+            <summary><span class="method-name">百家号</span><span class="method-route">Playwright · 创作者网页</span><span class="method-flags">视频 · CLI · 无定时</span></summary>
+            <div class="method-body">
+              <p><strong>登录：</strong>百度账号扫码后保存浏览器状态；上传前验证账号仍可进入后台。</p>
+              <p><strong>发布：</strong>在网页选视频、填标题、上传横版封面、选合集，再点击发表；跳转到内容页等地址时视为已提交。</p>
+              <p><strong>判断与边界：</strong>CLI 允许传描述、标签，但 uploader 没有将它们填入网页；CLI 称封面可选，实际上传校验要求横版封面。代码默认尝试勾选 AI 内容声明。</p>
+              <p class="method-source"><a href="https://github.com/dreammis/social-auto-upload/blob/0012d2c355f88f683cc38dde2a2db209e14091bc/uploader/baijiahao_uploader/main.py" target="_blank" rel="noopener noreferrer">百家号 uploader ↗</a><a href="https://github.com/dreammis/social-auto-upload/blob/0012d2c355f88f683cc38dde2a2db209e14091bc/docs/CLI.md#L125-L133" target="_blank" rel="noopener noreferrer">CLI 用法 ↗</a></p>
+            </div>
+          </details>
+          <details class="platform-detail" id="method-alipay">
+            <summary><span class="method-name">支付宝生活号</span><span class="method-route">Playwright · 内容创作网页</span><span class="method-flags">视频 · CLI · 无定时</span></summary>
+            <div class="method-body">
+              <p><strong>登录：</strong>支付宝扫码并保存浏览器状态；账号还需具备生活号内容创作权限。</p>
+              <p><strong>发布：</strong>进入短视频发布页，上传视频，填标题、描述、封面、合集；标签被拼接进标题。点击“确认发布”，必要时继续确认。</p>
+              <p><strong>判断与边界：</strong>以作品页跳转或“发布成功／提交审核”提示判断；提交审核不代表已经公开。页面有相应选项时，代码默认尝试选“内容由AI生成”。</p>
+              <p class="method-source"><a href="https://github.com/dreammis/social-auto-upload/blob/0012d2c355f88f683cc38dde2a2db209e14091bc/uploader/alipay_uploader/main.py" target="_blank" rel="noopener noreferrer">生活号 uploader ↗</a><a href="https://github.com/dreammis/social-auto-upload/blob/0012d2c355f88f683cc38dde2a2db209e14091bc/docs/CLI.md#L134-L142" target="_blank" rel="noopener noreferrer">CLI 用法 ↗</a></p>
+            </div>
+          </details>
+          <details class="platform-detail" id="method-weibo">
+            <summary><span class="method-name">微博</span><span class="method-route">Playwright · 视频发布弹窗</span><span class="method-flags">视频 · CLI · 无定时</span></summary>
+            <div class="method-body">
+              <p><strong>登录：</strong>在微博网页登录后保存浏览器状态。</p>
+              <p><strong>发布：</strong>从首页打开视频发布弹窗，选择视频文件，填标题、正文话题、封面和合集；出现成功层或“再发一条视频”才视为提交成功。</p>
+              <p><strong>判断与边界：</strong>CLI 将封面列为可选，上传校验却要求提供且小于 5 MB。代码还固定选择“二创”并尝试勾选 AI 内容声明，原创内容需先核对。</p>
+              <p class="method-source"><a href="https://github.com/dreammis/social-auto-upload/blob/0012d2c355f88f683cc38dde2a2db209e14091bc/uploader/weibo_uploader/main.py" target="_blank" rel="noopener noreferrer">微博 uploader ↗</a><a href="https://github.com/dreammis/social-auto-upload/blob/0012d2c355f88f683cc38dde2a2db209e14091bc/docs/CLI.md#L152-L160" target="_blank" rel="noopener noreferrer">CLI 用法 ↗</a></p>
+            </div>
+          </details>
+          <details class="platform-detail" id="method-hupu">
+            <summary><span class="method-name">虎扑</span><span class="method-route">Playwright · 视频发布网页</span><span class="method-flags">视频 · CLI · 无定时</span></summary>
+            <div class="method-body">
+              <p><strong>登录：</strong>在浏览器中完成 QQ 或手机号登录，再保存状态。</p>
+              <p><strong>发布：</strong>打开虎扑视频发布页，经文件选择器上传，填写标题和简介，可附封面，然后点击“确定发布”。</p>
+              <p><strong>判断与边界：</strong>正常以跳转到帖子详情页判断；若 60 秒内未跳转，源码只记录警告并返回，CLI 可能仍显示已提交，需要人工复核。</p>
+              <p class="method-source"><a href="https://github.com/dreammis/social-auto-upload/blob/0012d2c355f88f683cc38dde2a2db209e14091bc/uploader/hupu_uploader/main.py" target="_blank" rel="noopener noreferrer">虎扑 uploader ↗</a><a href="https://github.com/dreammis/social-auto-upload/blob/0012d2c355f88f683cc38dde2a2db209e14091bc/docs/CLI.md#L161-L169" target="_blank" rel="noopener noreferrer">CLI 用法 ↗</a></p>
+            </div>
+          </details>
+          <details class="platform-detail" id="method-tiktok">
+            <summary><span class="method-name">TikTok</span><span class="method-route">旧 Playwright Chrome 示例</span><span class="method-flags">视频 · 示例定时 · 无 CLI</span></summary>
+            <div class="method-body">
+              <p><strong>登录：</strong>示例打开 TikTok 登录页，等待你手动完成登录，再保存浏览器状态。</p>
+              <p><strong>发布：</strong>浏览器进入 TikTok Studio，上传视频，填标题和标签，可设置封面；定时调用 Studio 的 Schedule 控件。</p>
+              <p><strong>判断与边界：</strong>这是旧示例，不属于统一 <code>sau</code> 的平台入口，也没有 Skill；示例登录态检查较宽松，使用前需单独验证。</p>
+              <p class="method-source"><a href="https://github.com/dreammis/social-auto-upload/blob/0012d2c355f88f683cc38dde2a2db209e14091bc/examples/upload_video_to_tiktok.py" target="_blank" rel="noopener noreferrer">TikTok 示例 ↗</a><a href="https://github.com/dreammis/social-auto-upload/blob/0012d2c355f88f683cc38dde2a2db209e14091bc/uploader/tk_uploader/main_chrome.py" target="_blank" rel="noopener noreferrer">Chrome 实现 ↗</a></p>
+            </div>
+          </details>
+          <details class="platform-detail" id="method-youtube">
+            <summary><span class="method-name">YouTube</span><span class="method-route">Patchright · YouTube Studio</span><span class="method-flags">视频 · CLI · 无定时</span></summary>
+            <div class="method-body">
+              <p><strong>登录：</strong>在浏览器中交互完成 Google 账号登录，保存状态；不走二维码登录。</p>
+              <p><strong>发布：</strong>自动操作 Studio：选视频、填标题简介与标签、封面、播放列表、受众及公开范围，等待上传进度完成后点击发布。仓库采用网页路线，没有使用 YouTube Data API。</p>
+              <p><strong>判断与边界：</strong>CLI 支持公开、不公开列出、私人三种可见性，未提供定时参数；最终可见状态仍应在 Studio 核对。</p>
+              <p class="method-source"><a href="https://github.com/dreammis/social-auto-upload/blob/0012d2c355f88f683cc38dde2a2db209e14091bc/uploader/youtube_uploader/main.py" target="_blank" rel="noopener noreferrer">Studio uploader ↗</a><a href="https://github.com/dreammis/social-auto-upload/blob/0012d2c355f88f683cc38dde2a2db209e14091bc/docs/CLI.md#L143-L151" target="_blank" rel="noopener noreferrer">CLI 用法 ↗</a></p>
+            </div>
+          </details>
+        </div>
+        <p class="method-conclusion"><strong>判定“发出去了”的层次：</strong>脚本点击成功或进程返回正常 → 平台接收并处理 → 审核通过或预约时间到达 → 作品实际可见。这个仓库主要覆盖前两步，不能把 CLI 的成功输出直接等同于公开发布。</p>
+      </div>
+    </section>
+    <section class="section-pad section-ink" id="how-it-works" aria-labelledby="how-title">
+      <div class="container">
+        <div class="section-heading inverse">
+          <div>
+            <p class="section-kicker">03 / MECHANISM</p>
+            <h2 id="how-title">它怎样完成一次发布？</h2>
+            <p>以抖音等平台为例：先登录并保存浏览器状态，再让程序带着这个状态操作创作者网页。</p>
+          </div>
+        </div>
+        <div class="mechanism-core" aria-label="核心实现原理">
+          <span class="mechanism-core-label">一句话看懂</span>
+          <p class="mechanism-core-flow">人工登录 <span aria-hidden="true">→</span> 保存登录态 <span aria-hidden="true">→</span> 新浏览器会话恢复 <span aria-hidden="true">→</span> 按网页元素上传与发布</p>
+          <p>保存的是浏览器登录状态文件，通常含 Cookie 和站点的本地存储。<strong>Cookie 用来证明“这是已登录的账号”；上传素材、填写信息和点击发布，靠自动化浏览器完成。</strong>各平台分别保存自己的账号状态。</p>
+          <p class="mechanism-core-aside">你正在看的能力地图只是说明页；真正执行发布的是原仓库的 <code>sau</code> 命令和各平台 uploader。</p>
+        </div>
+        <div class="login-explainer" aria-labelledby="login-answer-title">
+          <div class="login-answer">
+            <p class="login-answer-tag">你刚才问的关键问题</p>
+            <h3 id="login-answer-title">手动登录后，程序究竟怎样“接着操作”？</h3>
+            <p><strong>会复用这次登录获得的身份，但通常会打开新的浏览器会话。</strong>它把项目登录窗口中的 Cookie 等站点状态保存为 JSON；发布时再加载到新的 Chromium 浏览器上下文。平台若仍接受该会话，就会显示同一账号的创作者后台。</p>
+          </div>
+          <div class="login-comparison">
+            <div><span>在项目打开的窗口登录</span><strong>可以延续</strong><p>运行该项目的登录流程并扫码或手动登录，程序才会保存相应账号状态。</p></div>
+            <div><span>只在日常 Chrome 登录</span><strong>默认不会带入</strong><p>项目一般启动自己的 Chromium；你日常浏览器的 Cookie 不会自动进入它的账号文件。</p></div>
+          </div>
+          <p class="login-detail"><strong>四个角色：</strong>Patchright / Playwright 是浏览器控制库；Chromium 是实际运行网页的浏览器；Cookie 等登录状态用来表明账号身份；脚本按网页元素定位上传框、输入框和按钮，再自动选择文件、填表和点击发布，由创作者网页向平台服务器发出请求。登录状态过期或遇到二次验证时，需要再人工登录。</p>
+          <p class="login-sources">源码和文档：<a href="https://github.com/dreammis/social-auto-upload/blob/0012d2c355f88f683cc38dde2a2db209e14091bc/uploader/douyin_uploader/main.py#L244-L280" target="_blank" rel="noopener noreferrer">打开浏览器并保存状态</a> · <a href="https://github.com/dreammis/social-auto-upload/blob/0012d2c355f88f683cc38dde2a2db209e14091bc/uploader/douyin_uploader/main.py#L895-L923" target="_blank" rel="noopener noreferrer">新会话恢复并上传</a> · <a href="https://playwright.dev/python/docs/auth" target="_blank" rel="noopener noreferrer">浏览器状态格式</a> · <a href="https://github.com/Kaliiiiiiiiii-Vinyzu/patchright" target="_blank" rel="noopener noreferrer">Patchright 项目</a></p>
+        </div>
+        <div class="dom-method" aria-labelledby="dom-method-title">
+          <div>
+            <p class="login-answer-tag">网页元素怎样变成发布动作</p>
+            <h3 id="dom-method-title">它按已写好的定位规则操作页面</h3>
+            <p>以抖音视频为例，脚本进入上传页，按 CSS 选择器查找文件输入框；也会按按钮文字、元素角色或页面结构定位控件。找到后把本地视频交给文件框，填写标题和描述，点击平台页面的发布按钮。浏览器加载的网页处理这些动作，再向平台服务器发送上传与提交请求。</p>
+            <p>脚本还会等待上传完成、弹窗关闭或页面跳转，再判断是否提交。平台改版后，如果元素或流程改变，对应的定位规则和判断逻辑就需要维护。</p>
+          </div>
+          <div class="dom-method-actions" aria-label="网页元素操作顺序">
+            <span>定位元素</span><span aria-hidden="true">→</span><span>选择文件与填表</span><span aria-hidden="true">→</span><span>点击提交</span><span aria-hidden="true">→</span><span>检查页面反馈</span>
+          </div>
+          <p class="login-sources">核对依据：<a href="https://github.com/dreammis/social-auto-upload/blob/0012d2c355f88f683cc38dde2a2db209e14091bc/uploader/douyin_uploader/main.py#L895-L923" target="_blank" rel="noopener noreferrer">抖音上传与元素定位</a> · <a href="https://github.com/dreammis/social-auto-upload/blob/0012d2c355f88f683cc38dde2a2db209e14091bc/uploader/douyin_uploader/main.py#L1007-L1024" target="_blank" rel="noopener noreferrer">提交与页面结果</a> · <a href="https://playwright.dev/python/docs/locators" target="_blank" rel="noopener noreferrer">定位器文档</a></p>
+        </div>
+        <ol class="flow">
+          <li><span class="flow-index">01</span><h3>准备账号</h3><p>在项目打开的浏览器中人工登录。程序检查会话，并把 Cookie 等状态保存到本地账号文件。</p></li>
+          <li><span class="flow-index">02</span><h3>选择平台</h3><p><code>sau</code> 接收平台、账号、素材、标题、描述等参数，转给对应的 uploader。</p></li>
+          <li><span class="flow-index">03</span><h3>操作后台</h3><p>打开新浏览器会话并恢复登录状态；Patchright 或 Playwright 驱动 Chromium，查找上传框、填表，并在可用时设置平台定时。</p></li>
+          <li><span class="flow-index">04</span><h3>提交与核验</h3><p>程序等待上传、点击发布并判断页面结果。实际作品状态仍应到平台后台复核。</p></li>
+        </ol>
+        <div class="mechanism-notes">
+          <div><span class="note-key">存在哪里</span><p>登录态按平台和账号保存在本地 <code>cookies/*.json</code>。虽然目录名叫 cookies，文件实际保存浏览器状态，应按账号凭据保管；失效后需重新登录。</p></div>
+          <div><span class="note-key">平台例外</span><p>B站通过 <code>biliup</code> 执行上传；TikTok 使用旧 Chrome 示例，尚未接入 <code>sau</code>。</p></div>
+          <div><span class="note-key">关于“多平台”</span><p>统一 CLI 提供的是多个平台入口。要连续分发，需依次调用，或再接一层外部调度。</p></div>
+        </div>
+        <p class="inline-sources">实现依据：<a href="https://github.com/dreammis/social-auto-upload/blob/0012d2c355f88f683cc38dde2a2db209e14091bc/uploader/douyin_uploader/main.py#L263-L280" target="_blank" rel="noopener noreferrer">扫码后保存登录态</a> · <a href="https://github.com/dreammis/social-auto-upload/blob/0012d2c355f88f683cc38dde2a2db209e14091bc/uploader/douyin_uploader/main.py#L895-L906" target="_blank" rel="noopener noreferrer">上传时恢复登录态</a> · <a href="https://github.com/dreammis/social-auto-upload/blob/0012d2c355f88f683cc38dde2a2db209e14091bc/sau_cli.py#L250-L253" target="_blank" rel="noopener noreferrer">账号文件</a> · <a href="https://github.com/dreammis/social-auto-upload/blob/0012d2c355f88f683cc38dde2a2db209e14091bc/uploader/douyin_uploader/main.py#L895-L970" target="_blank" rel="noopener noreferrer">浏览器上传</a> · <a href="https://github.com/dreammis/social-auto-upload/blob/0012d2c355f88f683cc38dde2a2db209e14091bc/uploader/douyin_uploader/main.py#L339-L349" target="_blank" rel="noopener noreferrer">定时控件</a> · <a href="https://github.com/dreammis/social-auto-upload/blob/0012d2c355f88f683cc38dde2a2db209e14091bc/sau_cli.py#L520-L547" target="_blank" rel="noopener noreferrer">B站调用</a></p>
+      </div>
+    </section>
+
+    <section class="section-pad section-light" id="for-you" aria-labelledby="for-you-title">
+      <div class="container personal-grid">
+        <div>
+          <p class="section-kicker">04 / FOR YOUR IP</p>
+          <h2 id="for-you-title">对你建立个人 IP 的价值</h2>
+          <p class="lead">它最适合放在<strong>“内容已经做好 → 稳定分发”</strong>这一段。你能把同一主题的素材有计划地送到几个平台，把手工上传的时间留给创作与交流。</p>
+          <div class="role-map" aria-label="个人 IP 内容流程中的分工">
+            <div><span>你决定</span><strong>定位与选题</strong><small>面向谁，表达什么</small></div>
+            <div class="role-focus"><span>工具承担</span><strong>重复发布</strong><small>上传、填表、排期</small></div>
+            <div><span>你继续做</span><strong>反馈与迭代</strong><small>评论、数据、下轮改进</small></div>
+          </div>
+          <p class="personal-note">工作区中的 RVC 项目偏向声音制作；这个项目偏向成品内容的分发。两者可以处在同一条创作链的不同环节。</p>
+        </div>
+        <aside class="decision-card">
+          <p class="card-eyebrow">建议的接入顺序</p>
+          <ol>
+            <li><span>1</span><div><strong>先定一个内容主题</strong><p>明确目标受众，以及视频或图文的基本形式。</p></div></li>
+            <li><span>2</span><div><strong>选两个平台试发</strong><p>根据平台调整标题、封面和表达，观察哪类内容有效。</p></div></li>
+            <li><span>3</span><div><strong>流程重复后再自动化</strong><p>先用一个账号、一条内容试跑，核对发布结果，再扩大范围。</p></div></li>
+          </ol>
+          <div class="decision-bottom">判断标准：重复上传与排期，是否已经明显占用你的创作时间。</div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="section-pad section-muted" id="limits" aria-labelledby="limits-title">
+      <div class="container">
+        <div class="section-heading">
+          <div>
+            <p class="section-kicker">05 / BOUNDARIES</p>
+            <h2 id="limits-title">使用前，先看这些边界</h2>
+          </div>
+        </div>
+        <div class="limit-grid">
+          <article class="limit-card"><span class="limit-number">01</span><h3>页面变化会影响脚本</h3><p>上传流程依赖创作者后台的页面元素。平台改版、登录态失效或二次验证，都可能使任务中断。</p></article>
+          <article class="limit-card"><span class="limit-number">02</span><h3>旧版 Web 不是主线</h3><p>仓库正围绕 CLI、Skill 与 Patchright 重构。作者明确表示历史 Web 代码不保证可直接运行。</p></article>
+          <article class="limit-card"><span class="limit-number">03</span><h3>平台能力需要实测</h3><p>上面的矩阵来自项目自述，不是对你的账号逐一跑通后的结果。正式发布前需小范围验证。</p></article>
+        </div>
+        <div class="warning" role="note">
+          <div class="warning-symbol" aria-hidden="true">!</div>
+          <div><p class="warning-label">代码默认值影响实际发布</p><h3>先核对 AI 内容与原创声明</h3><p>抖音视频的 CLI 帮助称省略 <code>--declaration</code> 不设置，但上传代码会默认选“内容由AI生成”。视频号、百家号、支付宝生活号与微博的视频流程也会尝试选择 AI 内容声明；微博还固定选择“二创”。这些操作可能因页面变化而未生效。发布自己的原创内容前，应按真实情况逐平台检查。</p><p class="warning-links"><a href="https://github.com/dreammis/social-auto-upload/blob/0012d2c355f88f683cc38dde2a2db209e14091bc/sau_cli.py#L754-L757" target="_blank" rel="noopener noreferrer">抖音 CLI 说明 ↗</a><a href="https://github.com/dreammis/social-auto-upload/blob/0012d2c355f88f683cc38dde2a2db209e14091bc/uploader/douyin_uploader/main.py#L966-L970" target="_blank" rel="noopener noreferrer">抖音上传代码 ↗</a><a href="https://github.com/dreammis/social-auto-upload/blob/0012d2c355f88f683cc38dde2a2db209e14091bc/uploader/tencent_uploader/main.py" target="_blank" rel="noopener noreferrer">视频号实现 ↗</a><a href="https://github.com/dreammis/social-auto-upload/blob/0012d2c355f88f683cc38dde2a2db209e14091bc/uploader/weibo_uploader/main.py" target="_blank" rel="noopener noreferrer">微博实现 ↗</a></p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section-pad sources" id="sources" aria-labelledby="sources-title">
+      <div class="container sources-grid">
+        <div><p class="section-kicker">SOURCE NOTES</p><h2 id="sources-title">核对依据</h2><p>页面固定引用仓库提交 <a href="https://github.com/dreammis/social-auto-upload/commit/0012d2c355f88f683cc38dde2a2db209e14091bc" target="_blank" rel="noopener noreferrer">0012d2c</a>，避免日后主线修改造成页面结论与来源错位。个人 IP 的接入顺序是基于你的目标提出的建议。</p></div>
+        <ul>
+          <li><a href="https://github.com/dreammis/social-auto-upload/blob/0012d2c355f88f683cc38dde2a2db209e14091bc/README.md#L64-L77" target="_blank" rel="noopener noreferrer">README · 平台能力表 <span>↗</span></a></li>
+          <li><a href="https://github.com/dreammis/social-auto-upload/blob/0012d2c355f88f683cc38dde2a2db209e14091bc/docs/CLI.md" target="_blank" rel="noopener noreferrer">CLI 文档 · 平台命令和差异 <span>↗</span></a></li>
+          <li><a href="https://github.com/dreammis/social-auto-upload/blob/0012d2c355f88f683cc38dde2a2db209e14091bc/docs/install.md" target="_blank" rel="noopener noreferrer">安装说明 · 浏览器与账号准备 <span>↗</span></a></li>
+          <li><a href="https://github.com/dreammis/social-auto-upload/blob/0012d2c355f88f683cc38dde2a2db209e14091bc/sau_cli.py#L727-L742" target="_blank" rel="noopener noreferrer">源码 · 单平台 CLI 入口 <span>↗</span></a></li>
+          <li><a href="https://github.com/dreammis/social-auto-upload/blob/0012d2c355f88f683cc38dde2a2db209e14091bc/README.md#L136-L148" target="_blank" rel="noopener noreferrer">README · 重构与旧 Web 说明 <span>↗</span></a></li>
+        </ul>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer"><div class="container footer-inner"><span>项目研究 002 · social-auto-upload</span><span>资料核对：2026-09-25 · <a href="../../index.html">返回项目索引</a></span></div></footer>
+</body>
+</html>

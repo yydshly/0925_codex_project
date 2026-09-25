@@ -1,0 +1,122 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1100" viewBox="0 0 1600 1100" role="img" aria-labelledby="title desc">
+  <title id="title">social-auto-upload 能力与原理总览图</title>
+  <desc id="desc">11 个平台的视频发布能力、三种接入路径、登录状态保存和恢复、浏览器自动化发布流程，以及对个人 IP 建设的意义。</desc>
+  <defs>
+    <style>
+      text { font-family: "Microsoft YaHei","PingFang SC","Noto Sans SC",Arial,sans-serif; }
+      .title { font-size: 43px; font-weight: 800; fill: #ffffff; }
+      .subtitle { font-size: 21px; fill: #b8cde0; }
+      .smallcap { font-size: 17px; font-weight: 800; letter-spacing: 1.5px; fill: #147b80; }
+      .heading { font-size: 26px; font-weight: 800; fill: #142b47; }
+      .body { font-size: 20px; fill: #344d65; }
+      .minor { font-size: 17px; fill: #61778b; }
+      .route { font-size: 20px; font-weight: 800; fill: #173852; }
+      .routeNames { font-size: 19px; fill: #39536b; }
+      .cardnum { font-size: 35px; font-weight: 800; fill: #087f83; }
+      .cardlabel { font-size: 19px; font-weight: 750; fill: #365168; }
+      .whiteheading { font-size: 23px; font-weight: 800; fill: #ffffff; }
+      .whitetext { font-size: 21px; fill: #d5e8ed; }
+    </style>
+  </defs>
+
+  <rect width="1600" height="1100" fill="#eef4f7"/>
+  <rect x="40" y="32" width="1520" height="140" rx="24" fill="#10233f"/>
+  <rect x="40" y="32" width="10" height="140" rx="5" fill="#59d8ce"/>
+  <text class="title" x="75" y="95">social-auto-upload · 一图看懂</text>
+  <text class="subtitle" x="77" y="135">用户先登录并保存状态；程序根据网页元素控制浏览器，上传内容并提交发布。</text>
+  <rect x="1280" y="66" width="240" height="72" rx="16" fill="#1a3d5b" stroke="#5ad9cf" stroke-width="2"/>
+  <text x="1400" y="96" text-anchor="middle" font-size="21" font-weight="800" fill="#64e2d7">11 个平台</text>
+  <text x="1400" y="122" text-anchor="middle" font-size="17" fill="#c6e5e7">研究版本 0012d2c</text>
+
+  <rect x="40" y="194" width="1520" height="110" rx="18" fill="#ffffff" stroke="#d6e4eb" stroke-width="2"/>
+  <line x1="344" y1="216" x2="344" y2="282" stroke="#dbe6ed" stroke-width="2"/>
+  <line x1="648" y1="216" x2="648" y2="282" stroke="#dbe6ed" stroke-width="2"/>
+  <line x1="952" y1="216" x2="952" y2="282" stroke="#dbe6ed" stroke-width="2"/>
+  <line x1="1256" y1="216" x2="1256" y2="282" stroke="#dbe6ed" stroke-width="2"/>
+  <text class="cardnum" x="73" y="249">11</text><text class="cardlabel" x="136" y="247">视频平台</text>
+  <text class="minor" x="73" y="279">全部 11 个均列有视频能力</text>
+  <text class="cardnum" x="377" y="249">3</text><text class="cardlabel" x="421" y="247">图文平台</text>
+  <text class="minor" x="377" y="279">抖音 / 小红书 / 快手</text>
+  <text class="cardnum" x="681" y="249">5+1</text><text class="cardlabel" x="766" y="247">定时</text>
+  <text class="minor" x="681" y="279">5 个主线 + TikTok 旧示例</text>
+  <text class="cardnum" x="985" y="249">10</text><text class="cardlabel" x="1046" y="247">CLI 入口</text>
+  <text class="minor" x="985" y="279">一次命令选择一个平台</text>
+  <text class="cardnum" x="1289" y="249">4</text><text class="cardlabel" x="1333" y="247">Agent Skill</text>
+  <text class="minor" x="1289" y="279">抖音 / B站 / 小红书 / 快手</text>
+
+  <rect x="40" y="330" width="340" height="474" rx="20" fill="#ffffff" stroke="#d2e2e9" stroke-width="2"/>
+  <text class="smallcap" x="68" y="367">01 / INPUT</text>
+  <text class="heading" x="68" y="402">你准备内容与账号</text>
+  <line x1="68" y1="422" x2="352" y2="422" stroke="#dce7ed" stroke-width="2"/>
+  <circle cx="81" cy="459" r="7" fill="#20a6a1"/>
+  <text class="body" x="105" y="465">视频 / 图片 / 封面</text>
+  <text class="minor" x="105" y="493">标题、正文、标签、时间</text>
+  <circle cx="81" cy="537" r="7" fill="#20a6a1"/>
+  <text class="body" x="105" y="543">在项目打开的浏览器</text>
+  <text class="body" x="105" y="572">中扫码或手动登录</text>
+  <rect x="66" y="616" width="288" height="91" rx="12" fill="#e9f5f4"/>
+  <text x="82" y="645" font-size="19" font-weight="800" fill="#126e72">保存登录状态</text>
+  <text class="minor" x="82" y="673">Cookie 等站点状态 → 本地</text>
+  <text class="minor" x="82" y="696">cookies/*.json 账号文件</text>
+  <text x="68" y="750" font-size="17" font-weight="700" fill="#a05d13">日常 Chrome 已登录 ≠ 默认可复用</text>
+  <text class="minor" x="68" y="777">需要在项目登录流程中保存状态</text>
+
+  <path d="M384 560 L395 560 M389 554 L395 560 L389 566" fill="none" stroke="#248c91" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <rect x="400" y="330" width="520" height="474" rx="20" fill="#ffffff" stroke="#d2e2e9" stroke-width="2"/>
+  <text class="smallcap" x="428" y="367">02 / ENGINE</text>
+  <text class="heading" x="428" y="402">SAU 如何完成发布</text>
+  <rect x="426" y="425" width="468" height="68" rx="11" fill="#edf5fa"/>
+  <circle cx="450" cy="459" r="15" fill="#177e88"/><text x="450" y="465" text-anchor="middle" font-size="16" font-weight="800" fill="#ffffff">1</text>
+  <text class="route" x="481" y="453">sau 命令选择平台与素材</text>
+  <text class="minor" x="481" y="480">分派给对应的平台 uploader</text>
+  <rect x="426" y="503" width="468" height="68" rx="11" fill="#edf5fa"/>
+  <circle cx="450" cy="537" r="15" fill="#177e88"/><text x="450" y="543" text-anchor="middle" font-size="16" font-weight="800" fill="#ffffff">2</text>
+  <text class="route" x="481" y="531">新浏览器会话载入登录态</text>
+  <text class="minor" x="481" y="558">有效时平台识别为已登录账号</text>
+  <rect x="426" y="581" width="468" height="68" rx="11" fill="#edf5fa"/>
+  <circle cx="450" cy="615" r="15" fill="#177e88"/><text x="450" y="621" text-anchor="middle" font-size="16" font-weight="800" fill="#ffffff">3</text>
+  <text class="route" x="481" y="609">根据网页元素定位控件</text>
+  <text class="minor" x="481" y="636">Patchright / Playwright 控制 Chromium</text>
+  <rect x="426" y="659" width="468" height="68" rx="11" fill="#edf5fa"/>
+  <circle cx="450" cy="693" r="15" fill="#177e88"/><text x="450" y="699" text-anchor="middle" font-size="16" font-weight="800" fill="#ffffff">4</text>
+  <text class="route" x="481" y="687">选文件、填表、点击发布</text>
+  <text class="minor" x="481" y="714">网页向平台服务器发上传与提交请求</text>
+  <text x="428" y="768" font-size="17" font-weight="700" fill="#126e72">Cookie = 登录身份；网页元素操作 = 发布动作</text>
+
+  <path d="M924 560 L935 560 M929 554 L935 560 L929 566" fill="none" stroke="#248c91" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <rect x="940" y="330" width="620" height="474" rx="20" fill="#ffffff" stroke="#d2e2e9" stroke-width="2"/>
+  <text class="smallcap" x="968" y="367">03 / ROUTES</text>
+  <text class="heading" x="968" y="402">11 个平台，三类接入路径</text>
+  <rect x="966" y="424" width="568" height="85" rx="11" fill="#e8f6f4"/>
+  <text class="route" x="984" y="452">Patchright · 5 个统一 CLI 浏览器平台</text>
+  <text class="routeNames" x="984" y="486">抖音 · 小红书 · 快手 · 视频号 · YouTube</text>
+  <rect x="966" y="518" width="568" height="85" rx="11" fill="#eaf1fb"/>
+  <text class="route" x="984" y="546">Playwright · 4 个统一 CLI 浏览器平台</text>
+  <text class="routeNames" x="984" y="580">百家号 · 支付宝生活号 · 微博 · 虎扑</text>
+  <rect x="966" y="612" width="568" height="72" rx="11" fill="#fff5e9"/>
+  <text class="route" x="984" y="640">biliup · 1 个统一 CLI 平台</text>
+  <text class="routeNames" x="984" y="670">Bilibili：CLI 委托外部程序上传</text>
+  <rect x="966" y="693" width="568" height="72" rx="11" fill="#f2effb"/>
+  <text class="route" x="984" y="721">旧 Chrome 示例 · 1 个独立入口</text>
+  <text class="routeNames" x="984" y="751">TikTok：未接入统一 sau 命令</text>
+  <text class="minor" x="968" y="789">B站登录和上传由 biliup 处理，不能套用浏览器分支。</text>
+
+  <rect x="40" y="824" width="1520" height="77" rx="17" fill="#173653"/>
+  <text class="whiteheading" x="69" y="858">脚本显示成功之后</text>
+  <text class="whitetext" x="332" y="857">已点击 / 进程返回 → 平台接收 → 审核或预约 → 作品实际可见</text>
+  <text x="332" y="885" font-size="17" fill="#b6d4de">各平台可见状态要回后台核对；CLI 成功输出不等于已公开。</text>
+
+  <text class="smallcap" x="40" y="938">04 / VALUE FOR YOUR PERSONAL IP</text>
+  <rect x="40" y="955" width="480" height="105" rx="15" fill="#ffffff" stroke="#d2e2e9" stroke-width="2"/>
+  <rect x="560" y="955" width="480" height="105" rx="15" fill="#e1f3f0" stroke="#a8d9d2" stroke-width="2"/>
+  <rect x="1080" y="955" width="480" height="105" rx="15" fill="#ffffff" stroke="#d2e2e9" stroke-width="2"/>
+  <text class="route" x="66" y="990">你决定 · 内容与定位</text>
+  <text class="body" x="66" y="1028">选题、受众、平台化改写</text>
+  <text class="route" x="586" y="990">工具承担 · 重复分发</text>
+  <text class="body" x="586" y="1028">上传、填表、平台原生排期</text>
+  <text class="route" x="1106" y="990">你继续 · 反馈与迭代</text>
+  <text class="body" x="1106" y="1028">核对结果、互动、看数据</text>
+  <text x="40" y="1087" font-size="16" fill="#687e90">依据 dreammis/social-auto-upload 固定提交 0012d2c；能力表为仓库声明，需用自己的账号逐平台验证。</text>
+</svg>

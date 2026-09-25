@@ -11,6 +11,7 @@
 | 编号 | 源库（关联原仓库） | 研究摘要 | 阅读入口 |
 | :--: | --- | --- | --- |
 | 001 | [Retrieval-based-Voice-Conversion-WebUI](https://github.com/RVC-Project/Retrieval-based-Voice-Conversion-WebUI) | **能力：** 已有语音 / 歌声换声、实时变声与声线训练。**原理：** 提取发音与音高，由目标模型重建波形，并可用检索辅助。**对我的意义：** 可复用为换声模块；先理解方案，实际效果按需验证。 | [完整研究](projects/001-rvc-voice-conversion/README.md) · [查看网页](https://yydshly.github.io/0925_codex_project/projects/001-rvc-voice-conversion/) |
+| 002 | [social-auto-upload](https://github.com/dreammis/social-auto-upload) | **能力：** 11 个平台列有视频上传能力，抖音、小红书、快手还支持图文。**原理：** 用户先登录并保存状态；9 个平台由 Patchright / Playwright 根据网页元素操作创作者后台，B站委托 biliup，TikTok 为旧示例。**对我的意义：** 内容做好后可减少个人 IP 多平台重复上传与排期。 | [完整研究](projects/002-social-auto-upload/README.md) · [在线网页](https://yydshly.github.io/0925_codex_project/projects/002-social-auto-upload/) · [一图总览](https://yydshly.github.io/0925_codex_project/projects/002-social-auto-upload/overview.svg) |
 
 ## 001 · Retrieval-based-Voice-Conversion-WebUI 图文导读
 
@@ -61,6 +62,18 @@ HuBERT 等特征模型从输入录音中提取与发音相关的线索；使用�
 ![环境图：区分运行环境、核心模型、目标声线文件和按功能增加的资源。](docs/projects/001-rvc-voice-conversion/assets/rvc-model-environment-map.png)
 
 环境图：区分运行环境、核心模型、目标声线文件和按功能增加的资源。
+
+## 002 · social-auto-upload 图文导读
+
+源库：[dreammis/social-auto-upload](https://github.com/dreammis/social-auto-upload)。仓库列出 11 个视频平台、3 个图文平台及部分平台的定时能力。抖音、小红书、快手、视频号、YouTube 通过 Patchright 操作创作者网页；百家号、支付宝生活号、微博、虎扑通过 Playwright 操作网页。Bilibili 由 biliup 处理，TikTok 是未接入统一 CLI 的旧 Chrome 示例。
+
+**实现原理：** 用户在项目打开的浏览器中手动登录，程序把 Cookie 等状态保存到本地账号文件。下次发布时，它在新的浏览器会话恢复登录状态，按网页元素找到上传框、输入框和按钮，选择文件、填写内容并点击发布；浏览器中的平台网页向服务器发送请求。平台改版或登录状态失效时，需要维护脚本或重新登录。
+
+**对我的意义：** 它适合放在个人 IP 的“内容完成 → 稳定分发”阶段。工具可承担重复上传、填表与排期；定位、选题、各平台表达和反馈复盘仍由自己掌握。统一 CLI 一次处理一个平台，多平台连续分发需在外层组织任务。
+
+![social-auto-upload 引导图：能力、平台、登录状态、网页元素操作、发布路径与个人 IP 价值。](docs/projects/002-social-auto-upload/overview.svg)
+
+[查看在线能力地图](https://yydshly.github.io/0925_codex_project/projects/002-social-auto-upload/) · [打开完整引导图](https://yydshly.github.io/0925_codex_project/projects/002-social-auto-upload/overview.svg) · [阅读研究笔记](projects/002-social-auto-upload/README.md)
 
 ## 添加项目
 
