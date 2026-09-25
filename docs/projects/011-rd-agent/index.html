@@ -1,0 +1,250 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#090e19">
+  <meta name="description" content="一图理解 RD-Agent：外部大模型多次生成方案与代码，框架调度真实实验并根据指标反馈迭代；梳理论文实现、数据集探索、八类场景、3D 边界和何时值得重新尝试。">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2064%2064%22%3E%3Crect%20width%3D%2264%22%20height%3D%2264%22%20rx%3D%2214%22%20fill%3D%22%230b1827%22%2F%3E%3Cpath%20d%3D%22M13%2017h17a11%2011%200%200%201%200%2022H13zm0%200v30m0-8h17m10-21v29m0-15%2012-14m-12%2014%2012%2015%22%20fill%3D%22none%22%20stroke%3D%22%2368e2d0%22%20stroke-width%3D%226%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%2F%3E%3C%2Fsvg%3E">
+  <title>RD-Agent Explorer · 自动化研发能力展示</title>
+  <style>
+    :root{color-scheme:dark;--bg:#090e19;--panel:#101828;--panel2:#131e30;--line:#273449;--ink:#f0f5fc;--muted:#9caec4;--quiet:#6d819a;--cyan:#68e2d0;--blue:#78a8ff;--purple:#a689f6;--gold:#f1bd79;--radius:20px}
+    *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,"Segoe UI","Microsoft YaHei",Arial,sans-serif;line-height:1.6}button,a{font:inherit}button{cursor:pointer}a{color:inherit;text-decoration:none}a:focus-visible,button:focus-visible{outline:2px solid var(--cyan);outline-offset:4px}::selection{background:#297f8c;color:#fff}
+    .skip{position:absolute;top:-50px;left:12px;background:var(--cyan);color:#07131b;padding:8px 14px;z-index:100}.skip:focus{top:12px}
+    .wrap{width:min(1180px,calc(100% - 48px));margin:auto}.header{height:82px;border-bottom:1px solid #1d2a3c;position:relative;z-index:5;background:rgba(9,14,25,.92)}.header-inner{height:100%;display:flex;align-items:center;justify-content:space-between;gap:24px}.brand{font-weight:800;letter-spacing:-.05em;font-size:23px;white-space:nowrap;display:inline-flex;align-items:center;gap:11px}.brand-mark{width:31px;height:31px;border:2px solid var(--cyan);border-radius:9px;display:grid;place-items:center;color:var(--cyan);font-size:16px;font-weight:900;letter-spacing:0;transform:rotate(-8deg)}.brand em{font-style:normal;color:var(--cyan)}.brand small{font-size:9px;font-weight:800;letter-spacing:.2em;color:var(--quiet);margin-left:2px;align-self:flex-end;margin-bottom:5px}.nav{display:flex;gap:30px;color:#b5c2d5;font-size:13px}.nav a:hover,.footer a:hover{color:var(--cyan)}.external{border:1px solid #374459;border-radius:9px;padding:10px 16px;font-size:12px;font-weight:750;white-space:nowrap}.external:hover{border-color:var(--cyan);color:var(--cyan)}
+    .hero{display:grid;grid-template-columns:1fr 1fr;min-height:580px;align-items:center;gap:34px;padding:70px 0 60px}.eyebrow,.kicker{font-size:11px;font-weight:800;letter-spacing:.2em;color:var(--cyan);text-transform:uppercase;margin:0 0 22px}.eyebrow:before{content:"";display:inline-block;width:26px;height:1px;background:var(--cyan);vertical-align:middle;margin-right:12px}.hero h1{font-size:clamp(46px,5.4vw,75px);line-height:1.16;letter-spacing:-.065em;margin:0 0 25px;font-weight:820}.gradient{background:linear-gradient(100deg,#80e5d0 0%,#80b9fb 55%,#b49df7 100%);color:transparent;background-clip:text}.hero-lead{max-width:590px;color:#aab9ca;font-size:17px;line-height:1.85;margin:0}.actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:34px}.btn{display:inline-flex;align-items:center;justify-content:center;gap:18px;border-radius:10px;padding:13px 21px;font-size:13px;font-weight:800;border:1px solid transparent;min-height:46px}.btn-primary{color:#07141b;background:var(--cyan);box-shadow:0 10px 28px #24c7b021}.btn-primary:hover{background:#9af0e2;transform:translateY(-1px)}.btn-secondary{background:transparent;border-color:#3a4960;color:#e3ecf7}.btn-secondary:hover{border-color:var(--cyan);color:var(--cyan)}.hero-note{font-size:11px;color:#8193aa;margin:28px 0 0}.dot{width:7px;height:7px;background:var(--cyan);border-radius:50%;display:inline-block;box-shadow:0 0 12px var(--cyan);margin-right:7px}
+    .hero-art{height:460px;position:relative;overflow:hidden;border-radius:27px;border:1px solid #21324d;background:radial-gradient(circle at 54% 47%,#1a3952 0,#10243b 28%,#0d1728 58%,#0a101d 100%)}.hero-art:before{content:"";position:absolute;inset:0;background-image:linear-gradient(#ffffff08 1px,transparent 1px),linear-gradient(90deg,#ffffff08 1px,transparent 1px);background-size:30px 30px;mask-image:radial-gradient(circle,#000 12%,transparent 78%)}.halo{position:absolute;left:50%;top:48%;border:1px solid #75deda3d;border-radius:50%;transform:translate(-50%,-50%)}.halo.h1{width:300px;height:300px}.halo.h2{width:225px;height:225px;border-style:dashed;animation:spin 34s linear infinite}.halo.h3{width:154px;height:154px;background:#142f4655;box-shadow:0 0 80px #56e6cd26}.core{position:absolute;left:50%;top:48%;transform:translate(-50%,-50%);font-size:48px;font-weight:900;letter-spacing:-.1em;white-space:nowrap;text-shadow:0 0 36px #51d7d27b}.core span{color:var(--cyan)}.orb{position:absolute;border-radius:50%;filter:blur(12px)}.orb.one{width:110px;height:110px;background:#7189fc25;top:30px;right:50px}.orb.two{width:95px;height:95px;background:#55e2cd1a;bottom:15px;left:40px}.art-label{position:absolute;font-size:10px;letter-spacing:.18em;color:#98b5c9}.art-label.top{top:22px;left:26px}.art-label.bottom{bottom:22px;right:25px}.art-card{position:absolute;display:flex;align-items:center;gap:11px;padding:13px 15px;background:#121e2bee;border:1px solid #3c5268;border-radius:12px;box-shadow:0 14px 35px #0005;min-width:165px}.art-card i{font-style:normal;width:30px;height:30px;border-radius:8px;display:grid;place-items:center;background:#20374b;color:var(--cyan);font-weight:900}.art-card strong{font-size:12px;display:block;line-height:1.25}.art-card small{display:block;font-size:9px;color:#8aa2b7;letter-spacing:.08em;margin-top:3px}.art-card.a{top:66px;left:22px}.art-card.b{right:18px;top:160px}.art-card.c{left:36px;bottom:42px}@keyframes spin{to{transform:translate(-50%,-50%) rotate(360deg)}}
+    .strip{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid #283648;background:#0e1725;border-radius:16px;overflow:hidden}.strip-item{padding:23px 25px;border-right:1px solid #283648;display:flex;gap:14px;align-items:center}.strip-item:last-child{border:0}.strip-item b{font-size:11px;color:var(--cyan)}.strip-item strong{display:block;font-size:13px}.strip-item span{display:block;font-size:11px;color:var(--quiet)}
+    section.block{padding:105px 0}.section-head{display:flex;justify-content:space-between;align-items:end;gap:32px;margin-bottom:30px}.section-head h2,.fit h2{font-size:clamp(29px,3.5vw,42px);line-height:1.25;letter-spacing:-.045em;margin:0}.section-head p:last-child{color:var(--muted);max-width:365px;font-size:13px;margin:0;line-height:1.8}.kicker{margin-bottom:12px}.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.cap{min-height:290px;background:linear-gradient(160deg,#142238,#101927 60%);border:1px solid #2a3a50;border-radius:18px;padding:25px;position:relative;overflow:hidden}.cap:first-child{background:linear-gradient(145deg,#17413f,#15283a 52%,#101927)}.cap-icon{width:42px;height:42px;border:1px solid #4a6f78;border-radius:12px;display:grid;place-items:center;color:var(--cyan);font-size:24px;margin-bottom:27px}.cap-num{font-size:10px;color:#79a5b9;letter-spacing:.18em;font-weight:800}.cap h3{font-size:17px;margin:13px 0 10px;letter-spacing:-.02em}.cap p{color:#a5b5c8;font-size:12px;line-height:1.8;margin:0}.source{color:#7990a9;font-size:11px;margin:20px 0 0}.source a{color:#a4dded;text-decoration:underline;text-underline-offset:3px}
+    .lab-bg{background:linear-gradient(180deg,#0e1928,#0b1421);border-top:1px solid #1c2c41;border-bottom:1px solid #1c2c41}.notice{display:flex;align-items:flex-start;gap:9px;border:1px solid #3a5a68;background:#153039;padding:12px 16px;border-radius:10px;color:#b5d8dc;font-size:12px;margin-bottom:22px}.notice b{color:#e6fcfa}.lab-grid{display:grid;grid-template-columns:300px 1fr;gap:15px}.panel{background:#101b2b;border:1px solid #2b3d52;border-radius:17px;padding:23px}.panel-step{font-size:10px;color:var(--cyan);font-weight:800;letter-spacing:.18em}.panel h3{font-size:16px;margin:6px 0 20px}.scenario-list{display:grid;gap:8px}.scenario{width:100%;border:1px solid #2b3c50;border-radius:11px;background:#152235;color:#e9f1fa;text-align:left;padding:12px;display:flex;align-items:center;gap:12px}.scenario:hover{border-color:#7fd9cf}.scenario.active{background:#17413f;border-color:#55ceb9}.scenario-icon{width:37px;height:37px;border-radius:9px;display:grid;place-items:center;background:#23364d;color:var(--cyan);font-size:19px;flex:none}.scenario strong{font-size:12px;display:block}.scenario small{font-size:10px;color:#9cacc1;display:block;margin-top:2px}.scenario-summary{border-top:1px solid #304155;padding-top:18px;margin-top:20px}.scenario-summary small{color:#8398b1;font-size:10px;letter-spacing:.1em}.scenario-summary p{font-size:12px;color:#c6d4e5;line-height:1.75;margin:6px 0 0}.exp-top{display:flex;justify-content:space-between;align-items:flex-start;gap:15px}.exp-top h3 span{font-weight:500;color:#8ba0b7;font-size:12px}.demo{font-size:9px;font-weight:800;letter-spacing:.14em;color:#9ee1d8;background:#193a3c;border:1px solid #3f7772;border-radius:99px;padding:6px 10px;white-space:nowrap}.demo:before{content:"";display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--cyan);margin-right:6px}.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;margin:3px 0 22px}.step{border:0;border-top:2px solid #35475d;padding:14px 0 0;background:none;color:#738ba6;text-align:left;display:flex;align-items:center;gap:8px;font-size:10px}.step span{width:24px;height:24px;border-radius:50%;background:#233347;display:grid;place-items:center;font-size:9px;flex:none}.step.current{color:var(--cyan);border-color:var(--cyan)}.step.current span{background:#216055;color:#dbfff6}.step.done{color:#b4dcd8;border-color:#388979}.step.done span{background:#20564e;color:#d8fff4}.terminal{background:#09111d;border:1px solid #2e4054;border-radius:12px;min-height:208px;overflow:hidden}.terminal-top{height:38px;background:#162334;border-bottom:1px solid #2e4054;padding:0 13px;display:flex;align-items:center;gap:10px;color:#94a9bc;font-size:10px}.lights{display:flex;gap:4px}.lights i{width:7px;height:7px;background:#dc746f;border-radius:50%}.lights i:nth-child(2){background:#e5c06c}.lights i:nth-child(3){background:#70b992}.terminal-tag{margin-left:auto;letter-spacing:.1em;color:#668296;font-size:9px}.terminal-body{padding:21px 22px 24px}.terminal-comment{font-family:Consolas,monospace;color:#6991a2;font-size:11px;margin:0 0 14px}.terminal-body h4{font-size:21px;letter-spacing:-.03em;margin:0 0 8px}.terminal-body p{font-size:12px;color:#b5c4d6;line-height:1.8;margin:0 0 15px}.terminal-detail{display:inline-flex;align-items:center;border:1px solid #2c5660;border-radius:7px;background:#123138;color:#a8ece1;padding:7px 10px;font-size:10px;font-family:Consolas,monospace;line-height:1.5}.exp-actions{display:flex;align-items:center;gap:10px;margin-top:17px;flex-wrap:wrap}.exp-actions .btn{padding:10px 16px;min-height:40px}.state{margin-left:auto;color:#7e94ac;font-size:11px}
+    .results{display:grid;grid-template-columns:1fr 1.1fr;gap:15px;margin-top:15px}.result-copy{background:#111f30;border:1px solid #2b3d52;border-radius:17px;padding:25px;display:flex;flex-direction:column;justify-content:center}.result-copy h3{font-size:23px;letter-spacing:-.035em;margin:6px 0 7px}.result-copy p{font-size:12px;color:#a5b7ca;margin:0;max-width:370px}.legend{display:flex;gap:15px;color:#8da2b8;font-size:10px;margin-top:20px}.legend i{width:8px;height:8px;border-radius:2px;background:#496482;display:inline-block;margin-right:5px}.legend i.after{background:var(--cyan)}.metric{background:#111f30;border:1px solid #2b3d52;border-radius:17px;padding:24px}.metric-head{display:flex;justify-content:space-between;color:#aebfd1;font-size:11px}.metric-head em{font-style:normal;color:#7295aa}.metric-values{display:flex;align-items:center;gap:14px;margin:10px 0 17px}.metric-values strong{font-size:31px;letter-spacing:-.05em}.metric-values strong:last-child{color:var(--cyan)}.metric-values span{color:#648198}.bar-row{display:flex;align-items:center;gap:12px;font-size:10px;color:#8099af;margin:9px 0}.bar-row>span{width:25px;flex:none}.bar-track{height:7px;flex:1;border-radius:99px;background:#22344a;overflow:hidden}.bar{height:100%;border-radius:99px;width:0;transition:width .65s ease}.bar.before{background:#577493}.bar.after{background:linear-gradient(90deg,#52baa9,#8eebdb)}.metric p{font-size:10px;color:#8199ae;margin:14px 0 0}
+    .architecture-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}.flow,.detail-list{border:1px solid #2a3b52;border-radius:18px;background:#101b2b;padding:29px}.flow-row{display:flex;align-items:center;gap:14px}.flow-row>span{width:40px;height:40px;border:1px solid #4d998e;color:var(--cyan);border-radius:11px;display:grid;place-items:center;font-weight:900;font-size:17px}.flow-row strong{display:block;font-size:15px}.flow-row small{display:block;font-size:11px;color:#91a8bd}.flow-arrow{height:44px;border-left:1px dashed #4b7480;margin-left:20px;padding-left:27px;display:flex;align-items:center;font-size:10px;color:#79aeb5}.flow-return{font-size:11px;color:var(--cyan);margin-top:22px;border-top:1px solid #30465a;padding-top:17px}.detail{display:flex;gap:18px;padding:10px 0 18px;border-bottom:1px solid #2b3b50}.detail:last-child{border-bottom:0}.detail>span{color:var(--cyan);font-size:11px;font-weight:800;margin-top:4px}.detail h3{font-size:14px;margin:0 0 5px}.detail p{font-size:11px;color:#a0b2c5;line-height:1.75;margin:0}
+    .fit{padding:100px 0;display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center}.fit-lead{color:#a4b5c9;font-size:14px;line-height:1.8;max-width:470px}.checks{display:grid;gap:14px;margin-top:25px}.check{display:flex;align-items:center;gap:11px;color:#d0dceb;font-size:12px}.check b{display:grid;place-items:center;background:#1b4a47;border:1px solid #43877c;color:var(--cyan);width:21px;height:21px;border-radius:50%;font-size:10px}.fit-card{background:linear-gradient(140deg,#1a3d41,#162a3d 55%,#121c2c);border:1px solid #426468;border-radius:18px;padding:33px;position:relative;overflow:hidden}.fit-card>*{position:relative;z-index:1}.fit-card:after{content:"";position:absolute;width:240px;height:240px;right:-85px;bottom:-125px;border:1px solid #79d4d44d;border-radius:50%;box-shadow:0 0 0 40px #4ac8bc0c,0 0 0 80px #4ac8bc08}.fit-card small{font-size:10px;letter-spacing:.18em;color:var(--cyan);font-weight:800}.fit-card h3{font-size:24px;letter-spacing:-.04em;margin:25px 0 9px}.fit-card p{font-size:12px;color:#b7cbd5;max-width:330px;line-height:1.8}.fit-card a{color:#bcfff0;font-size:12px;font-weight:800;display:inline-block;margin-top:18px}.fit-card a:hover{text-decoration:underline}
+    .footer{border-top:1px solid #203044;background:#0b1320;padding:38px 0}.footer-inner{display:flex;align-items:flex-start;justify-content:space-between;gap:24px}.footer p{color:#75899e;font-size:11px;margin:12px 0 0}.footer-links{display:flex;gap:25px;color:#9eb1c4;font-size:11px}.footer-links a{white-space:nowrap}
+    @media(max-width:1000px){.nav{gap:14px}.cards{grid-template-columns:repeat(2,1fr)}.hero{grid-template-columns:1fr 1fr}.hero h1{font-size:clamp(40px,5vw,60px)}.strip-item{padding:18px 14px}.lab-grid{grid-template-columns:260px 1fr}}@media(max-width:760px){.wrap{width:min(100% - 32px,620px)}.header{height:70px}.nav{display:none}.external{font-size:10px;padding:8px 9px}.brand{font-size:19px}.brand small{display:none}.hero{grid-template-columns:1fr;padding:65px 0 35px;gap:37px}.hero-art{height:365px}.hero h1{font-size:clamp(45px,10vw,64px)}.hero-lead{font-size:15px}.strip{grid-template-columns:repeat(2,1fr)}.strip-item:nth-child(2){border-right:0}.strip-item:nth-child(-n+2){border-bottom:1px solid #283648}section.block{padding:75px 0}.section-head{display:block}.section-head p:last-child{margin-top:15px}.lab-grid,.results,.architecture-grid,.fit{grid-template-columns:1fr}.fit{gap:28px;padding:75px 0}.state{margin-left:0;width:100%}.footer-inner{display:block}.footer-links{margin-top:20px;flex-wrap:wrap}}@media(max-width:480px){.cards{grid-template-columns:1fr}.cap{min-height:230px}.art-card{padding:9px;min-width:140px}.art-card.a{top:52px;left:10px}.art-card.b{right:6px;top:148px}.art-card.c{left:12px;bottom:30px}.art-card strong{font-size:10px}.art-card small{font-size:8px}.hero-art{height:330px}.halo.h1{width:245px;height:245px}.halo.h2{width:185px;height:185px}.halo.h3{width:130px;height:130px}.core{font-size:39px}.steps{gap:2px}.step{font-size:9px;display:block}.step span{margin-bottom:5px}.panel{padding:17px}.footer-links{gap:14px}}
+    @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.halo.h2{animation:none}.bar,.btn{transition:none}}
+
+    .value-grid,.extend-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+    .value-card,.extend-card{background:#101b2b;border:1px solid #2a3b52;border-radius:17px;padding:25px}
+    .value-card>span,.extend-card>span{display:block;color:var(--cyan);font-weight:800;letter-spacing:.12em;font-size:11px;margin-bottom:18px}
+    .value-card h3,.extend-card h3{font-size:18px;margin:0 0 9px}
+    .value-card p,.extend-card p{font-size:13px;color:#b1c0d2;line-height:1.8;margin:0}
+    .value-card a{color:#a9ecdf;text-decoration:underline;text-underline-offset:3px}
+    .value-callout{margin-top:17px;background:#173039;border-left:3px solid var(--cyan);padding:16px 20px;border-radius:0 10px 10px 0;color:#c8e3e2;font-size:13px;line-height:1.8}
+    @media(max-width:760px){.value-grid,.extend-grid{grid-template-columns:1fr}}
+
+    .paths-block{padding-top:82px!important}
+    .path-intro{max-width:760px;color:var(--muted);font-size:14px;line-height:1.9;margin:16px 0 26px}
+    .mode-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+    .mode-card{border:1px solid #345468;border-radius:18px;padding:27px;background:linear-gradient(155deg,#15333a,#102132 75%)}
+    .mode-card.agent{border-color:#69543c;background:linear-gradient(155deg,#3a2a20,#1b2030 78%)}
+    .mode-label{font-size:11px;font-weight:800;letter-spacing:.14em;color:var(--cyan)}
+    .mode-card.agent .mode-label{color:var(--gold)}
+    .mode-card h3{font-size:24px;letter-spacing:-.035em;margin:10px 0}
+    .mode-card>p{font-size:13px;color:#b4c4d5;line-height:1.8;margin:0 0 20px}
+    .mode-flow{display:flex;align-items:stretch;gap:7px;margin-bottom:19px}
+    .mode-flow span{flex:1;display:grid;place-items:center;text-align:center;padding:11px 6px;border-radius:9px;background:#233e49;color:#d8f8f2;font-size:11px;min-height:52px}
+    .mode-card.agent .mode-flow span{background:#453626;color:#fce0bb}
+    .mode-flow b{align-self:center;color:var(--cyan);font-size:17px}
+    .mode-card.agent .mode-flow b{color:var(--gold)}
+    .mode-card dl{display:grid;grid-template-columns:57px 1fr;gap:9px 12px;margin:0;font-size:12px;line-height:1.75}
+    .mode-card dt{font-weight:800;color:#90e1d2}.mode-card.agent dt{color:#f2c58d}
+    .mode-card dd{margin:0;color:#cedae7}
+    .dataset-box{margin-top:16px;border:1px solid #34506a;background:#101d2f;border-radius:18px;padding:25px}
+    .dataset-box h3{font-size:20px;margin:0 0 7px}
+    .dataset-box>p{font-size:13px;color:#b8c8d8;line-height:1.8;margin:0 0 19px}
+    .dataset-steps{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+    .dataset-steps>div{border:1px solid #31445b;background:#15253a;border-radius:12px;padding:17px}
+    .dataset-steps b{display:block;color:var(--cyan);font-size:13px;margin-bottom:7px}
+    .dataset-steps span{display:block;color:#b8c7d8;font-size:12px;line-height:1.75}
+    .path-rule{margin-top:16px;border-left:3px solid var(--gold);background:#30271f;border-radius:0 10px 10px 0;padding:15px 19px;color:#e6d1b8;font-size:13px;line-height:1.8}
+    .overview{margin:24px 0 0;border:1px solid #30425a;border-radius:18px;overflow:hidden;background:#f4f8fd}
+    .overview img{display:block;width:100%;height:auto}
+    .overview figcaption{padding:14px 18px;background:#112033;color:#9db0c3;font-size:12px;line-height:1.7}
+    .overview a{display:block}.overview figcaption a{display:inline;color:#b6e9e5;text-decoration:underline;text-underline-offset:3px}
+    .scene-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+    .scene-card{border:1px solid #2e4055;background:#101c2d;border-radius:15px;padding:20px;min-height:198px}
+    .scene-card.copilot{border-top:3px solid var(--cyan)}
+    .scene-card.agent{border-top:3px solid var(--gold)}
+    .scene-card.custom{border-top:3px solid var(--purple)}
+    .scene-card small{font-size:10px;font-weight:800;letter-spacing:.1em;color:#88a5bb}
+    .scene-card h3{font-size:15px;margin:10px 0 8px}
+    .scene-card p{font-size:11px;line-height:1.75;color:#b2c2d4;margin:0}
+    .scene-card strong{color:#dfeefa}
+    .scene-note{margin-top:18px;padding:16px 20px;border:1px solid #365164;border-radius:12px;color:#c5d5e5;font-size:13px;line-height:1.8;background:#14283a}
+    .scene-note strong{color:var(--cyan)}
+    .value-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+    @media(max-width:900px){.scene-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+    @media(max-width:760px){.mode-grid,.dataset-steps,.value-grid{grid-template-columns:1fr}.mode-flow{flex-wrap:wrap}.mode-flow span{min-width:40%}}
+    @media(max-width:480px){.scene-grid{grid-template-columns:1fr}}
+
+    .decision-frame{margin-top:16px;padding:25px;border:1px solid #3b536b;border-radius:18px;background:#121f31}
+    .decision-frame h3{font-size:20px;margin:0 0 7px}
+    .decision-frame>p{font-size:13px;color:#b8c9da;line-height:1.85;margin:0 0 19px}
+    .dimension-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+    .dimension-grid>div{border:1px solid #33495f;border-radius:12px;background:#17283d;padding:18px}
+    .dimension-grid small{font-size:10px;font-weight:800;letter-spacing:.12em;color:var(--cyan)}
+    .dimension-grid h4{font-size:14px;margin:8px 0 7px}
+    .dimension-grid p{font-size:12px;line-height:1.75;color:#b2c4d5;margin:0}
+    .decision-frame .frame-bottom{border-top:1px solid #31465b;margin:19px 0 0;padding-top:16px;color:#c0d2e2}
+    .runtime-note{margin-top:14px;padding:16px 19px;border:1px solid #3e5268;border-radius:10px;background:#172336;color:#c2d0df;font-size:12px;line-height:1.8}
+    .runtime-note strong{color:var(--cyan)}
+    .runtime-note a{color:#a4dded;text-decoration:underline;text-underline-offset:3px}
+    @media(max-width:760px){.dimension-grid{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <a class="skip" href="#main">跳转到内容</a>
+  <header class="header"><div class="wrap header-inner">
+    <a class="brand" href="#top" aria-label="RD-Agent Explorer 首页"><span class="brand-mark" aria-hidden="true">✦</span><span>RD<em>/</em>Agent</span><small>EXPLORER</small></a>
+    <nav class="nav" aria-label="主导航"><a href="#paths">两种路径</a><a href="#lab">交互演示</a><a href="#scenes">使用场景</a><a href="#fit">适用判断</a></nav>
+    <a class="external" href="https://github.com/microsoft/RD-Agent" target="_blank" rel="noopener noreferrer">查看项目源码 ↗</a>
+  </div></header>
+  <main id="main">
+    <section class="wrap hero" id="top" aria-labelledby="hero-title">
+      <div><p class="eyebrow">MICROSOFT RESEARCH · OPEN SOURCE</p><h1 id="hero-title">让每个想法<br>都经过<span class="gradient">真实实验</span></h1><p class="hero-lead">RD-Agent 是调用外部大模型的研发流程框架：模型多次理解资料、提出方案并写代码；框架调度真实训练或回测，把指标和错误交给下一轮。论文实现与数据集探索是两条常见路径，适用性取决于任务能否运行和评价。</p><div class="actions"><a class="btn btn-primary" href="#lab">体验研发闭环 <span aria-hidden="true">↗</span></a><a class="btn btn-secondary" href="#abilities">了解核心能力 <span aria-hidden="true">↓</span></a></div><p class="hero-note"><span class="dot"></span>本站为能力说明与交互模拟；实验数字是示例数据</p></div>
+      <div class="hero-art" role="img" aria-label="提出假设、实现代码、获得反馈的研发循环示意"><span class="orb one"></span><span class="orb two"></span><span class="art-label top">AUTONOMOUS R&D LOOP // 01</span><span class="halo h1"></span><span class="halo h2"></span><span class="halo h3"></span><span class="core">R<span>&</span>D</span><div class="art-card a"><i>✦</i><div><strong>提出假设</strong><small>RESEARCH AGENT</small></div></div><div class="art-card b"><i>⌘</i><div><strong>实现与调试</strong><small>DEVELOPER AGENT</small></div></div><div class="art-card c"><i>↗</i><div><strong>基于结果进化</strong><small>EXPERIMENT FEEDBACK</small></div></div><span class="art-label bottom">● &nbsp; ITERATING</span></div>
+    </section>
+    <div class="wrap strip" aria-label="研发闭环组成"><div class="strip-item"><b>01</b><div><strong>研究代理</strong><span>提出可检验的方向</span></div></div><div class="strip-item"><b>02</b><div><strong>开发代理</strong><span>编写并修复实验代码</span></div></div><div class="strip-item"><b>03</b><div><strong>真实反馈</strong><span>执行结果驱动下一轮</span></div></div><div class="strip-item"><b>04</b><div><strong>经验积累</strong><span>记录成功与失败</span></div></div></div>
+    <section class="wrap block" id="abilities" aria-labelledby="abilities-title"><div class="section-head"><div><p class="kicker">WHAT IT CAN DO</p><h2 id="abilities-title">从资料，到实验，再到新发现</h2></div><p>能力覆盖数据构建、模型实现和持续优化。每一种能力都落在可运行、可比较的实验上。</p></div><div class="cards"><article class="cap"><span class="cap-icon">◇</span><span class="cap-num">01 / EXPLORE</span><h3>自动提出研究方向</h3><p>结合任务目标、已有方案与实验反馈，生成下一轮可验证的假设。</p></article><article class="cap"><span class="cap-icon">⌘</span><span class="cap-num">02 / BUILD</span><h3>把想法写成代码</h3><p>将因子、特征或模型方案实现为代码，并依据运行错误持续修复。</p></article><article class="cap"><span class="cap-icon">↗</span><span class="cap-num">03 / MEASURE</span><h3>用指标决定下一步</h3><p>运行训练、验证或回测，比较新旧方案的表现并记录实验。</p></article><article class="cap"><span class="cap-icon">▧</span><span class="cap-num">04 / READ</span><h3>从论文和报告出发</h3><p>提取资料中的结构、公式和特征描述，推进到可运行的初版实现。</p></article></div><p class="source">能力依据 <a href="https://github.com/microsoft/RD-Agent" target="_blank" rel="noopener noreferrer">官方仓库</a> 与 <a href="https://rdagent.readthedocs.io/en/latest/" target="_blank" rel="noopener noreferrer">项目文档</a>；具体支持情况以所用版本和场景配置为准。</p></section>
+
+    <section class="wrap block paths-block" id="paths" aria-labelledby="paths-title">
+      <div class="section-head"><div><p class="kicker">TWO WORK MODES</p><h2 id="paths-title">两种工作方式，许多具体场景</h2></div><p>“两种”指解决问题的方式，并不表示这个库只有两个功能。具体应用仍要按数据、目标和评价方式选择或适配。</p></div>
+      <p class="path-intro">RD-Agent 本身不是训练好的基础模型。它调用外部大模型提出方案和编写代码，再调度真实程序执行。关键价值是让下一次尝试依据上一次的实验结果，而不是只生成一次答案。</p>
+      <div class="mode-grid">
+        <article class="mode-card">
+          <span class="mode-label">A / COPILOT · 已有方法的实现</span>
+          <h3>论文、研报 → 可运行代码</h3>
+          <p>适合你已经找到论文或明确的算法描述，想看它怎样被实现。论文检索通常要先由你或其他工具完成；通用模型入口接收 PDF 文件或 PDF 链接，具体参数以所用版本为准。</p>
+          <div class="mode-flow" aria-label="读取资料、提取规格、生成代码、运行修复"><span>读取 PDF</span><b>→</b><span>提取规格</span><b>→</b><span>生成代码</span><b>→</b><span>运行修复</span></div>
+          <dl><dt>输入</dt><dd>论文或报告、模型结构、公式；还需大模型接口与执行环境。</dd><dt>反馈</dt><dd>通用模型会检查样例输入、形状和运行错误；金融因子场景还可以结合回测反馈。</dd><dt>输出</dt><dd>模型或因子代码、检查结果、实现记录；可运行不等于论文效果已复现。</dd></dl>
+        </article>
+        <article class="mode-card agent">
+          <span class="mode-label">B / AGENT · 围绕目标自主实验</span>
+          <h3>数据集、指标 → 多轮候选方案</h3>
+          <p>适合有数据、目标和可重复评分方式的问题，例如预测、量化因子研究或基准驱动的微调。</p>
+          <div class="mode-flow" aria-label="提出假设、编写代码、训练评估、反馈迭代"><span>提出假设</span><b>→</b><span>编写代码</span><b>→</b><span>训练评估</span><b>↺</b><span>反馈迭代</span></div>
+          <dl><dt>输入</dt><dd>训练/验证数据、任务说明、目标指标、基线与运行预算。</dd><dt>反馈</dt><dd>训练或回测程序产生的分数、错误、耗时和历史实验记录。</dd><dt>输出</dt><dd>多轮特征/模型方案、代码、指标和实验轨迹；提升与否由评估结果决定。</dd></dl>
+        </article>
+      </div>
+
+      <div class="decision-frame">
+        <h3>还要分清三个维度</h3>
+        <p>官方将 Copilot 和 Agent 视为两类主要角色，同时把模型实现与数据构建视为两类研发对象。它们可以组合使用，不是四套互不相干的产品。</p>
+        <div class="dimension-grid">
+          <div><small>01 / 角色</small><h4>谁决定下一步？</h4><p>Copilot 主要跟随人给出的论文、报告或方向；Agent 更主动地依据实验反馈提出新方案。</p></div>
+          <div><small>02 / 研发对象</small><h4>改进什么？</h4><p>可以实现或优化模型，也可以构建数据、特征或量化因子；微调任务还涉及数据处理和训练配置。</p></div>
+          <div><small>03 / 领域</small><h4>在哪个问题里做？</h4><p>官方已有金融、数据科学、论文模型和大模型微调等场景；3D 人物等领域需要自定义适配。</p></div>
+        </div>
+        <p class="frame-bottom">论文和数据集只是常见入口，不是互斥的分类；同一任务可以先由人指定方向，再让 Agent 迭代探索。部分循环有人工修改假设或反馈的接口；并行探索、命令行和界面属于调度或操作方式。</p>
+      </div>
+      <div class="dataset-box">
+        <h3>数据集路径里，谁在“分析数据”？</h3>
+        <p>大模型依据任务说明、样本或数据概况、已有实验反馈设计方案；生成的 Python 程序读取数据、训练模型并计算指标。训练得到的模型参数来自训练算法对数据的计算，并非大模型凭文字直接写出。</p>
+        <div class="dataset-steps">
+          <div><b>① 大模型：设计</b><span>例如“预测客户流失”，提出清洗、特征工程和模型候选。</span></div>
+          <div><b>② 训练程序：学习</b><span>读取训练数据，执行特征处理和模型拟合，产生模型参数或预测。</span></div>
+          <div><b>③ 评估程序：打分</b><span>在固定验证集计算 AUC 等指标；RD-Agent 保存结果并组织下一轮。</span></div>
+        </div>
+      </div>
+      <div class="path-rule"><strong>前提与边界：</strong>“更好”必须尽量转成可检验标准。像“做一个高质量 3D 人物”需要先明确输入、人物格式、几何/纹理/动画质量及评价方法；目前不是把任意论文或愿望交给 RD-Agent 就能自动得到成品。</div>
+      <div class="runtime-note"><strong>实际运行条件：</strong>官方当前 README 标明仅支持 Linux；多数场景需要 Docker，还需配置聊天模型和嵌入模型接口。训练或回测会消耗时间与算力，尤其是微调任务。本站网页仅用于说明与模拟，不会运行上游框架。<a href="https://github.com/microsoft/RD-Agent/blob/main/README.md" target="_blank" rel="noopener noreferrer">查看官方准备要求 ↗</a></div>
+      <figure class="overview"><a href="rd-agent-guide.svg" target="_blank" rel="noopener noreferrer" aria-label="打开 RD-Agent 能力、原理、八类场景与重试判断完整导图"><img src="rd-agent-guide.svg" loading="lazy" decoding="async" alt="RD-Agent 完整导图：外部大模型、框架、真实执行器分工；论文与数据集入口；Copilot 和 Agent 的循环；八类场景；3D 人物所需环节；何时重新尝试。"></a><figcaption>点击可查看高清完整导图。包含<a href="rd-agent-overview.png" target="_blank" rel="noopener noreferrer">此前总览图</a>的输入、两条路径、输出和八个场景，并补充模型与程序分工、3D 缺口和回顾时机。第八个场景是自定义扩展方向。</figcaption></figure>
+      <p class="source">依据：<a href="https://rdagent.readthedocs.io/en/latest/scens/model_copilot_general.html" target="_blank" rel="noopener noreferrer">通用模型 Copilot</a> · <a href="https://rdagent.readthedocs.io/en/latest/scens/data_science.html" target="_blank" rel="noopener noreferrer">数据科学 Agent 与自定义数据集</a> · <a href="https://github.com/microsoft/RD-Agent/blob/main/rdagent/components/workflow/rd_loop.py" target="_blank" rel="noopener noreferrer">RDLoop 源码</a></p>
+    </section>
+    <section class="block lab-bg" id="lab" aria-labelledby="lab-title"><div class="wrap"><div class="section-head"><div><p class="kicker">INTERACTIVE LAB</p><h2 id="lab-title">亲手走完一轮研发闭环</h2></div><p>选择一个场景，观察假设如何成为实验，以及反馈如何影响下一轮。</p></div><div class="notice"><span aria-hidden="true">ⓘ</span><span>交互模拟：下方流程与数值用于说明工作方式，<b>不会调用模型、训练代码或 RD-Agent 服务</b>。</span></div><div class="lab-grid">
+      <aside class="panel"><span class="panel-step">STEP 01</span><h3>选择应用场景</h3><div class="scenario-list" role="group" aria-label="应用场景"><button class="scenario active" type="button" data-scenario="quant" aria-pressed="true"><span class="scenario-icon">◈</span><span><strong>量化研究</strong><small>因子 × 模型联合优化</small></span></button><button class="scenario" type="button" data-scenario="datascience" aria-pressed="false"><span class="scenario-icon">▦</span><span><strong>数据科学</strong><small>特征工程与建模</small></span></button><button class="scenario" type="button" data-scenario="paper" aria-pressed="false"><span class="scenario-icon">▤</span><span><strong>论文模型实现</strong><small>阅读、实现与检查</small></span></button><button class="scenario" type="button" data-scenario="finetune" aria-pressed="false"><span class="scenario-icon">✧</span><span><strong>大模型微调</strong><small>基准驱动的方案迭代</small></span></button></div><div class="scenario-summary"><small>当前任务</small><p id="task">从行情数据中提出新因子，检验其对收益预测的帮助。</p></div></aside>
+      <div class="panel"><div class="exp-top"><div><span class="panel-step">STEP 02</span><h3>实验进程 <span id="round">/ 第 0 轮</span></h3></div><span class="demo">DEMO MODE</span></div><div class="steps" role="group" aria-label="实验阶段"><button class="step current" type="button" data-stage="0" aria-current="step"><span>01</span>提出假设</button><button class="step" type="button" data-stage="1"><span>02</span>实现代码</button><button class="step" type="button" data-stage="2"><span>03</span>运行评估</button><button class="step" type="button" data-stage="3"><span>04</span>吸收反馈</button></div><div class="terminal"><div class="terminal-top"><span class="lights" aria-hidden="true"><i></i><i></i><i></i></span><span id="filename">research / hypothesis.md</span><span class="terminal-tag">SIMULATED TRACE</span></div><div class="terminal-body"><p class="terminal-comment" id="comment">// 研究代理正在分析任务与既有结果</p><h4 id="stage-title">准备开始</h4><p id="stage-body">点击“运行演示”，观察一个假设如何进入开发、验证和反馈环节。</p><span class="terminal-detail" id="detail">等待实验输入 _</span></div></div><div class="exp-actions"><button class="btn btn-primary" id="run" type="button">运行演示 →</button><button class="btn btn-secondary" id="reset" type="button">重置</button><span class="state" id="state" role="status" aria-live="polite">等待开始</span></div></div>
+    </div><div class="results"><div class="result-copy"><span class="panel-step">STEP 03</span><h3>每一轮都有依据</h3><p>记录原始指标、修改内容、运行结果，以及下一轮的判断。图表数字均为说明流程的示例。</p><div class="legend"><span><i></i>基线示例</span><span><i class="after"></i>迭代示例</span></div></div><div class="metric"><div class="metric-head"><span id="metric-name">信息系数 IC</span><em>示例数据</em></div><div class="metric-values"><strong id="before">0.041</strong><span aria-hidden="true">→</span><strong id="after">0.053</strong></div><div class="bar-row"><span>基线</span><div class="bar-track"><div class="bar before" id="bar-before"></div></div></div><div class="bar-row"><span>迭代</span><div class="bar-track"><div class="bar after" id="bar-after"></div></div></div><p id="metric-desc">加入新因子后，在同一验证设置下比较预测相关性。</p></div></div></div></section>
+    <section class="wrap block" id="principle" aria-labelledby="principle-title"><div class="section-head"><div><p class="kicker">UNDER THE HOOD</p><h2 id="principle-title">它如何把“研发”变成系统</h2></div><p>核心机制是角色分工与实验反馈：外部大模型负责提出想法和生成代码；训练、测试与回测程序给出可检验的结果。</p></div><div class="architecture-grid"><div class="flow"><div class="flow-row"><span>R</span><div><strong>Researcher</strong><small>研究代理 / 决定试什么</small></div></div><div class="flow-arrow">↓ &nbsp; 假设与实验任务</div><div class="flow-row"><span>D</span><div><strong>Developer</strong><small>开发代理 / 实现与修复</small></div></div><div class="flow-arrow">↓ &nbsp; 代码与可运行方案</div><div class="flow-row"><span>✓</span><div><strong>Evaluator</strong><small>训练、测试、回测与指标</small></div></div><div class="flow-return">↶ &nbsp; 指标与错误日志进入下一轮研究</div></div><div class="detail-list"><div class="detail"><span>01</span><div><h3>场景适配</h3><p>定义数据、任务背景、运行环境与评价规则，让循环服务于特定领域。</p></div></div><div class="detail"><span>02</span><div><h3>经验检索</h3><p>Co-STEER 利用历史实现经验，帮助安排任务和修复代码。</p></div></div><div class="detail"><span>03</span><div><h3>多路线探索</h3><p>同时尝试不同思路，依据表现选择或组合更有价值的方案。</p></div></div></div></div><p class="source">进一步阅读：<a href="https://arxiv.org/abs/2505.14738" target="_blank" rel="noopener noreferrer">整体技术报告</a> · <a href="https://arxiv.org/abs/2407.18690" target="_blank" rel="noopener noreferrer">Co-STEER 论文</a> · <a href="https://github.com/microsoft/RD-Agent/blob/main/rdagent/components/workflow/rd_loop.py" target="_blank" rel="noopener noreferrer">循环实现</a></p></section>
+
+
+    <section class="wrap block" id="scenes" aria-labelledby="scenes-title">
+      <div class="section-head"><div><p class="kicker">SCENARIO CATALOG</p><h2 id="scenes-title">具体场景按目标探索</h2></div><p>前七项是项目已有的场景方向；最后一项是扩展思路，需要你自己接入领域数据、运行器和评价器。</p></div>
+      <div class="scene-grid">
+        <article class="scene-card copilot"><small>01 / COPILOT</small><h3>通用论文模型实现</h3><p><strong>输入：</strong>论文 PDF、模型描述<br><strong>产出：</strong>PyTorch 模型代码与运行检查<br><strong>例：</strong>把时序预测论文变成初版实现</p></article>
+        <article class="scene-card copilot"><small>02 / COPILOT</small><h3>金融研报因子实现</h3><p><strong>输入：</strong>金融研报与市场数据<br><strong>产出：</strong>因子代码和回测反馈<br><strong>例：</strong>把研报公式变为可计算因子</p></article>
+        <article class="scene-card agent"><small>03 / AGENT</small><h3>金融因子发现</h3><p><strong>输入：</strong>市场数据、因子评价规则<br><strong>产出：</strong>候选因子与实验记录<br><strong>例：</strong>持续尝试新量价特征</p></article>
+        <article class="scene-card agent"><small>04 / AGENT</small><h3>金融模型优化</h3><p><strong>输入：</strong>金融数据、基线和指标<br><strong>产出：</strong>模型代码与回测结果<br><strong>例：</strong>改进因子预测模型</p></article>
+        <article class="scene-card agent"><small>05 / AGENT</small><h3>量化联合研发</h3><p><strong>输入：</strong>市场数据、策略评价目标<br><strong>产出：</strong>因子与模型的组合方案<br><strong>例：</strong>交替优化特征和模型</p></article>
+        <article class="scene-card agent"><small>06 / AGENT</small><h3>数据科学任务</h3><p><strong>输入：</strong>训练/验证数据、任务与评分<br><strong>产出：</strong>特征/模型代码和验证分数<br><strong>例：</strong>表格预测、分类或时间序列</p></article>
+        <article class="scene-card agent"><small>07 / AGENT</small><h3>大模型微调</h3><p><strong>输入：</strong>基座模型、数据集与基准<br><strong>产出：</strong>处理/训练配置与评测结果<br><strong>例：</strong>围绕目标基准改进模型</p></article>
+        <article class="scene-card custom"><small>08 / CUSTOM</small><h3>自有领域：如 3D 人物</h3><p><strong>输入：</strong>领域数据、目标、质量标准<br><strong>产出：</strong>自建的实验与反馈流程<br><strong>前提：</strong>需实现 3D 执行和评价适配</p></article>
+      </div>
+      <div class="scene-note"><strong>如何选：</strong>想学习论文原理，可先用大模型解释，再用 Copilot 看代码怎样落地；想持续提高可量化指标，用 Agent 跑多轮实验；想做 3D 人物等新领域，先找对口论文和公开实现，再判断接入 RD-Agent 的成本是否值得。</div>
+      <p class="source">场景依据 <a href="https://github.com/microsoft/RD-Agent" target="_blank" rel="noopener noreferrer">官方仓库</a>、<a href="https://rdagent.readthedocs.io/en/latest/scens/model_copilot_general.html" target="_blank" rel="noopener noreferrer">论文模型</a>、<a href="https://rdagent.readthedocs.io/en/latest/scens/data_science.html" target="_blank" rel="noopener noreferrer">数据科学</a>及<a href="https://github.com/microsoft/RD-Agent/blob/main/rdagent/app/finetune/llm/README.md" target="_blank" rel="noopener noreferrer">微调场景文档</a>。</p>
+    </section>
+    <section class="wrap block" id="value" aria-labelledby="value-title">
+      <div class="section-head"><div><p class="kicker">VALUE FOR YOUR PROJECTS</p><h2 id="value-title">放进你现有的项目，价值在哪里？</h2></div><p>这部分是结合本研究仓库已有项目的应用判断，跨项目接口尚未接入或实测。</p></div>
+      <div class="value-grid">
+        <article class="value-card"><span>01 / VOICE</span><h3>语音工具链：最适合先试</h3><p>为 <a href="../003-voicebox/">Voicebox</a> 与 <a href="../005-whisperlivekit/">WhisperLiveKit</a> 准备固定中文样本，比较词错率、延迟和资源消耗。建立可靠评分后，再探索数据或模型改进。</p></article>
+        <article class="value-card"><span>02 / MEDIA</span><h3>内容生产：先定义质量</h3><p><a href="../010-jellyfish/">Jellyfish</a> 与 <a href="../008-video-use/">video-use</a> 涉及分镜、镜头和剪辑。可以记录耗时、失败率等客观指标；画面与叙事质量仍需要人工评价。</p></article>
+        <article class="value-card"><span>03 / DECISION</span><h3>优先把它当作研发方法</h3><p>先固定数据、基线与评价规则，再决定是否接入 RD-Agent 自动探索。当前页面没有连接这些项目，也没有运行任何模型。</p></article>
+        <article class="value-card"><span>04 / 3D AVATAR</span><h3>3D 人物：先确认完整目标</h3><p>从文字或单张图像生成、网格与纹理、骨骼和动画是不同问题。可先对照相关论文与公开实现；RD-Agent 目前没有现成的 3D 人物完整工作流，若要自动迭代需另建执行与质量评价。</p></article>
+      </div>
+      <div class="value-callout"><strong>适合的第一个小实验：</strong>选 30–50 段有人工转写的中文音频，测一条稳定基线；再比较不同处理方案的词错率、延迟和成本。结果可复查后，才有持续自动优化的基础。</div>
+      <div class="decision-frame" id="revisit"><h3>后期值得回顾，但要带着具体问题回来</h3><p>针对你目前“理解论文”和“生成 3D 人物”的需求，先用论文原文、作者公开代码和普通大模型拆解方法。RD-Agent 的优势出现在需要反复改代码、真实运行并比较结果的时候；为了一次性读懂论文而搭建整套环境，投入通常不划算。</p><div class="dimension-grid"><div><small>现在 · 学习</small><h4>把论文变成可理解步骤</h4><p>梳理目标、输入输出、核心公式与实现条件；需要看代码时再试 Copilot 的初版实现。</p></div><div><small>稍后 · 小实验</small><h4>用一个可评分任务验证价值</h4><p>例如中文语音识别：固定样本、基线、词错率、延迟与成本，运行少量迭代并人工检查。</p></div><div><small>再决定 · 接入</small><h4>只在收益超过成本时扩展</h4><p>确认结果可复现、预算可控，再为语音或 3D 自建执行和评价环节。</p></div></div><p class="frame-bottom"><strong>重新尝试清单：</strong>明确目标、可用数据或论文、可运行基线、固定评价规则、算力与 API 预算、人工验收人。缺少可靠评价时，先建设评价方法。</p></div>
+    </section>
+    <section class="wrap block" id="extend" aria-labelledby="extend-title">
+      <div class="section-head"><div><p class="kicker">EXTEND THE FRAMEWORK</p><h2 id="extend-title">可扩展的三个方向</h2></div><p>以下是基于现有接口提出的实践方向，不代表上游已经提供这些业务集成。</p></div>
+      <div class="extend-grid">
+        <article class="extend-card"><span>01 / SCENARIO</span><h3>自定义业务场景</h3><p>接入你自己的数据、任务描述、实验运行环境和评价器，让假设与反馈围绕真实业务目标展开。</p></article>
+        <article class="extend-card"><span>02 / EVALUATION</span><h3>多目标评估</h3><p>同时比较质量、速度、成本和稳定性，并固定测试集，减少数据泄漏或只追逐一次高分的风险。</p></article>
+        <article class="extend-card"><span>03 / KNOWLEDGE</span><h3>积累团队经验</h3><p>保存假设、代码、失败原因与人工判断，让后续探索能利用过去真正有效的经验。</p></article>
+      </div>
+    </section>
+    <section class="wrap fit" id="fit" aria-labelledby="fit-title"><div><p class="kicker">IS IT FOR YOU?</p><h2 id="fit-title">你的任务，适合自动化探索吗？</h2><p class="fit-lead">当一个问题有数据、基线和可重复的评价方式，RD-Agent 才能有效判断新想法是否真的更好。</p><div class="checks"><div class="check"><b>✓</b>有可用的数据与明确目标</div><div class="check"><b>✓</b>实验能运行并产生可比较的指标</div><div class="check"><b>✓</b>允许多轮尝试，能控制时间与算力预算</div></div></div><div class="fit-card"><small>START WITH A SMALL PILOT</small><h3>从一个可衡量的问题开始</h3><p>准备一份数据、一条基线和固定的验证集。让代理尝试几轮，再比较指标、耗时和人工投入。</p><a href="https://rdagent.readthedocs.io/en/latest/" target="_blank" rel="noopener noreferrer">阅读官方使用文档 ↗</a></div></section>
+  </main>
+  <footer class="footer"><div class="wrap footer-inner"><div><a class="brand" href="#top"><span class="brand-mark" aria-hidden="true">✦</span><span>RD<em>/</em>Agent</span><small>EXPLORER</small></a><p>独立制作的能力展示页。实验过程与数值均为交互示例。</p></div><div class="footer-links"><a href="https://github.com/microsoft/RD-Agent" target="_blank" rel="noopener noreferrer">GitHub ↗</a><a href="https://rdagent.readthedocs.io/en/latest/" target="_blank" rel="noopener noreferrer">官方文档 ↗</a><a href="https://github.com/microsoft/RD-Agent/blob/main/LICENSE" target="_blank" rel="noopener noreferrer">项目许可 ↗</a></div></div></footer>
+  <script>
+    const scenarios={
+      quant:{task:"从行情数据中提出新因子，检验其对收益预测的帮助。",metric:"信息系数 IC",before:"0.041",after:"0.053",bars:[54,72],desc:"加入新因子后，在同一验证设置下比较预测相关性。",stages:[
+        ["research / hypothesis.md","// Researcher · 基于历史实验提出方向","假设：价格与成交量的联动可能提供增量信号","构建短周期量价交互因子，检查它与现有因子的互补性。","输出：一个可检验的因子定义"],
+        ["developer / factor.py","// Developer · 把假设转成代码","生成因子实现，并修复时间窗口边界","为新因子编写计算逻辑；先用样本数据验证输出形状与缺失值处理。","输出：可运行的因子代码"],
+        ["evaluation / backtest.log","// Evaluator · 在固定数据切分下运行","验证新方案的预测表现","保持训练与验证设置一致，记录 IC、回测指标及资源开销。","示例结果：IC 0.041 → 0.053"],
+        ["feedback / next_iteration.md","// Feedback · 汇总收益与问题","保留有效思路，形成下一轮假设","本轮因子带来正向提升；下一步检查不同市场阶段的稳定性。","下一轮：验证稳健性与冗余度"]]},
+      datascience:{task:"针对结构化数据任务，尝试特征工程和模型方案。",metric:"验证集 AUC",before:"0.812",after:"0.845",bars:[62,79],desc:"在固定验证集上比较特征工程前后的 AUC。",stages:[
+        ["research / hypothesis.md","// Researcher · 分析当前误差","假设：时间聚合特征能改善预测","针对误差较高的样本群，提出按时间窗口聚合的新特征。","输出：特征工程实验计划"],
+        ["developer / features.py","// Developer · 实现特征流水线","生成特征并检查数据泄漏","编写聚合逻辑，确保每个样本仅使用预测时已知的数据。","输出：可复用的特征代码"],
+        ["evaluation / validation.log","// Evaluator · 运行训练与评估","对照基线完成同条件验证","训练候选模型并保存预测、分数与运行时间。","示例结果：AUC 0.812 → 0.845"],
+        ["feedback / next_iteration.md","// Feedback · 总结实验结果","选择下一条高价值路线","聚合特征带来提升；下一轮检查不同样本群是否均衡获益。","下一轮：分组验证与稳定性检查"]]},
+      paper:{task:"从论文描述出发，尝试实现模型结构并检查可运行性。",metric:"通过的检查项",before:"6 / 8",after:"8 / 8",bars:[65,89],desc:"示例：修复张量形状与模块连接后，通过更多实现检查。",stages:[
+        ["reader / paper.pdf","// Reader · 读取论文内容","识别论文中的模型结构","提取输入输出、关键模块、公式与参数。","输出：论文内容与待实现要点"],
+        ["reader / model_task.json","// Reader · 整理模型任务","形成结构化实现规格","将模块关系、变量、超参数整理为模型任务。","输出：结构化模型任务"],
+        ["coder / model.py","// Evolving Coder · 生成 PyTorch","编写模型初版代码","按照规格生成前向传播和各模块实现。","输出：可运行的初版代码"],
+        ["coder / check.log","// 运行样例并反馈错误","检查张量形状，修复实现","用样例输入运行；出错则把反馈送回 Coder 修改。","输出：检查与修改记录"]]},
+      finetune:{task:"围绕目标基准，探索数据处理与微调方案。",metric:"目标基准得分",before:"68",after:"74",bars:[60,77],desc:"示例：在同一基准上比较微调方案的得分。",stages:[
+        ["research / plan.md","// Researcher · 分析基准薄弱点","假设：针对性数据处理可改善表现","根据错误类型设计数据筛选与训练方案。","输出：微调实验计划"],
+        ["developer / train.py","// Developer · 组装训练流程","准备数据与参数配置","生成训练脚本与评估配置，控制运行资源。","输出：可执行的微调流程"],
+        ["evaluation / benchmark.log","// Evaluator · 运行目标基准","比较基线与候选模型","在同一基准设置下记录得分、耗时与资源使用。","示例结果：得分 68 → 74"],
+        ["feedback / next_iteration.md","// Feedback · 指导下轮训练","保留有效的数据与参数策略","新方案在示例基准上提升；下一轮检查泛化与成本。","下一轮：跨任务评估"]]}
+    };
+    const $=id=>document.getElementById(id);
+    let selected="quant",stage=0,started=false,timer=null;
+    function stopTimer(){if(timer!==null){clearInterval(timer);timer=null}}
+    function paint(){
+      const s=scenarios[selected],item=s.stages[stage];
+      $("task").textContent=s.task;$("metric-name").textContent=s.metric;$("before").textContent=s.before;$("after").textContent=s.after;$("metric-desc").textContent=s.desc;
+      $("filename").textContent=started?item[0]:"research / hypothesis.md";
+      $("comment").textContent=started?item[1]:"// 研究代理正在分析任务与既有结果";
+      $("stage-title").textContent=started?item[2]:"准备开始";
+      $("stage-body").textContent=started?item[3]:"点击“运行演示”，观察一个假设如何进入开发、验证和反馈环节。";
+      $("detail").textContent=started?item[4]:"等待实验输入 _";
+      $("round").textContent=selected==="paper"?"/ 论文实现":(started?"/ 第 1 轮":"/ 第 0 轮");
+      document.querySelectorAll(".scenario").forEach(b=>{const on=b.dataset.scenario===selected;b.classList.toggle("active",on);b.setAttribute("aria-pressed",String(on))});
+      const stepLabels=selected==="paper"?["读取论文","提取规格","生成代码","检查修复"]:["提出假设","实现代码","运行评估","吸收反馈"];
+      document.querySelectorAll(".step").forEach((b,i)=>{b.lastChild.textContent=stepLabels[i];b.classList.toggle("current",i===stage&&started);b.classList.toggle("done",i<stage&&started);if(i===stage&&started)b.setAttribute("aria-current","step");else b.removeAttribute("aria-current")});
+      $("bar-before").style.width=(started&&stage>=2?s.bars[0]:0)+"%";
+      $("bar-after").style.width=(started&&stage>=2?s.bars[1]:0)+"%";
+      $("state").textContent=!started?"等待开始":stage===3?"本轮模拟已完成":"正在展示第 "+(stage+1)+" 步 / 4";
+      $("run").disabled=timer!==null;
+      $("run").textContent=timer!==null?"演示进行中…":"运行演示 →";
+    }
+    document.querySelectorAll(".scenario").forEach(b=>b.addEventListener("click",()=>{stopTimer();selected=b.dataset.scenario;stage=0;started=false;paint()}));
+    document.querySelectorAll(".step").forEach(b=>b.addEventListener("click",()=>{stopTimer();started=true;stage=Number(b.dataset.stage);paint()}));
+    $("run").addEventListener("click",()=>{stopTimer();started=true;stage=0;paint();timer=setInterval(()=>{if(stage<3){stage++;paint()}else{stopTimer();paint()}},1450);paint()});
+    $("reset").addEventListener("click",()=>{stopTimer();stage=0;started=false;paint()});
+    paint();
+  </script>
+</body>
+</html>

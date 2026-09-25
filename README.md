@@ -20,6 +20,7 @@
 | 008 | [video-use](https://github.com/browser-use/video-use) | **能力：** 逐词转写辅助选段，按 EDL 粗剪、调色、叠加动画、加字幕并渲染。**原理：** Scribe 识别音频与时间戳，代码代理理解文本并生成 EDL，FFmpeg 同步剪辑音画。**隐患：** 时间对齐不保证画面连续，切点可能跳变；原版转写依赖云 API。**场景：** 口播、访谈、教程、产品讲解。**对我的意义：** 有望衔接 Voicebox / LiveTalking 素材与 social-auto-upload 发布；中文和 Windows 效果待实测。 | [完整研究](projects/008-video-use/README.md) · [能力网页（部署后）](https://yydshly.github.io/0925_codex_project/projects/008-video-use/) |
 | 009 | [system-design-primer](https://github.com/donnemartin/system-design-primer) | **定位与能力：** 高性能与大规模系统设计资料库，涵盖性能、扩展、可用性、一致性、缓存、数据库等主题，以及设计方法、案例练习和 Anki 卡片。**对我的意义：** 为现有项目的并发、延迟与扩容讨论提供知识索引和提问清单；它不是可直接部署的框架。 | [摘要笔记](projects/009-system-design-primer/README.md) · [查看引导图](docs/projects/009-system-design-primer/assets/overview.png) · [网页导读](https://yydshly.github.io/0925_codex_project/#guide-system-design-primer) |
 | 010 | [Jellyfish](https://github.com/Forget-C/Jellyfish) | **定位：** 以分章剧本为入口的 AI 短剧生产工作台。**能力：** 剧本拆镜头与要素提取、导演分镜提示、人物和场景资产复用、人工确认、图片与视频生成任务追踪。**出口：** 分镜与提示词、图片、单镜头视频及可追溯素材。**对我的意义：** 可补上系列内容从剧本到镜头素材的生产环节；小说改编与完整成片仍需另行处理或实测。 | [完整研究](projects/010-jellyfish/README.md) · [在线导读](https://yydshly.github.io/0925_codex_project/projects/010-jellyfish/) · [完整引导图](https://yydshly.github.io/0925_codex_project/projects/010-jellyfish/assets/overview.svg) |
+| 011 | [RD-Agent](https://github.com/microsoft/RD-Agent) | **能力：** 把论文或研报推进到初版代码；在量化、数据科学和微调任务中反复提出方案、运行实验并比较结果。**原理：** 外部大模型多次理解、假设和写代码，RD-Agent 调度执行器、评价器与历史反馈形成循环。**对我的意义：** 先用于理解方法；等语音或 3D 任务有固定数据、基线和指标，再回顾是否值得小规模试用。 | [完整研究](projects/011-rd-agent/README.md) · [能力网页](https://yydshly.github.io/0925_codex_project/projects/011-rd-agent/) · [完整导图](https://yydshly.github.io/0925_codex_project/projects/011-rd-agent/rd-agent-guide.svg) |
 
 ## 001 · Retrieval-based-Voice-Conversion-WebUI 图文导读
 
@@ -165,6 +166,12 @@ HuBERT 等特征模型从输入录音中提取与发音相关的线索；使用�
 ![Jellyfish 短剧工作台引导图：输入、处理、模型分工、输出、价值和能力边界](docs/projects/010-jellyfish/assets/overview.svg)
 
 [查看在线图文导读](https://yydshly.github.io/0925_codex_project/projects/010-jellyfish/) · [打开完整引导图](docs/projects/010-jellyfish/assets/overview.svg) · [阅读完整研究笔记](projects/010-jellyfish/README.md)
+
+## 011 · RD-Agent 自动化研发导读
+
+源库：[microsoft/RD-Agent](https://github.com/microsoft/RD-Agent)。它借助外部大模型多次理解问题、提出假设、生成和修复代码，再用实际训练、检查或回测的结果推动下一轮。它适合论文方法实现，也适合有固定数据和指标的持续实验；现有场景覆盖量化、数据科学和大模型微调。对当前项目组合，建议先用它理解研究方法，后期在 Voicebox / WhisperLiveKit 有中文样本、基线、词错率与延迟指标后回顾试用价值。3D 人物则要先确定目标、论文、公开实现和完整资产流程；跨项目集成尚未进行。
+
+[查看交互式能力网页](https://yydshly.github.io/0925_codex_project/projects/011-rd-agent/) · [查看完整引导图](https://yydshly.github.io/0925_codex_project/projects/011-rd-agent/rd-agent-guide.svg) · [阅读研究笔记](projects/011-rd-agent/README.md)
 
 ## 添加项目
 
