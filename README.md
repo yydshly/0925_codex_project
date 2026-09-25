@@ -101,12 +101,14 @@ HuBERT 等特征模型从输入录音中提取与发音相关的线索；使用�
 
 目前完成的是资料研究和静态网页，尚未部署 LiveTalking 本体，也未验证跨项目接口。
 
-## 添加项目
-
-从 [子项目模板](projects/_template/README.md) 开始，按 [收录说明](ADDING_PROJECTS.md) 更新索引。静态网页演示统一放在 docs/projects/ 下，便于通过一个 GitHub Pages 站点按子路径访问。
-
 ## 005 · WhisperLiveKit 实时语音输入导读
 
 源库：[QuentinFuxa/WhisperLiveKit](https://github.com/QuentinFuxa/WhisperLiveKit)。它把持续音频转换成可逐步显示和确认的文字，支持文件字幕、可选说话人区分与翻译。底层由 Python 服务接收音频，经 VAD、Whisper 等识别后端和流式确认策略输出结果；模型权重、音频组件及可选功能有相应依赖，LiveKit 平台并非必需。适用于直播/会议字幕、访谈记录和实时语音助手。当前若以录音、配音和成片为主，先试效果即可；有实时互动需求时，可接在用户讲话与 LLM / Voicebox / LiveTalking 之间。跨项目组合仍需实测。
 
+![WhisperLiveKit 引导图：Whisper、WhisperLiveKit 与 LiveKit 的关系，音频输入、识别流程、底层依赖、输出、场景及项目价值。](docs/projects/005-whisperlivekit/assets/overview.svg)
+
 [打开在线能力网页](https://yydshly.github.io/0925_codex_project/projects/005-whisperlivekit/) · [打开我们生成的一图总览](https://yydshly.github.io/0925_codex_project/projects/005-whisperlivekit/assets/overview.svg) · [阅读完整研究笔记](projects/005-whisperlivekit/README.md)
+
+## 添加项目
+
+从 [子项目模板](projects/_template/README.md) 开始，按 [收录说明](ADDING_PROJECTS.md) 更新索引。静态网页演示统一放在 docs/projects/ 下，便于通过一个 GitHub Pages 站点按子路径访问。
