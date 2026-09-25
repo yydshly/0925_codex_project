@@ -13,6 +13,7 @@
 | 001 | [Retrieval-based-Voice-Conversion-WebUI](https://github.com/RVC-Project/Retrieval-based-Voice-Conversion-WebUI) | **能力：** 已有语音 / 歌声换声、实时变声与声线训练。**原理：** 提取发音与音高，由目标模型重建波形，并可用检索辅助。**对我的意义：** 可复用为换声模块；先理解方案，实际效果按需验证。 | [完整研究](projects/001-rvc-voice-conversion/README.md) · [查看网页](https://yydshly.github.io/0925_codex_project/projects/001-rvc-voice-conversion/) |
 | 002 | [social-auto-upload](https://github.com/dreammis/social-auto-upload) | **能力：** 11 个平台列有视频上传能力，抖音、小红书、快手还支持图文。**原理：** 用户先登录并保存状态；9 个平台由 Patchright / Playwright 根据网页元素操作创作者后台，B站委托 biliup，TikTok 为旧示例。**对我的意义：** 内容做好后可减少个人 IP 多平台重复上传与排期。 | [完整研究](projects/002-social-auto-upload/README.md) · [在线网页](https://yydshly.github.io/0925_codex_project/projects/002-social-auto-upload/) · [一图总览](https://yydshly.github.io/0925_codex_project/projects/002-social-auto-upload/overview.svg) |
 | 003 | [Voicebox](https://github.com/jamiepine/voicebox) | **能力：** 本地 Whisper 听写、7 类 TTS 引擎的克隆或预置音色配音、本地 Qwen3 文本整理，并通过 REST/MCP 接入应用。**原理：** 首次下载模型后，由本地 FastAPI 调度 MLX/PyTorch 推理；参考录音只为克隆提供音色条件。**对我的意义：** 可放在个人 IP 的口述与配音环节，衔接换声与发布工具。 | [完整研究](projects/003-voicebox/README.md) · [在线网页](https://yydshly.github.io/0925_codex_project/projects/003-voicebox/) · [完整引导图](https://yydshly.github.io/0925_codex_project/projects/003-voicebox/overview.svg) |
+| 004 | [LiveTalking](https://github.com/lipku/LiveTalking) | **能力：** 图片或视频制作人物 avatar，文字或音频驱动口型，输出实时流或 MP4。**原理：** 音频特征驱动 Wav2Lip、MuseTalk 等模型生成面部画面，再贴回人物素材并同步声音。**场景：** 讲解、客服、直播和短视频。**对我的意义：** 在此前 MuseTalk 成片练习上，按需验证实时会话与推流。 | [在线网页](https://yydshly.github.io/0925_codex_project/projects/004-livetalking/) · [完整引导图](https://yydshly.github.io/0925_codex_project/projects/004-livetalking/assets/architecture.svg) · [完整研究](projects/004-livetalking/README.md) |
 
 ## 001 · Retrieval-based-Voice-Conversion-WebUI 图文导读
 
@@ -83,6 +84,22 @@ HuBERT 等特征模型从输入录音中提取与发音相关的线索；使用�
 ![Voicebox 完整引导图：本地模型、主要能力、实现原理、克隆与预置区别、个人内容工作流及能力边界。](docs/projects/003-voicebox/overview.svg)
 
 [查看在线能力地图](https://yydshly.github.io/0925_codex_project/projects/003-voicebox/) · [打开完整引导图](https://yydshly.github.io/0925_codex_project/projects/003-voicebox/overview.svg) · [阅读完整研究笔记](projects/003-voicebox/README.md)
+
+## 004 · LiveTalking 能力导读
+
+源库：[lipku/LiveTalking](https://github.com/lipku/LiveTalking)。
+
+- **能力：** 用人物图片或闭嘴视频准备 avatar；文字经 TTS、已有音频可直接驱动人物说话，支持会话、打断、WebRTC/RTMP、虚拟摄像头与 MP4 录制。
+- **底层原理：** 声音被提取为模型需要的特征，所选 Wav2Lip、MuseTalk 等模型生成对应口型或面部帧；服务把生成区域合成人物画面，再同步声音与视频并交付。
+- **使用场景：** 网页数字人客服、课程或展厅讲解、虚拟主播、预先制作的短视频。
+- **对我的意义：** 可把 Voicebox 配音或其他已有声音接成出镜形象；成片可再交给 002 发布工具。此前的 015 已用 MuseTalk 1.5 做过本地成片，004 值得研究的是会话和实时推流。
+
+![LiveTalking 完整引导图：人物和声音输入、内部模型与依赖、音画合成、实时和文件输出。](docs/projects/004-livetalking/assets/architecture.svg)
+
+[查看在线网页](https://yydshly.github.io/0925_codex_project/projects/004-livetalking/) · [打开完整引导图](https://yydshly.github.io/0925_codex_project/projects/004-livetalking/assets/architecture.svg) · [阅读研究笔记](projects/004-livetalking/README.md) · [查看环境要求](projects/004-livetalking/docs/requirements.md)
+
+目前完成的是资料研究和静态网页，尚未部署 LiveTalking 本体，也未验证跨项目接口。
+
 ## 添加项目
 
 从 [子项目模板](projects/_template/README.md) 开始，按 [收录说明](ADDING_PROJECTS.md) 更新索引。静态网页演示统一放在 docs/projects/ 下，便于通过一个 GitHub Pages 站点按子路径访问。

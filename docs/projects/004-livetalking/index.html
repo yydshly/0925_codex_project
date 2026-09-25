@@ -1,0 +1,263 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0c1729">
+  <meta name="description" content="LiveTalking 实时数字人库研究：人物图片或视频预处理为 avatar，文字或音频驱动 Wav2Lip、MuseTalk 等模型生成同步口型，输出 WebRTC、RTMP 或 MP4。看懂能力、原理、环境、使用场景与个人内容工作流价值。">
+  <link rel="canonical" href="https://yydshly.github.io/0925_codex_project/projects/004-livetalking/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="LiveTalking：实时数字人的能力、原理与应用">
+  <meta property="og:description" content="一张架构图看懂人物素材、文字与音频怎样经过口型模型，成为可播放、推流或录制的数字人视频。">
+  <meta property="og:url" content="https://yydshly.github.io/0925_codex_project/projects/004-livetalking/">
+  <meta property="og:image" content="https://yydshly.github.io/0925_codex_project/projects/004-livetalking/assets/architecture.png">
+  <meta property="og:image:alt" content="LiveTalking 输入、内部处理、模型、环境与输出完整架构图">
+  <meta name="twitter:card" content="summary_large_image">
+  <title>LiveTalking：能力、原理、场景与个人价值 · 实时数字人研究</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='15' fill='%230c1729'/%3E%3Ccircle cx='32' cy='24' r='11' fill='%2388e0d0'/%3E%3Cpath d='M13 53c2-13 10-20 19-20s17 7 19 20' fill='%23ffbf85'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="./styles.css">
+  <script src="./app.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">跳到正文</a>
+  <header class="topbar">
+    <div class="shell topbar-inner">
+      <a class="brand" href="#top"><span class="brand-mark">L<span>•</span>T</span><span>LIVE TALKING <small>研究笔记 004</small></span></a>
+      <nav aria-label="页面导航">
+        <a href="#architecture">总览图</a><a href="#demo">演示</a><a href="#prior">旧练习</a><a href="#ecosystem">组合</a>
+        <a href="#capabilities">能力</a>
+        <a href="#principle">原理</a>
+        <a href="#models">本地模型</a>
+        <a href="#environment">环境</a>
+        <a href="#value">使用价值</a>
+      </nav>
+      <a class="top-link" href="https://github.com/lipku/LiveTalking" target="_blank" rel="noopener noreferrer">源仓库 <span aria-hidden="true">↗</span></a>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="hero" id="top" aria-labelledby="hero-title">
+      <div class="hero-grid" aria-hidden="true"></div>
+      <div class="shell hero-layout">
+        <div class="hero-copy">
+          <p class="overline"><span class="live-dot"></span> OPEN SOURCE RESEARCH / 004</p>
+          <h1 id="hero-title">让声音<br>长出<span>画面。</span></h1>
+          <p class="hero-lead">LiveTalking 是实时数字人服务框架：先把图片或视频做成人物 avatar，再用文字或已有音频驱动口型模型，生成同步的声音与画面，实时播放、推流或录制。</p>
+          <div class="hero-actions">
+            <a class="button button-primary" href="#architecture">看完整架构图 <span aria-hidden="true">↘</span></a>
+            <a class="button button-outline" href="#ecosystem">看能力如何组合 <span aria-hidden="true">→</span></a>
+          </div>
+          <p class="hero-caption">基于 <a href="https://github.com/lipku/LiveTalking" target="_blank" rel="noopener noreferrer">项目 README</a> 与 <a href="https://doc.livetalking.ai/docs/usage/" target="_blank" rel="noopener noreferrer">官方使用说明</a> 整理 · 2026.09.25 · 首屏使用本页完整架构图；真实动态效果见下方官方演示</p>
+        </div>
+        <a class="hero-guide" href="#architecture" aria-label="查看 LiveTalking 完整能力架构图">
+          <span class="hero-guide-head"><b>完整能力架构图</b><small>点击阅读大图 ↗</small></span>
+          <img src="./assets/architecture.svg" width="1440" height="1230" alt="LiveTalking 从人物与声音输入，到模型推理、音画合成、运行环境和多种输出的完整引导图">
+          <span class="hero-guide-foot"><span>INPUT → MODEL → OUTPUT</span><strong>一张图看懂整个流程</strong></span>
+        </a>
+      </div>
+      <div class="shell hero-facts" aria-label="能力、原理、场景与个人价值摘要">
+        <div><small>能力</small><strong>让人物按声音说话</strong></div>
+        <div><small>底层原理</small><strong>声音特征驱动模型生成口型</strong></div>
+        <div><small>使用场景</small><strong>讲解 · 客服 · 直播 · 成片</strong></div>
+        <div><small>对我的意义</small><strong>在已有口型练习上补实时交付</strong></div>
+      </div>
+    </section>
+
+    <section class="section architecture-section" id="architecture" aria-labelledby="architecture-title">
+      <div class="shell">
+        <div class="section-heading"><div><p class="kicker">完整架构 / 一张图</p><h2 id="architecture-title">从输入到输出，<br>看清每一层</h2></div><p>人物素材先做成 avatar；文字、现成音频或语音提问分别走不同声音路径。中间选择一种口型模型，最后由 LiveTalking 同步并交付音视频。</p></div>
+        <div class="architecture-toolbar"><span>输入 → 服务与模型 → 输出 → 运行底座</span><a href="./assets/architecture.svg" target="_blank" rel="noopener noreferrer">打开可放大的矢量图 ↗</a></div>
+        <figure class="architecture-figure">
+          <div class="architecture-scroll" role="region" aria-label="LiveTalking 完整能力架构图，手机上可横向滚动" tabindex="0"><img src="./assets/architecture.svg" width="1440" height="1230" alt="LiveTalking 完整架构：人物图片或视频先制成 avatar；文字经可选 LLM 与 TTS、已有音频直接输入、语音提问经外接 ASR；服务提取音频特征，用所选 Wav2Lip、MuseTalk 等模型生成口型，合成人物画面并同步声音，输出 WebRTC、RTMP、虚拟摄像头或 MP4。底部列出环境、Python 库、模型素材与网络条件。"></div>
+          <figcaption>实线表示处理主链，虚线表示按需接入。图片/视频用于准备人物形象；已有音频驱动可跳过 LLM 与 TTS。模型、库与环境按具体路线选择，<b>本页尚未在本机部署 LiveTalking</b>。依据：<a href="https://github.com/lipku/LiveTalking" target="_blank" rel="noopener noreferrer">项目 README</a>、<a href="https://github.com/lipku/LiveTalking/blob/main/docs/api.md" target="_blank" rel="noopener noreferrer">API</a>、<a href="https://doc.livetalking.ai/docs/usage/" target="_blank" rel="noopener noreferrer">模型使用说明</a>、<a href="https://github.com/lipku/LiveTalking/blob/main/requirements.txt" target="_blank" rel="noopener noreferrer">依赖清单</a>。</figcaption>
+        </figure>
+      </div>
+    </section>
+    <section class="section demo-section" id="demo" aria-labelledby="demo-title">
+      <div class="shell">
+        <div class="section-heading"><div><p class="kicker">官方素材 / ACTUAL PREVIEW</p><h2 id="demo-title">这里有真实界面截图，<br>动态效果看原演示</h2></div><p>首屏展示的是研究架构图。下图来自 LiveTalking 原仓库，展示实际网页中的人物画面与输入区；嘴型是否跟声音同步，需要看动态演示。</p></div>
+        <div class="demo-layout">
+          <figure class="official-shot"><a href="https://github.com/lipku/LiveTalking/blob/main/assets/index.jpg" target="_blank" rel="noopener noreferrer" aria-label="打开 LiveTalking 官方界面截图原图"><img src="./assets/official-interface.jpg" width="2642" height="1356" alt="LiveTalking 官方界面：左侧 WebRTC 视频窗口中有数字人形象，右侧有文本驱动和音频上传操作区。" loading="lazy"></a><figcaption>官方界面截图 · 来源：<a href="https://github.com/lipku/LiveTalking/blob/main/assets/index.jpg" target="_blank" rel="noopener noreferrer">LiveTalking / assets/index.jpg ↗</a></figcaption></figure>
+          <div class="demo-links"><span class="mini-tag">观看真实口型</span><h3>静态图看画面，视频看同步</h3><p>上游 README 给出了不同模型的效果演示。打开视频后重点观察嘴型和声音是否同步、画面接缝以及说话时的稳定性。</p><a href="https://www.bilibili.com/video/BV1scwBeyELA/" target="_blank" rel="noopener noreferrer"><b>01</b><span>Wav2Lip 演示</span><em>↗</em></a><a href="https://www.bilibili.com/video/BV1bUwezvEnG/" target="_blank" rel="noopener noreferrer"><b>02</b><span>MuseTalk 演示</span><em>↗</em></a><a href="https://www.bilibili.com/video/BV1G1421z73r/" target="_blank" rel="noopener noreferrer"><b>03</b><span>ER-NeRF 演示</span><em>↗</em></a><small>链接来自<a href="https://github.com/lipku/LiveTalking#readme" target="_blank" rel="noopener noreferrer">原仓库 README</a>；视频在 Bilibili 打开。</small></div>
+        </div>
+      </div>
+    </section>
+    <section class="section answer-section" id="answer" aria-labelledby="answer-title">
+      <div class="shell">
+        <div class="section-intro"><p class="kicker">01 / 先回答最重要的问题</p><h2 id="answer-title">需要本地模型吗？<span>需要。</span></h2><p>自托管口型渲染时，模型权重与人物 avatar 数据放在运行 LiveTalking 的电脑或服务器上。浏览器只接收画面，不需要给每位观众安装模型。</p></div>
+        <div class="answer-grid">
+          <article class="answer-main"><div class="answer-badge">必需</div><h3>口型模型 + 人物素材</h3><p>至少选一种口型模型（如 Wav2Lip 或 MuseTalk），下载对应权重和 avatar。官方示例可直接使用预训练文件，无需先自行训练。</p><div class="file-visual" aria-hidden="true"><span>models/<b>wav2lip.pth</b></span><span>data/avatars/<b>人物素材</b></span></div><a href="https://github.com/lipku/LiveTalking#21-%E4%B8%8B%E8%BD%BD%E6%A8%A1%E5%9E%8B" target="_blank" rel="noopener noreferrer">查看官方示例文件 ↗</a></article>
+          <article class="answer-side"><span class="mini-tag">按功能增加</span><h3>LLM、TTS、ASR</h3><ul><li><b>LLM</b>：只在自动回答时需要；直接播报可用 echo 模式。</li><li><b>TTS</b>：文字变声音时需要；上传已有音频可跳过。</li><li><b>ASR</b>：用户用语音提问时才需要。</li></ul><p class="small-note">默认 EdgeTTS 调用在线服务。“口型模型本地运行”不等于整套流程离线。</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section io-section" id="io" aria-labelledby="io-title">
+      <div class="shell">
+        <div class="section-heading"><div><p class="kicker">入口与出口 / INPUT → OUTPUT</p><h2 id="io-title">先准备人物，<br>再让人物说话</h2></div><p>可以用“声音 + 人物图片或视频”来理解，但它分为准备形象和每次播报两步。外观来自人物素材，口型由声音驱动。</p></div>
+        <div class="io-grid">
+          <article class="io-card"><div class="io-head"><span>准备一次</span><strong>创建 avatar</strong></div><div class="io-symbols"><span>人物图片 / 视频</span><i aria-hidden="true">→</i><span>预处理的人物素材</span></div><p>MuseTalk 的 avatar 可以从图片或视频制作；Wav2Lip 的官方自制流程使用闭嘴、不说话的视频。也可直接用下载的示例 avatar。</p></article>
+          <article class="io-card io-card-dark"><div class="io-head"><span>每次播报</span><strong>驱动说话</strong></div><div class="io-symbols"><span>文字 / 已有音频</span><i aria-hidden="true">+</i><span>avatar + 口型模型</span></div><p>文字先由 TTS 生成声音，已有音频可直接上传。模型读取声音特征，主要生成嘴型和口周画面，再贴回人物素材；眉眼表情与身体动作并非仅靠这段音频完整生成。</p></article>
+        </div>
+        <div class="output-panel"><div><span>最终出口</span><h3>带声音的数字人视频</h3><p>这是一段连续的音视频画面，而非一个新的 3D 人物文件。画面中的外观、背景和身体动作主要取决于人物素材与动作编排。</p></div><ul><li><b>实时播放</b><small>WebRTC 浏览器</small></li><li><b>直播推流</b><small>RTMP / RTC 推送</small></li><li><b>摄像头</b><small>虚拟摄像头</small></li><li><b>留存成片</b><small>录制 MP4</small></li></ul></div>
+        <p class="section-foot">依据：<a href="https://doc.livetalking.ai/docs/usage/" target="_blank" rel="noopener noreferrer">官方 avatar 与传输说明</a>、<a href="https://github.com/lipku/LiveTalking/blob/main/docs/api.md" target="_blank" rel="noopener noreferrer">文本/音频与录制 API</a>。</p>
+      </div>
+    </section>
+    <section class="section capabilities-section" id="capabilities" aria-labelledby="capabilities-title">
+      <div class="shell">
+        <div class="section-heading"><div><p class="kicker">02 / 能力地图</p><h2 id="capabilities-title">围绕“会说话的画面”<br>搭起完整链路</h2></div><p>从文字或音频输入，到口型生成、会话控制和多种输出方式。声音克隆的实际能力取决于所选 TTS。</p></div>
+        <div class="cap-grid">
+          <article><span class="cap-no">01 / DRIVE</span><h3>文字与音频驱动</h3><p>文字可直接播报，也可先由 LLM 生成回答；已有音频可上传后直接驱动画面。</p><code>/human · /humanaudio</code></article>
+          <article><span class="cap-no">02 / RENDER</span><h3>口型与人物画面</h3><p>多种模型根据声音生成嘴部画面，再合成到预处理的人物视频中。</p><code>Wav2Lip · MuseTalk</code></article>
+          <article><span class="cap-no">03 / CONTROL</span><h3>会话与动作</h3><p>每个连接有自己的会话；支持打断播报、静音动作和多个并发会话。</p><code>sessionid · interrupt</code></article>
+          <article><span class="cap-no">04 / DELIVER</span><h3>直播、摄像头、录像</h3><p>送到浏览器、直播平台或虚拟摄像头；也可录制后制作视频内容。</p><code>WebRTC · RTMP · MP4</code></article>
+        </div>
+        <p class="section-foot">来源：<a href="https://github.com/lipku/LiveTalking#features" target="_blank" rel="noopener noreferrer">项目功能列表</a>、<a href="https://github.com/lipku/LiveTalking/blob/main/docs/api.md" target="_blank" rel="noopener noreferrer">API 文档</a>。</p>
+      </div>
+    </section>
+
+    <section class="section principle-section" id="principle" aria-labelledby="principle-title">
+      <div class="shell">
+        <div class="section-heading"><div><p class="kicker">03 / 工作原理</p><h2 id="principle-title">选择一种输入，<br>看模块如何连接</h2></div><p>同一套数字人画面，因输入方式不同，依赖也不同。点击下方路径即可切换。</p></div>
+        <div class="mode-switch" role="group" aria-label="选择工作流程">
+          <button type="button" class="mode-button is-active" data-mode="text" aria-pressed="true"><span>01</span> 文字播报</button>
+          <button type="button" class="mode-button" data-mode="audio" aria-pressed="false"><span>02</span> 已有音频</button>
+          <button type="button" class="mode-button" data-mode="conversation" aria-pressed="false"><span>03</span> 语音对话</button>
+        </div>
+        <div class="flow-panel" aria-live="polite">
+          <div class="flow-top"><div><span class="flow-kicker" id="flow-kicker">最简入口</span><h3 id="flow-title">输入一句话，数字人把它说出来。</h3></div><p id="flow-description">echo 模式直接朗读传入的文字，无需大语言模型；TTS 先把文字变成声音，口型模型再生成画面。</p></div>
+          <ol class="flow-steps" id="flow-steps"><li><span>01</span><b>输入文字</b><small>你的文案</small></li><li><span>02</span><b>语音合成</b><small>TTS 必需</small></li><li><span>03</span><b>口型推理</b><small>本地模型 + avatar</small></li><li><span>04</span><b>音视频输出</b><small>WebRTC / RTMP</small></li></ol>
+          <div class="flow-deps"><span class="deps-title">这条路径的依赖</span><div id="flow-dependencies"><span class="dependency required">必需 · 口型模型</span><span class="dependency required">必需 · avatar</span><span class="dependency required">必需 · TTS</span><span class="dependency optional">可选 · LLM</span></div></div>
+        </div>
+        <div class="mechanism-grid" aria-label="口型生成的三个关键步骤">
+          <article><span>01 / PREPARE</span><h3>先准备人物</h3><p>视频或图片预处理为 avatar 帧和脸部位置数据。实时生成时，模型在这些人物画面上修改说话区域。</p></article>
+          <article><span>02 / INFER</span><h3>声音决定嘴型</h3><p>从音频提取 Mel、Whisper 等特征；Wav2Lip、MuseTalk 等模型据此生成与声音对应的口型。MuseTalk 使用图像潜空间的单步补绘。</p></article>
+          <article><span>03 / COMPOSE</span><h3>贴回并同步输出</h3><p>生成区域合成到人物画面，再与音频对齐并编码成实时流或录制文件。</p></article>
+        </div>
+        <p class="section-foot">声音特征驱动口型模型生成画面，合成后的音视频再送入推流层。<a href="https://github.com/lipku/LiveTalking#3-%E7%B3%BB%E7%BB%9F%E6%9E%B6%E6%9E%84" target="_blank" rel="noopener noreferrer">查看官方架构 ↗</a> · <a href="https://github.com/TMElyralab/MuseTalk#model" target="_blank" rel="noopener noreferrer">MuseTalk 模型说明 ↗</a></p>
+      </div>
+    </section>
+
+    <section class="section models-section" id="models" aria-labelledby="models-title">
+      <div class="shell">
+        <div class="section-heading"><div><p class="kicker">04 / 模型选择</p><h2 id="models-title">你下载的，不只是<br>一份“数字人程序”</h2></div><p>口型模型权重决定如何生成嘴部画面；avatar 保存具体人物的预处理素材。不同模型各自有文件与制作方法。</p></div>
+        <div class="model-table-wrap" role="region" aria-label="模型准备方式对比，可横向滚动" tabindex="0">
+          <table class="model-table">
+            <thead><tr><th scope="col">模型路径</th><th scope="col">要准备的资源</th><th scope="col">自己训练？</th><th scope="col">适合何时看</th></tr></thead>
+            <tbody>
+              <tr><th scope="row"><strong>Wav2Lip</strong><small>官方最快试跑路径</small></th><td><code>models/wav2lip.pth</code> + 示例 avatar；自制头像还要关注人脸检测模型</td><td><span class="status no">示例无需</span></td><td>先验证效果与接口</td></tr>
+              <tr><th scope="row"><strong>MuseTalk</strong><small>另一种口型画面方案</small></th><td>对应的 <code>models/</code> 文件 + <code>musetalk_avatar1</code> 等素材</td><td><span class="status no">示例无需</span></td><td>进一步比较画质与性能</td></tr>
+              <tr><th scope="row"><strong>Ultralight</strong><small>人物专属模型</small></th><td>训练后的 checkpoint、检测模型与 avatar</td><td><span class="status yes">官方路径需要</span></td><td>有明确人物定制需求</td></tr>
+              <tr><th scope="row"><strong>ER-NeRF</strong><small>位于独立分支</small></th><td><code>ernerf-rtmp</code> 分支及人物训练产物</td><td><span class="status yes">自定人物需要</span></td><td>研究该分支的专项方案</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="model-note"><strong>选择时要分开看两件事</strong><p>“无需训练”只是说可用现成权重试跑，不代表无需下载权重；也不代表模型、素材和生成内容自动取得商业使用权。</p></div>
+        <p class="section-foot">来源：<a href="https://doc.livetalking.ai/docs/usage/" target="_blank" rel="noopener noreferrer">官方模型使用说明</a>。各下载地址与文件名应在实际部署时重新核对。</p>
+      </div>
+    </section>
+
+    <section class="section environment-section" id="environment" aria-labelledby="environment-title">
+      <div class="shell">
+        <div class="section-heading"><div><p class="kicker">05 / 运行环境</p><h2 id="environment-title">先按当前 README<br>的组合准备环境</h2></div><p>以下是上游声称已测试的组合与性能建议，不等于本站已完成安装验证。</p></div>
+        <div class="env-grid">
+          <article class="env-feature"><small>官方当前验证组合</small><div><b>Ubuntu</b><strong>22.04</strong></div><div><b>Python</b><strong>3.12</strong></div><div><b>PyTorch</b><strong>2.9.1</strong></div><div><b>CUDA 构建</b><strong>12.8</strong></div></article>
+          <article class="env-detail"><span class="env-icon">GPU</span><h3>实时推理看显卡</h3><p>官方建议 Wav2Lip256 用 RTX 3060 及以上，MuseTalk 用 RTX 3080 Ti 及以上。显卡负责口型推理，CPU 承担每路视频编码；官方没有给出统一的最低显存和系统内存数值。</p><span class="env-small">分辨率与并发会改变实际负载</span></article>
+          <article class="env-detail"><span class="env-icon">NET</span><h3>网页播放看网络</h3><p>WebRTC 示例默认监听 TCP 8010；官方示例同时列出 UDP 端口范围。远程部署还要核对网络、ICE/STUN 与防火墙配置。</p><span class="env-small">浏览器是客户端，推理由服务器运行</span></article>
+          <article class="env-detail"><span class="env-icon">ADD</span><h3>按所选功能加依赖</h3><p>先装项目 Python 依赖；自制 avatar、RTMP、虚拟摄像头、本地 TTS 或 ASR 会增加 FFmpeg、驱动或额外服务。</p><span class="env-small">不要一次安装所有可选能力</span></article>
+        </div>
+        <div class="version-note"><span>版本提醒</span><p>主仓库 README 已列出 Ubuntu 22.04 / Python 3.12 / PyTorch 2.9.1 / CUDA 12.8；官网安装页和仓库 Dockerfile 仍保留较旧组合。试跑当前主分支时以当前 README 为起点。</p><a href="https://doc.livetalking.ai/docs/install/" target="_blank" rel="noopener noreferrer">对照旧安装页 ↗</a></div>
+        <div class="env-links"><a href="https://github.com/lipku/LiveTalking#1-%E5%AE%89%E8%A3%85" target="_blank" rel="noopener noreferrer">当前 README 安装步骤 ↗</a><a href="https://github.com/lipku/LiveTalking/blob/main/requirements.txt" target="_blank" rel="noopener noreferrer">Python 依赖清单 ↗</a><a href="https://github.com/yydshly/0925_codex_project/blob/main/projects/004-livetalking/docs/requirements.md" target="_blank" rel="noopener noreferrer">本项目详细环境笔记 →</a></div>
+      </div>
+    </section>
+
+    <section class="section value-section" id="value" aria-labelledby="value-title">
+      <div class="shell">
+        <div class="section-heading"><div><p class="kicker">06 / 什么时候对你有用</p><h2 id="value-title">把它放在<br>内容与视频之间</h2></div><p>现在先把能力地图记清楚。有明确需求时，再用真实素材评估画质、响应时间和部署成本。</p></div>
+        <div class="use-layout">
+          <div class="use-flow"><p class="use-overline">可探索的个人 IP 内容流程</p><ol><li><span>01</span><div><b>写好内容</b><small>文案或 LLM 生成回答</small></div></li><li><span>02</span><div><b>制作声音</b><small>Voicebox、其他 TTS 或已有音频</small></div></li><li class="current"><span>03</span><div><b>生成数字人画面</b><small>015 成片流程，或 LiveTalking 实时/录制</small></div></li><li><span>04</span><div><b>发布内容</b><small>social-auto-upload 等分发工具</small></div></li></ol><p>015 的视频成片已本机验证；把 Voicebox、RVC、LiveTalking 与发布工具接成完整链路，仍需逐项测试。</p></div>
+          <div class="scenario-grid">
+            <article><span>01</span><h3>虚拟讲解员</h3><p>课程、知识内容或展厅讲解；关注口型自然度和长时间播放稳定性。</p></article>
+            <article><span>02</span><h3>数字人客服</h3><p>接入知识库与语音问答；关注整体延迟、打断和同时在线人数。</p></article>
+            <article><span>03</span><h3>直播与短视频</h3><p>实时推流或先录制成片；关注人物授权、平台要求和制作效率。</p></article>
+            <article><span>04</span><h3>产品中的 AI 形象</h3><p>给现有助手增加可见角色；先判断视觉存在是否真正提升体验。</p></article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section prior-section" id="prior" aria-labelledby="prior-title">
+      <div class="shell">
+        <div class="section-heading"><div><p class="kicker">我们的实践 / 015 → 004</p><h2 id="prior-title">我们已经做过口型，<br>这次研究实时交付</h2></div><p>此前的 015「从声音到数字人物」练习，已经在本机用 MuseTalk 1.5 做出了有声人物视频。LiveTalking 与它有模型重叠，但提供的是另一套实时音视频服务。</p></div>
+        <div class="prior-highlight"><div><span class="mini-tag">已完成的练习</span><h3>本地 MuseTalk 已跑通，成片可直接观看</h3><p>015 使用人物照片、动作视频和语音，经过本地口型推理与融合，输出带声音的 MP4；另有独立的 Audio2Face-3D 路线驱动三维人物面部。</p></div><a class="button button-primary" href="https://yydshly.github.io/0907_codex_project/demos/015-audio2face-3d/#recording-demo" target="_blank" rel="noopener noreferrer">观看以前的真实录像 <span aria-hidden="true">↗</span></a></div>
+        <p class="prior-scroll-hint">手机上可左右滑动查看完整对比 →</p><div class="prior-table-wrap" role="region" aria-label="此前数字人物练习与 LiveTalking 的区别，可横向滚动" tabindex="0"><table class="prior-table"><thead><tr><th scope="col">比较点</th><th scope="col">此前的 015 练习</th><th scope="col">LiveTalking</th></tr></thead><tbody>
+          <tr><th scope="row">共同核心</th><td>视频路线已实际调用本地 MuseTalk 1.5，按语音重绘口型；3D 路线另用 Audio2Face-3D。</td><td>同样能选择 MuseTalk 口型路线，也提供 Wav2Lip 等模型；它本身不等于 Audio2Face 的 3D 路线。</td></tr>
+          <tr><th scope="row">人物动作</th><td>照片先由 LivePortrait、Hailuo 或早期 LTX 形成动作视频，再用 MuseTalk 贴口型；做过自研稳定与融合。</td><td>以预处理 avatar 为人物画面，支持待机动作和全身视频拼接；不会自动接入我们原来的动作生成流程。</td></tr>
+          <tr><th scope="row">出口与节奏</th><td>每句先生成并编码 MP4，网页再分段播放；有打断和切换，但不是实时视频通话。</td><td>围绕会话持续生成并通过 WebRTC、RTMP 或虚拟摄像头输出，也支持录制。</td></tr>
+          <tr><th scope="row">已经验证</th><td>Windows + RTX 4070 Laptop 8 GB 已跑通 MuseTalk 1.5 和人物视频成片。</td><td>当前 004 只完成资料研究；尚未在本机安装或测试 LiveTalking 的实时帧率。</td></tr>
+        </tbody></table></div>
+        <div class="prior-conclusion"><strong>怎么判断是否值得再试</strong><p>做预先生成的短视频，015 已有可复用流程；需要浏览器实时数字人、直播推流或标准会话接口时，再验证 LiveTalking。旧项目的模型文件和 avatar 缓存能否直接接入 LiveTalking，必须核对版本与数据格式。</p></div>
+        <p class="section-foot">015 的早期三段 4 秒视频各耗时约 24–26 秒；后续优化记录中，一段 4.52 秒视频的本地渲染耗时 8.172 秒。这些是不同阶段、不同流程的记录，均不证明已达到 LiveTalking 的实时推流指标。参见 <a href="https://github.com/yydshly/0907_codex_project/blob/main/projects/015-audio2face-3d/README.md" target="_blank" rel="noopener noreferrer">015 练习记录</a>与<a href="https://github.com/yydshly/0907_codex_project/blob/main/projects/015-audio2face-3d/notes/natural-body-v2.md" target="_blank" rel="noopener noreferrer">渲染记录</a>。</p>
+      </div>
+    </section>
+    <section class="section ecosystem-section" id="ecosystem" aria-labelledby="ecosystem-title">
+      <div class="shell">
+        <div class="section-heading"><div><p class="kicker">能力组合 / 以前研究 × 当前库</p><h2 id="ecosystem-title">把已有能力拼起来，<br>再选择画面出口</h2></div><p>这些项目各管一段：声音的输入与制作、人物画面、实时传输、成片发布。下面是可行的接法和验证状态，不表示它们已经组成一个可运行系统。</p></div>
+        <div class="ecosystem-proof"><span class="mini-tag">先看证据</span><strong>已本机跑通：015 的 MuseTalk 视频成片</strong><p>001 RVC、002 发布工具、003 Voicebox 和 004 LiveTalking 在当前研究中均未完成本机接入；跨项目端到端流程也尚未验证。</p></div>
+        <div class="ecosystem-map" aria-label="从声音到人物画面再到成片发布的能力分工">
+          <div class="eco-stage"><span class="eco-no">01 / 内容与声音</span><h3>先得到可用的音频</h3><a class="eco-module" href="../003-voicebox/index.html"><b>003 · Voicebox</b><span>口述转文字；文案生成配音或克隆音色</span><em>研究阶段 ↗</em></a><a class="eco-module" href="../001-rvc-voice-conversion/index.html"><b>001 · RVC</b><span>对已有录音或配音换声，按需加入</span><em>研究阶段 ↗</em></a></div>
+          <span class="eco-arrow" aria-hidden="true">→</span>
+          <div class="eco-stage eco-stage-visual"><span class="eco-no">02 / 人物画面 · 二选一</span><h3>决定怎样让人物出镜</h3><a class="eco-module" href="https://yydshly.github.io/0907_codex_project/demos/015-audio2face-3d/" target="_blank" rel="noopener noreferrer"><b>015 · 数字人物练习</b><span>动作视频 + 本地 MuseTalk 口型 → MP4；另有独立 3D 路线</span><em class="eco-verified">本机已验证 ↗</em></a><a class="eco-module" href="#prior"><b>004 · LiveTalking</b><span>avatar + 语音 → 实时流或录制；具备会话接口</span><em>尚未部署 ↗</em></a></div>
+          <span class="eco-arrow" aria-hidden="true">→</span>
+          <div class="eco-stage"><span class="eco-no">03 / 成片分发</span><h3>把完成的视频送出去</h3><a class="eco-module" href="../002-social-auto-upload/index.html"><b>002 · social-auto-upload</b><span>上传已完成的视频，填写平台内容与排期</span><em>未在账号实测 ↗</em></a><p class="eco-stage-note">这一段接收成片文件；实时 WebRTC 画面走播放或直播通道。</p></div>
+        </div>
+        <p class="ecosystem-map-note"><b>连接关系：</b>Voicebox 的配音与 RVC 的换声是候选音频来源；015 和 LiveTalking 是画面出口的两种方案，不需要把两套口型模型串联使用。015 中的 MiniMax 对话/TTS、Hailuo 或 LivePortrait 动作素材，也不会自动成为 LiveTalking 的内置功能。</p>
+        <div class="ecosystem-runtime" aria-label="组合方案的运行位置"><article><span>本地推理</span><p>015 的 MuseTalk 已在本机验证；RVC、Voicebox 与 LiveTalking 的对应模型可以放本地，但本次研究没有安装它们。</p></article><article><span>按需使用云服务</span><p>015 曾用 MiniMax 对话/TTS、Hailuo 动作；LiveTalking 默认 EdgeTTS 需联网。是否离线取决于实际选用的模块。</p></article><article><span>平台侧</span><p>浏览器接收实时画面；002 上传工具需要平台登录状态和成片文件。实时直播与视频上传是不同出口。</p></article></div>
+        <div class="model-roles" id="model-roles" aria-labelledby="model-roles-title">
+          <div class="model-roles-heading"><div><span class="kicker">比较模型 / 按职责拆开</span><h3 id="model-roles-title">效果好不好，要看具体模型</h3></div><p>声音和画面各有自己的模型。用同一段语音、同一个人物素材比较同类模型，才能看出口型、音质和速度的差异。</p></div>
+          <div class="model-role-grid">
+            <article class="model-role-card"><span class="model-role-no">01 / 声音</span><h4>识别、配音、换声</h4><p>ASR 把讲话转文字；TTS 把文字变语音；RVC 对已有音频换音色。Voicebox 整合 ASR/TTS 等声音能力，本身不是单一模型。</p><small><b>看什么：</b>识别准确、发音自然、音色一致、生成速度</small></article>
+            <article class="model-role-card model-role-focus"><span class="model-role-no">02 / 口型画面</span><h4>语音驱动嘴部区域</h4><p>MuseTalk、Wav2Lip 等接收音频与预处理的人物画面，生成与语音同步的嘴型帧，再融回画面。015 已本机验证 MuseTalk 1.5；LiveTalking 的具体组合尚未实测。</p><small><b>看什么：</b>音画同步、面部自然度、身份保持、画面稳定</small></article>
+            <article class="model-role-card"><span class="model-role-no">03 / 动作</span><h4>头部、表情和身体</h4><p>015 用过 LivePortrait、Hailuo 等动作来源。口型模型主要处理说话区域，丰富的神态和身体动作还取决于素材或额外动作生成与编排。</p><small><b>看什么：</b>动作自然、人物一致、与口型衔接</small></article>
+            <article class="model-role-card"><span class="model-role-no">04 / 另一条 3D 路线</span><h4>声音驱动三维面部</h4><p>015 还研究过 Audio2Face-3D：语音驱动三维面部动画，输出给 3D 人物使用。这与 MuseTalk 的二维视频口型是不同类型的结果。</p><small><b>看什么：</b>表情系数、角色适配、实时表现</small></article>
+          </div>
+          <div class="model-system-note"><b>系统与交付层</b><p>015 把选定模型接成 MP4 成片流程；LiveTalking 把口型模型、人物、音频与 WebRTC/RTMP 会话接成实时流；social-auto-upload 接收成片去发布。若两边都选 MuseTalk，比较重点是版本、人物处理、速度和交付体验，不能把它说成两种完全不同的口型模型。</p></div>
+          <p class="model-roles-foot">补充：口型模型依据连续的声音特征生成画面，并非查找预制嘴型图片。MuseTalk 在此使用 Whisper 音频编码器提取特征，不是先把语音识别成文字。<a href="https://github.com/TMElyralab/MuseTalk" target="_blank" rel="noopener noreferrer">MuseTalk 原项目 ↗</a> · <a href="https://github.com/Rudrabha/Wav2Lip" target="_blank" rel="noopener noreferrer">Wav2Lip 原项目 ↗</a> · <a href="https://github.com/NVIDIA/Audio2Face-3D" target="_blank" rel="noopener noreferrer">Audio2Face-3D ↗</a></p>
+        </div>
+        <div class="workflow-heading"><div><span class="kicker">按目标选路径</span><h3>先决定要成片，还是要在线互动</h3></div><p>切换后看每条路线的输入、输出与当前证据。</p></div>
+        <div class="workflow-switch" role="group" aria-label="选择跨项目使用路线"><button type="button" class="workflow-tab is-active" data-workflow="video" aria-controls="workflow-video" aria-pressed="true">预先制作视频</button><button type="button" class="workflow-tab" data-workflow="live" aria-controls="workflow-live" aria-pressed="false">实时数字人互动</button></div>
+        <div class="workflow-panel" id="workflow-video"><div class="workflow-intro"><span>路线 A / CONTENT</span><h4>做一条可反复发布的视频</h4><p>适合讲解、课程或短视频。可以从已经跑通的 015 视频路线继续，而不是为了成片先迁移到 LiveTalking。</p></div><ol class="workflow-steps"><li><b>01 · 文案或口述</b><p>现成文案即可；Voicebox 听写是可选的输入能力。</p></li><li><b>02 · 录音或配音</b><p>015 已用 Edge TTS，后来接过 MiniMax TTS；Voicebox 或 RVC 可以作为新的声音来源，接口待接。</p></li><li><b>03 · 人物画面</b><p>优先复用 015 的动作素材 + 本地 MuseTalk → MP4；LiveTalking 录制是另一条待验证方案。</p></li><li><b>04 · 平台发布</b><p>成片完成后再接 social-auto-upload；原工具尚未在自己的账号上试发。</p></li></ol><div class="workflow-result"><b>当前证据</b><span>015 已产出可观看的有声人物视频；Voicebox、RVC 和自动发布尚未串成这条链路。</span></div></div>
+        <div class="workflow-panel" id="workflow-live" hidden><div class="workflow-intro"><span>路线 B / LIVE</span><h4>让数字人在线说话</h4><p>适合网页交互或直播。这里 LiveTalking 的增量是持续音视频流、会话和推流接口。</p></div><ol class="workflow-steps"><li><b>01 · 用户提问</b><p>文字可直接进入；语音提问需 ASR。Voicebox 可作为候选识别服务，但还没接线。</p></li><li><b>02 · 决定说什么、用什么声音</b><p>按需接 LLM 与 TTS；也可把已有音频直接送入 LiveTalking。外部 Voicebox / RVC 接入需验证格式与延迟。</p></li><li><b>03 · 实时口型</b><p>LiveTalking 使用自己的 avatar 和所选口型模型生成画面；015 的权重与人物缓存不能直接假定兼容。</p></li><li><b>04 · 播放或推流</b><p>通过 WebRTC、RTMP 或虚拟摄像头输出；是否在本机稳定实时仍待测。</p></li></ol><div class="workflow-result"><b>最小验证</b><span>先用 LiveTalking 示例 avatar + 现有短音频跑通一条 WebRTC 连接，再测帧率和端到端响应。</span></div></div>
+        <div class="integration-gates"><div><span>接入前要过的四关</span><h3>接口能连，体验还要实测</h3></div><ul><li><b>音频</b><small>文件格式、采样率、分段和声音延迟</small></li><li><b>人物</b><small>模型版本、权重路径、avatar 与缓存格式</small></li><li><b>实时</b><small>推理与最终帧率、首句等待、GPU/CPU 占用</small></li><li><b>分发</b><small>MP4 对接上传工具；直播流按平台另接</small></li></ul></div>
+        <p class="section-foot">对应研究：<a href="../001-rvc-voice-conversion/index.html">001 RVC</a> · <a href="../002-social-auto-upload/index.html">002 发布</a> · <a href="../003-voicebox/index.html">003 Voicebox</a> · <a href="https://yydshly.github.io/0907_codex_project/demos/015-audio2face-3d/" target="_blank" rel="noopener noreferrer">015 数字人物练习</a>。能力边界与验证状态以各研究记录为准。</p>
+      </div>
+    </section>
+    <section class="section boundary-section" id="boundaries" aria-labelledby="boundaries-title">
+      <div class="shell">
+        <div class="section-heading"><div><p class="kicker">07 / 决策边界</p><h2 id="boundaries-title">从能跑起来，<br>到能投入使用</h2></div><p>这几个条件比单看演示视频更能决定后续投入。</p></div>
+        <div class="boundary-grid">
+          <article><span>性能</span><h3>帧率不是全部延迟</h3><p>官方以 inferfps 和 finalfps 都达到 25 作为实时指标。用户从提问到听到回答，还受 ASR、LLM、TTS 和网络影响。</p></article>
+          <article><span>版本</span><h3>开源版有功能边界</h3><p>开源版提供文本、音频驱动和基础推流；官方把开箱即用的实时语音对话、唤醒词打断、实时音频流输入等列在商用版。</p></article>
+          <article><span>授权</span><h3>逐层核对来源</h3><p>LiveTalking 代码为 Apache-2.0，但原版 Wav2Lip 开源模型限制商业使用。MuseTalk 声明其代码与权重可商用，同时要求检查其他依赖；人物与声音素材也要有授权。</p></article>
+        </div>
+        <div class="research-status"><div><span class="status-dot"></span><strong>当前状态：LiveTalking 尚未部署</strong></div><p>这个页面是知识整理，不是运行中的 LiveTalking 演示；此前 015 的本地 MuseTalk 成片见上方对比。后续试跑应先用示例 Wav2Lip/avatar 验证，再按目标场景选择模型与服务。</p></div>
+      </div>
+    </section>
+
+    <section class="section source-section" id="sources" aria-labelledby="sources-title">
+      <div class="shell">
+        <div class="section-heading"><div><p class="kicker">08 / 依据与延伸阅读</p><h2 id="sources-title">从原始资料<br>继续查证</h2></div><p>页面结合上游资料和我们此前的 015 实践记录整理；实际安装与商业使用以当时版本为准。</p></div>
+        <div class="source-grid">
+          <a href="https://github.com/lipku/LiveTalking" target="_blank" rel="noopener noreferrer"><b>01</b><span>LiveTalking 主仓库</span><small>能力、安装、性能、声明</small><em>↗</em></a>
+          <a href="https://doc.livetalking.ai/docs/usage/" target="_blank" rel="noopener noreferrer"><b>02</b><span>官方使用说明</span><small>模型、TTS、传输与语音输入</small><em>↗</em></a>
+          <a href="https://github.com/lipku/LiveTalking/blob/main/docs/api.md" target="_blank" rel="noopener noreferrer"><b>03</b><span>API 文档</span><small>会话、文字/音频驱动、录制</small><em>↗</em></a>
+          <a href="https://doc.livetalking.ai/docs/service/" target="_blank" rel="noopener noreferrer"><b>04</b><span>版本对比</span><small>开源版与商用版能力</small><em>↗</em></a>
+          <a href="https://github.com/Rudrabha/Wav2Lip#disclaimer" target="_blank" rel="noopener noreferrer"><b>05</b><span>Wav2Lip 声明</span><small>开源模型使用限制</small><em>↗</em></a>
+          <a href="https://github.com/TMElyralab/MuseTalk#disclaimerlicense" target="_blank" rel="noopener noreferrer"><b>06</b><span>MuseTalk 声明</span><small>模型及依赖许可</small><em>↗</em></a>
+        </div>
+      </div>
+    </section>
+  </main>
+  <footer class="site-footer"><div class="shell"><div><span class="brand-mark">L<span>•</span>T</span><p>独立研究整理 · 非 LiveTalking 官方网站<br>最后核对：2026-09-25</p></div><div><a href="../../index.html">返回项目索引 ↑</a><a href="https://github.com/yydshly/0925_codex_project/blob/main/projects/004-livetalking/README.md" target="_blank" rel="noopener noreferrer">查看完整研究笔记 ↗</a></div></div></footer>
+</body>
+</html>

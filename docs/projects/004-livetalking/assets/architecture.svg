@@ -1,0 +1,150 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="1230" viewBox="0 0 1440 1230" role="img" aria-labelledby="title desc">
+<title id="title">LiveTalking 完整能力架构图</title>
+<desc id="desc">左侧是人物图片或视频、文字、现成音频和可选的语音提问。中间是 LiveTalking 的 API、会话、avatar 预处理、音频处理、口型模型推理、画面合成与音画同步。右侧是 WebRTC、RTMP、虚拟摄像头与 MP4 录制。底部列出运行环境、软件库、模型和素材。</desc>
+<defs>
+  <marker id="arrow" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0 0 L9 4.5 L0 9Z" fill="#328e84"/></marker>
+  <style>text{font-family:"Segoe UI","Microsoft YaHei","Noto Sans CJK SC",sans-serif} .soft{fill:#eaf4f1}</style>
+</defs>
+<rect x="0" y="0" width="1440" height="1230" rx="0" fill="#f5f8f5" stroke="#f5f8f5" stroke-width="0"/>
+<text x="36" y="49" fill="#2a8f87" font-size="13" font-weight="800" text-anchor="start" letter-spacing="2">LIVE TALKING / 一图看全链路</text>
+<text x="36" y="90" fill="#102b3c" font-size="32" font-weight="850" text-anchor="start">人物素材 + 声音输入 → 口型画面 → 实时音视频</text>
+<text x="36" y="122" fill="#56707a" font-size="16" font-weight="400" text-anchor="start">它是一套实时数字人服务：选择模型、管理会话、同步声音与画面，并输出给浏览器、直播或录制。</text>
+<rect x="1080" y="34" width="323" height="76" rx="14" fill="#e8f3ef" stroke="#cce2da" stroke-width="1.5"/>
+<text x="1097" y="61" fill="#1f635d" font-size="14" font-weight="800" text-anchor="start">图例</text>
+<text x="1097" y="84" fill="#5c7579" font-size="13" font-weight="400" text-anchor="start">实线：主处理链    虚线：按需接入</text>
+<text x="36" y="166" fill="#347e76" font-size="15" font-weight="800" text-anchor="start" letter-spacing="1">01  输入 / PREPARE</text>
+<text x="373" y="166" fill="#347e76" font-size="15" font-weight="800" text-anchor="start" letter-spacing="1">02  LIVETALKING 服务与模型 / PROCESS</text>
+<text x="1122" y="166" fill="#347e76" font-size="15" font-weight="800" text-anchor="start" letter-spacing="1">03  输出 / DELIVER</text>
+<path d="M322 271 H350" fill="none" stroke="#6aaba0" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<path d="M322 410 H350" fill="none" stroke="#6aaba0" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<path d="M322 540 H350" fill="none" stroke="#6aaba0" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<path d="M322 681 H350" fill="none" stroke="#6aaba0" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="6 5" marker-end="url(#arrow)"/>
+<path d="M720 326 V346" fill="none" stroke="#4b9d8c" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<path d="M540 542 V566" fill="none" stroke="#4b9d8c" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<path d="M895 542 V566" fill="none" stroke="#4b9d8c" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<path d="M722 678 V700" fill="none" stroke="#4b9d8c" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<path d="M1070 757 H1107 V306" fill="none" stroke="#328e84" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M1107 306 H1123" fill="none" stroke="#328e84" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<path d="M1107 426 H1123" fill="none" stroke="#328e84" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<path d="M1107 546 H1123" fill="none" stroke="#328e84" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<path d="M1107 666 H1123" fill="none" stroke="#328e84" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="32" y="196" width="290" height="150" rx="16" fill="#fffaf5" stroke="#cfdfdc" stroke-width="1.5"/>
+<rect x="32" y="196" width="6" height="150" rx="3" fill="#bb7750" stroke="#bb7750" stroke-width="0"/>
+<text x="52" y="221" fill="#bb7750" font-size="11" font-weight="800" text-anchor="start" letter-spacing="1">人物入口 / 先制作</text>
+<text x="52" y="250" fill="#143143" font-size="20" font-weight="800" text-anchor="start">图片或闭嘴视频</text>
+<text x="52" y="276" fill="#526d75" font-size="14" font-weight="400" text-anchor="start">按所选模型制作 avatar。</text>
+<text x="52" y="298" fill="#526d75" font-size="14" font-weight="400" text-anchor="start">MuseTalk 可用图片或视频；</text>
+<text x="52" y="320" fill="#526d75" font-size="14" font-weight="400" text-anchor="start">Wav2Lip 自定义人物用视频。</text>
+<rect x="32" y="352" width="290" height="116" rx="16" fill="#fffaf5" stroke="#cfdfdc" stroke-width="1.5"/>
+<rect x="32" y="352" width="6" height="116" rx="3" fill="#c58a43" stroke="#c58a43" stroke-width="0"/>
+<text x="52" y="377" fill="#c58a43" font-size="11" font-weight="800" text-anchor="start" letter-spacing="1">播报入口 / API</text>
+<text x="52" y="406" fill="#143143" font-size="20" font-weight="800" text-anchor="start">文字</text>
+<text x="52" y="432" fill="#526d75" font-size="14" font-weight="400" text-anchor="start">/human：echo 直接播报；</text>
+<text x="52" y="454" fill="#526d75" font-size="14" font-weight="400" text-anchor="start">chat 可先交给 LLM 生成回答。</text>
+<rect x="32" y="482" width="290" height="116" rx="16" fill="#fffaf5" stroke="#cfdfdc" stroke-width="1.5"/>
+<rect x="32" y="482" width="6" height="116" rx="3" fill="#c58a43" stroke="#c58a43" stroke-width="0"/>
+<text x="52" y="507" fill="#c58a43" font-size="11" font-weight="800" text-anchor="start" letter-spacing="1">播报入口 / API</text>
+<text x="52" y="536" fill="#143143" font-size="20" font-weight="800" text-anchor="start">已有音频文件</text>
+<text x="52" y="562" fill="#526d75" font-size="14" font-weight="400" text-anchor="start">/humanaudio 上传文件；</text>
+<text x="52" y="584" fill="#526d75" font-size="14" font-weight="400" text-anchor="start">可绕过 LLM 与 TTS。</text>
+<rect x="32" y="612" width="290" height="138" rx="16" fill="#fffaf5" stroke="#cfdfdc" stroke-width="1.5"/>
+<rect x="32" y="612" width="6" height="138" rx="3" fill="#ab936e" stroke="#ab936e" stroke-width="0"/>
+<text x="52" y="637" fill="#ab936e" font-size="11" font-weight="800" text-anchor="start" letter-spacing="1">可选的上游输入</text>
+<text x="52" y="666" fill="#143143" font-size="20" font-weight="800" text-anchor="start">用户语音提问</text>
+<text x="52" y="692" fill="#526d75" font-size="14" font-weight="400" text-anchor="start">先由浏览器或外部 ASR 识别，</text>
+<text x="52" y="714" fill="#526d75" font-size="14" font-weight="400" text-anchor="start">再进入文字 → 回复 → 语音路径。</text>
+<text x="52" y="736" fill="#526d75" font-size="14" font-weight="400" text-anchor="start">完整语音对话需另行集成与验证。</text>
+<rect x="351" y="182" width="741" height="645" rx="23" fill="#eaf4f0" stroke="#8cc9bb" stroke-width="2"/>
+<text x="373" y="210" fill="#32847b" font-size="12" font-weight="800" text-anchor="start" letter-spacing="1.8">LIVETALKING RUNTIME</text>
+<rect x="373" y="223" width="697" height="103" rx="16" fill="#f9fffc" stroke="#cfdfdc" stroke-width="1.5"/>
+<rect x="373" y="223" width="6" height="103" rx="3" fill="#2a8f87" stroke="#2a8f87" stroke-width="0"/>
+<text x="393" y="248" fill="#2a8f87" font-size="11" font-weight="800" text-anchor="start" letter-spacing="1">服务编排</text>
+<text x="393" y="277" fill="#143143" font-size="20" font-weight="800" text-anchor="start">HTTP API + 会话控制</text>
+<text x="393" y="303" fill="#526d75" font-size="14" font-weight="400" text-anchor="start">/human · /humanaudio · avatar 管理；每路连接有 sessionid</text>
+<text x="393" y="323" fill="#526d75" font-size="14" font-weight="400" text-anchor="start">多会话、打断播报、待机动作、录制由服务协调</text>
+<rect x="373" y="346" width="334" height="196" rx="16" fill="#fff" stroke="#cfdfdc" stroke-width="1.5"/>
+<rect x="373" y="346" width="6" height="196" rx="3" fill="#bc7957" stroke="#bc7957" stroke-width="0"/>
+<text x="393" y="371" fill="#bc7957" font-size="11" font-weight="800" text-anchor="start" letter-spacing="1">人物画面 / 提前准备</text>
+<text x="393" y="400" fill="#143143" font-size="20" font-weight="800" text-anchor="start">avatar 预处理</text>
+<text x="393" y="426" fill="#526d75" font-size="14" font-weight="400" text-anchor="start">图片或视频按模型做人脸检测、裁切、</text>
+<text x="393" y="449" fill="#526d75" font-size="14" font-weight="400" text-anchor="start">抽帧与位置/掩码等缓存。</text>
+<text x="393" y="472" fill="#526d75" font-size="14" font-weight="400" text-anchor="start">输出 avatar 数据，运行时反复读取。</text>
+<text x="393" y="495" fill="#526d75" font-size="14" font-weight="400" text-anchor="start">人物素材决定外观和原始动作。</text>
+<rect x="723" y="346" width="347" height="196" rx="16" fill="#fff" stroke="#cfdfdc" stroke-width="1.5"/>
+<rect x="723" y="346" width="6" height="196" rx="3" fill="#c58a43" stroke="#c58a43" stroke-width="0"/>
+<text x="743" y="371" fill="#c58a43" font-size="11" font-weight="800" text-anchor="start" letter-spacing="1">声音 / 每次播报</text>
+<text x="743" y="400" fill="#143143" font-size="20" font-weight="800" text-anchor="start">音频处理与特征</text>
+<text x="743" y="426" fill="#526d75" font-size="13" font-weight="400" text-anchor="start">文字 echo → TTS；chat → LLM → TTS</text>
+<text x="743" y="447" fill="#526d75" font-size="13" font-weight="400" text-anchor="start">已有音频 → 直接进入口型链路</text>
+<text x="743" y="468" fill="#526d75" font-size="13" font-weight="400" text-anchor="start">语音提问 → 外接 ASR → 文字路径</text>
+<text x="743" y="489" fill="#526d75" font-size="13" font-weight="400" text-anchor="start">可接 Voicebox（ASR/TTS）、RVC 换声</text>
+<text x="743" y="510" fill="#526d75" font-size="13" font-weight="400" text-anchor="start">提取 Mel / Whisper 等声音特征</text>
+<rect x="373" y="566" width="697" height="112" rx="16" fill="#fff" stroke="#cfdfdc" stroke-width="1.5"/>
+<rect x="373" y="566" width="6" height="112" rx="3" fill="#3980ad" stroke="#3980ad" stroke-width="0"/>
+<text x="393" y="591" fill="#3980ad" font-size="11" font-weight="800" text-anchor="start" letter-spacing="1">视觉 / 选择一种路径</text>
+<text x="393" y="620" fill="#143143" font-size="20" font-weight="800" text-anchor="start">口型或数字人模型推理</text>
+<text x="393" y="646" fill="#526d75" font-size="14" font-weight="400" text-anchor="start">音频特征 + avatar + 对应权重 → 说话的人脸/嘴部帧</text>
+<text x="393" y="667" fill="#526d75" font-size="14" font-weight="400" text-anchor="start">Wav2Lip、MuseTalk、Ultralight；ER-NeRF 在独立分支</text>
+<rect x="373" y="700" width="697" height="110" rx="16" fill="#fff" stroke="#cfdfdc" stroke-width="1.5"/>
+<rect x="373" y="700" width="6" height="110" rx="3" fill="#3980ad" stroke="#3980ad" stroke-width="0"/>
+<text x="393" y="725" fill="#3980ad" font-size="11" font-weight="800" text-anchor="start" letter-spacing="1">画面与传输</text>
+<text x="393" y="754" fill="#143143" font-size="20" font-weight="800" text-anchor="start">合成、音画同步、编码</text>
+<text x="393" y="780" fill="#526d75" font-size="14" font-weight="400" text-anchor="start">把生成区域贴回人物画面；可拼接全身视频、待机动作</text>
+<text x="393" y="801" fill="#526d75" font-size="14" font-weight="400" text-anchor="start">同步音频与视频；按会话持续推流或录制</text>
+<rect x="1123" y="251" width="285" height="110" rx="16" fill="#fff" stroke="#cfdfdc" stroke-width="1.5"/>
+<rect x="1123" y="251" width="6" height="110" rx="3" fill="#347fad" stroke="#347fad" stroke-width="0"/>
+<text x="1143" y="276" fill="#347fad" font-size="11" font-weight="800" text-anchor="start" letter-spacing="1">浏览器 / 低延迟</text>
+<text x="1143" y="305" fill="#143143" font-size="20" font-weight="800" text-anchor="start">WebRTC / RTCPush</text>
+<text x="1143" y="331" fill="#526d75" font-size="14" font-weight="400" text-anchor="start">实时观看与交互；</text>
+<text x="1143" y="353" fill="#526d75" font-size="14" font-weight="400" text-anchor="start">RTCPush 可接 SRS。</text>
+<rect x="1123" y="371" width="285" height="110" rx="16" fill="#fff" stroke="#cfdfdc" stroke-width="1.5"/>
+<rect x="1123" y="371" width="6" height="110" rx="3" fill="#347fad" stroke="#347fad" stroke-width="0"/>
+<text x="1143" y="396" fill="#347fad" font-size="11" font-weight="800" text-anchor="start" letter-spacing="1">直播平台</text>
+<text x="1143" y="425" fill="#143143" font-size="20" font-weight="800" text-anchor="start">RTMP 推流</text>
+<text x="1143" y="451" fill="#526d75" font-size="14" font-weight="400" text-anchor="start">输出音视频直播流；</text>
+<text x="1143" y="473" fill="#526d75" font-size="14" font-weight="400" text-anchor="start">需推流目标与相应依赖。</text>
+<rect x="1123" y="491" width="285" height="110" rx="16" fill="#fff" stroke="#cfdfdc" stroke-width="1.5"/>
+<rect x="1123" y="491" width="6" height="110" rx="3" fill="#347fad" stroke="#347fad" stroke-width="0"/>
+<text x="1143" y="516" fill="#347fad" font-size="11" font-weight="800" text-anchor="start" letter-spacing="1">本机其他应用</text>
+<text x="1143" y="545" fill="#143143" font-size="20" font-weight="800" text-anchor="start">虚拟摄像头</text>
+<text x="1143" y="571" fill="#526d75" font-size="14" font-weight="400" text-anchor="start">表现为系统摄像头；</text>
+<text x="1143" y="593" fill="#526d75" font-size="14" font-weight="400" text-anchor="start">需驱动与相应组件。</text>
+<rect x="1123" y="611" width="285" height="110" rx="16" fill="#fff" stroke="#cfdfdc" stroke-width="1.5"/>
+<rect x="1123" y="611" width="6" height="110" rx="3" fill="#347fad" stroke="#347fad" stroke-width="0"/>
+<text x="1143" y="636" fill="#347fad" font-size="11" font-weight="800" text-anchor="start" letter-spacing="1">完成的视频文件</text>
+<text x="1143" y="665" fill="#143143" font-size="20" font-weight="800" text-anchor="start">录制 MP4</text>
+<text x="1143" y="691" fill="#526d75" font-size="14" font-weight="400" text-anchor="start">/record 开始、结束录制；</text>
+<text x="1143" y="713" fill="#526d75" font-size="14" font-weight="400" text-anchor="start">可按 sessionid 下载。</text>
+<rect x="32" y="855" width="1376" height="327" rx="22" fill="#e7f0ee" stroke="#d1e2dc" stroke-width="1.5"/>
+<text x="52" y="893" fill="#347e76" font-size="15" font-weight="800" text-anchor="start" letter-spacing="1">04  运行底座 / ENVIRONMENT + LIBRARIES + ASSETS</text>
+<text x="52" y="920" fill="#5d7479" font-size="14" font-weight="400" text-anchor="start">按选用功能配置；下列为当前上游 README 与 requirements.txt 中的代表性组合，并非每条路径都调用全部库。</text>
+<rect x="48" y="931" width="318" height="219" rx="15" fill="#ffffff" stroke="#d7e7e3" stroke-width="1.5"/>
+<text x="66" y="963" fill="#15394b" font-size="18" font-weight="800" text-anchor="start">系统与算力</text>
+<text x="66" y="991" fill="#55707a" font-size="13" font-weight="400" text-anchor="start">验证组合：Ubuntu 22.04</text>
+<text x="66" y="1018" fill="#55707a" font-size="13" font-weight="400" text-anchor="start">Python 3.12 / PyTorch 2.9.1</text>
+<text x="66" y="1045" fill="#55707a" font-size="13" font-weight="400" text-anchor="start">CUDA 12.8 对应构建；GPU 推理</text>
+<text x="66" y="1072" fill="#55707a" font-size="13" font-weight="400" text-anchor="start">建议：Wav2Lip ≥ RTX 3060</text>
+<text x="66" y="1099" fill="#55707a" font-size="13" font-weight="400" text-anchor="start">MuseTalk ≥ RTX 3080 Ti；CPU 编码</text>
+<rect x="388" y="931" width="318" height="219" rx="15" fill="#ffffff" stroke="#d7e7e3" stroke-width="1.5"/>
+<text x="406" y="963" fill="#15394b" font-size="18" font-weight="800" text-anchor="start">服务与音频库</text>
+<text x="406" y="991" fill="#55707a" font-size="13" font-weight="400" text-anchor="start">Flask、aiohttp_cors：服务/API</text>
+<text x="406" y="1018" fill="#55707a" font-size="13" font-weight="400" text-anchor="start">edge_tts：默认在线语音合成</text>
+<text x="406" y="1045" fill="#55707a" font-size="13" font-weight="400" text-anchor="start">librosa、soundfile、resampy</text>
+<text x="406" y="1072" fill="#55707a" font-size="13" font-weight="400" text-anchor="start">numpy、scipy：音频/数值处理</text>
+<text x="406" y="1099" fill="#55707a" font-size="13" font-weight="400" text-anchor="start">openai、dashscope：可选 LLM 接入</text>
+<rect x="728" y="931" width="318" height="219" rx="15" fill="#ffffff" stroke="#d7e7e3" stroke-width="1.5"/>
+<text x="746" y="963" fill="#15394b" font-size="18" font-weight="800" text-anchor="start">视觉与传输库</text>
+<text x="746" y="991" fill="#55707a" font-size="13" font-weight="400" text-anchor="start">opencv-python-headless：图像处理</text>
+<text x="746" y="1018" fill="#55707a" font-size="13" font-weight="400" text-anchor="start">transformers、diffusers、accelerate</text>
+<text x="746" y="1045" fill="#55707a" font-size="13" font-weight="400" text-anchor="start">einops：模型相关工具</text>
+<text x="746" y="1072" fill="#55707a" font-size="13" font-weight="400" text-anchor="start">aiortc、websockets：实时连接</text>
+<text x="746" y="1099" fill="#55707a" font-size="13" font-weight="400" text-anchor="start">FFmpeg：avatar/视频/RTMP 等路径</text>
+<rect x="1068" y="931" width="318" height="219" rx="15" fill="#ffffff" stroke="#d7e7e3" stroke-width="1.5"/>
+<text x="1086" y="963" fill="#15394b" font-size="18" font-weight="800" text-anchor="start">模型、素材与网络</text>
+<text x="1086" y="991" fill="#55707a" font-size="13" font-weight="400" text-anchor="start">服务器放所选模型权重和 avatar</text>
+<text x="1086" y="1018" fill="#55707a" font-size="13" font-weight="400" text-anchor="start">Wav2Lip/MuseTalk 示例无需自训</text>
+<text x="1086" y="1045" fill="#55707a" font-size="13" font-weight="400" text-anchor="start">Ultralight/ER-NeRF 自定人需训练</text>
+<text x="1086" y="1072" fill="#55707a" font-size="13" font-weight="400" text-anchor="start">WebRTC 需端口、网络/ICE 配置</text>
+<text x="1086" y="1099" fill="#55707a" font-size="13" font-weight="400" text-anchor="start">TTS/ASR/LLM 可本地或外部接入</text>
+<text x="36" y="1212" fill="#61777b" font-size="13" font-weight="400" text-anchor="start">我们的接法：Voicebox/RVC 可供声音，015 的 MuseTalk 成片是另一方案，录制 MP4 可接 002 发布；这些跨项目接口尚未验证。</text>
+</svg>
