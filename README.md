@@ -14,6 +14,7 @@
 | 002 | [social-auto-upload](https://github.com/dreammis/social-auto-upload) | **能力：** 11 个平台列有视频上传能力，抖音、小红书、快手还支持图文。**原理：** 用户先登录并保存状态；9 个平台由 Patchright / Playwright 根据网页元素操作创作者后台，B站委托 biliup，TikTok 为旧示例。**对我的意义：** 内容做好后可减少个人 IP 多平台重复上传与排期。 | [完整研究](projects/002-social-auto-upload/README.md) · [在线网页](https://yydshly.github.io/0925_codex_project/projects/002-social-auto-upload/) · [一图总览](https://yydshly.github.io/0925_codex_project/projects/002-social-auto-upload/overview.svg) |
 | 003 | [Voicebox](https://github.com/jamiepine/voicebox) | **能力：** 本地 Whisper 听写、7 类 TTS 引擎的克隆或预置音色配音、本地 Qwen3 文本整理，并通过 REST/MCP 接入应用。**原理：** 首次下载模型后，由本地 FastAPI 调度 MLX/PyTorch 推理；参考录音只为克隆提供音色条件。**对我的意义：** 可放在个人 IP 的口述与配音环节，衔接换声与发布工具。 | [完整研究](projects/003-voicebox/README.md) · [在线网页](https://yydshly.github.io/0925_codex_project/projects/003-voicebox/) · [完整引导图](https://yydshly.github.io/0925_codex_project/projects/003-voicebox/overview.svg) |
 | 004 | [LiveTalking](https://github.com/lipku/LiveTalking) | **能力：** 图片或视频制作人物 avatar，文字或音频驱动口型，输出实时流或 MP4。**原理：** 音频特征驱动 Wav2Lip、MuseTalk 等模型生成面部画面，再贴回人物素材并同步声音。**场景：** 讲解、客服、直播和短视频。**对我的意义：** 在此前 MuseTalk 成片练习上，按需验证实时会话与推流。 | [在线网页](https://yydshly.github.io/0925_codex_project/projects/004-livetalking/) · [完整引导图](https://yydshly.github.io/0925_codex_project/projects/004-livetalking/assets/architecture.svg) · [完整研究](projects/004-livetalking/README.md) |
+| 005 | [WhisperLiveKit](https://github.com/QuentinFuxa/WhisperLiveKit) | **能力：** 音频实时转写，输出临时与已确认文字；可选字幕、翻译、说话人区分。**原理：** VAD 检测语音，Whisper 等模型识别，流式策略确认稳定文字并推送。**场景：** 直播/会议字幕、访谈、语音助手输入。**底层依赖：** Python Web 服务、音频组件、识别模型及权重；LiveKit 非必需。**对我的意义：** 当前录制成片先复用 003 Voicebox，试效果即可；有实时互动需求再研究延迟与集成。 | [完整研究](projects/005-whisperlivekit/README.md) · [在线网页](https://yydshly.github.io/0925_codex_project/projects/005-whisperlivekit/) · [我们生成的引导图](https://yydshly.github.io/0925_codex_project/projects/005-whisperlivekit/assets/overview.svg) |
 
 ## 001 · Retrieval-based-Voice-Conversion-WebUI 图文导读
 
@@ -103,3 +104,9 @@ HuBERT 等特征模型从输入录音中提取与发音相关的线索；使用�
 ## 添加项目
 
 从 [子项目模板](projects/_template/README.md) 开始，按 [收录说明](ADDING_PROJECTS.md) 更新索引。静态网页演示统一放在 docs/projects/ 下，便于通过一个 GitHub Pages 站点按子路径访问。
+
+## 005 · WhisperLiveKit 实时语音输入导读
+
+源库：[QuentinFuxa/WhisperLiveKit](https://github.com/QuentinFuxa/WhisperLiveKit)。它把持续音频转换成可逐步显示和确认的文字，支持文件字幕、可选说话人区分与翻译。底层由 Python 服务接收音频，经 VAD、Whisper 等识别后端和流式确认策略输出结果；模型权重、音频组件及可选功能有相应依赖，LiveKit 平台并非必需。适用于直播/会议字幕、访谈记录和实时语音助手。当前若以录音、配音和成片为主，先试效果即可；有实时互动需求时，可接在用户讲话与 LLM / Voicebox / LiveTalking 之间。跨项目组合仍需实测。
+
+[打开在线能力网页](https://yydshly.github.io/0925_codex_project/projects/005-whisperlivekit/) · [打开我们生成的一图总览](https://yydshly.github.io/0925_codex_project/projects/005-whisperlivekit/assets/overview.svg) · [阅读完整研究笔记](projects/005-whisperlivekit/README.md)

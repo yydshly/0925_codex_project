@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light" />
+    <meta name="description" content="WhisperLiveKit 把持续音频转成实时文字：梳理输入输出、Whisper 与 LiveKit 的关系、VAD 与流式确认原理、运行依赖、使用场景及对现有项目的价值。" />
+    <title>WhisperLiveKit 能做什么？｜项目研究手册</title>
+    <link rel="stylesheet" href="./styles.css" />
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='13' fill='%23123e30'/%3E%3Cpath d='M13 32h6l5-12 7 24 7-30 6 18h7' fill='none' stroke='%23f3f8f0' stroke-width='5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E" />
+    <script src="./app.js" defer></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">跳到正文</a>
+    <header class="site-header">
+      <a class="brand" href="#top" aria-label="回到页面顶部">
+        <span class="brand-mark" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span></span>
+        <span>VOICE<span class="brand-separator">/</span>STACK</span>
+      </a>
+      <div class="header-right">
+        <span class="header-label">开源项目研究手册</span>
+        <a class="header-link" href="https://github.com/QuentinFuxa/WhisperLiveKit" target="_blank" rel="noopener noreferrer">查看原项目 <span aria-hidden="true">↗</span></a>
+      </div>
+    </header>
+
+    <div class="page-shell" id="top">
+      <aside class="sidebar" aria-label="页面目录">
+        <p class="sidebar-eyebrow">阅读目录</p>
+        <nav class="section-nav" aria-label="章节">
+          <a href="#overview" class="is-active">01 <span>一句话理解</span></a>
+          <a href="#relationship">02 <span>一图总览与关系</span></a>
+          <a href="#capabilities">03 <span>能力地图</span></a>
+          <a href="#principle">04 <span>技术原理与依赖</span></a>
+          <a href="#scenarios">05 <span>使用场景</span></a>
+          <a href="#extensions">06 <span>扩展方向</span></a>
+          <a href="#fit">07 <span>与你的项目搭配</span></a>
+          <a href="#evaluation">08 <span>怎么判断值不值得用</span></a>
+          <a href="#sources">09 <span>资料来源</span></a>
+        </nav>
+        <div class="sidebar-note">
+          <span class="tiny-square" aria-hidden="true"></span>
+          <p>这是一份选型说明，重点回答：它解决哪一段问题，以及如何接到你的产品里。</p>
+        </div>
+      </aside>
+
+      <main id="main">
+        <section class="hero content-section" id="overview" aria-labelledby="hero-title">
+          <div class="hero-grid" aria-hidden="true"></div>
+          <div class="hero-content">
+            <p class="eyebrow"><span class="eyebrow-line"></span> WHISPERLIVEKIT / EXPLAINED</p>
+            <h1 id="hero-title">让声音<br /><em>变成</em>实时文字。</h1>
+            <p class="hero-lead">WhisperLiveKit 是一个可自行部署的<strong>实时语音转文字服务</strong>。它持续接收音频，调用 Whisper 等识别模型，一边听一边输出可更新的文字；还可加入说话人区分与翻译。</p>
+            <div class="hero-actions">
+              <a class="button button-primary" href="#overview-map">查看一张全图 <span aria-hidden="true">↘</span></a>
+              <a class="text-link" href="#fit">直接看如何搭配项目 <span aria-hidden="true">→</span></a>
+            </div>
+          </div>
+          <div class="hero-visual" aria-label="音频逐步转换成文字的示意">
+            <div class="signal-card">
+              <div class="signal-topline"><span class="status-dot"></span> LIVE AUDIO <span class="signal-time">00:08</span></div>
+              <div class="waveform" aria-hidden="true">
+                <span style="--h:22%"></span><span style="--h:46%"></span><span style="--h:31%"></span><span style="--h:73%"></span><span style="--h:56%"></span><span style="--h:92%"></span><span style="--h:64%"></span><span style="--h:34%"></span><span style="--h:80%"></span><span style="--h:53%"></span><span style="--h:96%"></span><span style="--h:44%"></span><span style="--h:74%"></span><span style="--h:39%"></span><span style="--h:61%"></span><span style="--h:27%"></span><span style="--h:52%"></span><span style="--h:33%"></span><span style="--h:69%"></span><span style="--h:24%"></span><span style="--h:46%"></span><span style="--h:28%"></span>
+              </div>
+              <div class="transcript-lines">
+                <div><span class="speaker-dot"></span><span>我们来讨论下一步计划。</span><span class="line-tag">已确认</span></div>
+                <div class="provisional"><span class="speaker-dot"></span><span>首先需要确定……</span><span class="line-tag">临时</span></div>
+              </div>
+              <div class="signal-footer"><span>声音持续进入</span><span aria-hidden="true">→</span><span>文字持续更新</span></div>
+            </div>
+          </div>
+          <div class="hero-bottom"><span>核心定位</span><strong>音频输入层 → 实时文字输出层</strong><span class="source-inline"><a href="#source-1">依据 [1]</a></span></div>
+        </section>
+
+        <section class="content-section section-block" id="relationship" aria-labelledby="relationship-title">
+          <div class="section-head"><p class="section-index">02 / OVERVIEW</p><h2 id="relationship-title">一张图看全貌</h2><p>先读摘要，再看我们生成的完整引导图；后文逐项展开。</p></div>
+          <dl class="summary-grid" aria-label="WhisperLiveKit 五项摘要">
+            <div><dt>能力</dt><dd>持续接收音频，逐步输出临时与已确认文字；文件转写、字幕、翻译和说话人区分按需使用。</dd></div>
+            <div><dt>原理</dt><dd>语音检测辅助定位说话片段，识别模型生成文字，AlignAtt 等流式策略决定何时确认，再经接口推送。</dd></div>
+            <div><dt>场景</dt><dd>直播或会议字幕、访谈记录、跨语言字幕、语音助手输入，也可处理已有录音。</dd></div>
+            <div><dt>对你的意义</dt><dd>当前录制成片先用 003 Voicebox 并试转写效果；出现实时互动需求时再研究延迟、确认策略与接入。</dd></div>
+            <div class="summary-dependency"><dt>底层依赖</dt><dd>Python Web 服务、音频处理组件、VAD、识别后端及模型权重；可选功能另装依赖。LiveKit 平台不是运行前提。</dd></div>
+          </dl>
+          <figure class="overview-figure" id="overview-map">
+            <a class="overview-image-link" href="./assets/overview.svg" target="_blank" rel="noopener noreferrer" aria-label="打开可缩放的 WhisperLiveKit 完整概览图">
+              <img src="./assets/overview.svg" width="1600" height="2780" loading="lazy" alt="WhisperLiveKit 完整概览图：说明 Whisper、WhisperLiveKit 与 LiveKit 的关系，音频输入、识别与稳定文字确认、输出、使用场景，以及对现有项目的价值和边界。" />
+            </a>
+            <figcaption>点击图片可放大阅读。<a href="./assets/overview.svg" target="_blank" rel="noopener noreferrer">打开 SVG 原图 ↗</a><a href="./assets/overview.png" target="_blank" rel="noopener noreferrer">打开 PNG 图片 ↗</a></figcaption>
+          </figure>
+          <h3 class="relation-subtitle">三个名字，各管一层</h3>
+          <div class="relation-grid">
+            <article class="relation-card"><div class="relation-no">01 <span class="relation-icon">◉</span></div><h3>Whisper</h3><p class="relation-role">识别模型</p><p>给它一段语音，它判断说了什么，输出文字。它是识别能力的来源。</p><div class="relation-analogy">相当于 <strong>“听写的大脑”</strong></div></article>
+            <article class="relation-card relation-featured"><div class="relation-no">02 <span class="relation-icon">◌</span></div><h3>WhisperLiveKit</h3><p class="relation-role">实时处理服务</p><p>接收不断到来的音频，组织识别、确认文字，并通过接口实时发给你的网页或应用。</p><div class="relation-analogy">相当于 <strong>“实时听写机”</strong></div></article>
+            <article class="relation-card"><div class="relation-no">03 <span class="relation-icon">⌁</span></div><h3>LiveKit</h3><p class="relation-role">实时音视频平台</p><p>负责把人和设备的声音、画面实时传送到会议或应用中的其他参与者。</p><div class="relation-analogy">相当于 <strong>“通话线路”</strong></div></article>
+          </div>
+          <div class="relation-callout"><span class="callout-symbol">↳</span><p><strong>关系：</strong>WhisperLiveKit 默认可使用 Whisper 系列模型，但也支持其他识别后端。它本身有音频接入接口，不要求先使用 LiveKit。若你的项目已有 LiveKit 会议，可以把会议音频接给 WhisperLiveKit 生成字幕，中间需要自行做音频桥接。</p><a href="#source-9">依据 [3][4][8][9]</a></div>
+        </section>
+
+        <section class="content-section section-block" id="capabilities" aria-labelledby="capabilities-title">
+          <div class="section-head"><p class="section-index">03 / CAPABILITIES</p><h2 id="capabilities-title">它交付的是一条语音处理链</h2><p>从音频进入，到文字可被显示或交给其他系统。</p></div>
+          <div class="capability-grid">
+            <article class="capability-card"><span class="capability-number">01 / 核心</span><h3>实时转写</h3><p>音频边到，文字边出；区分尚可变化的临时结果与已确认结果。</p><span class="capability-meta">网页麦克风 · WebSocket</span></article>
+            <article class="capability-card"><span class="capability-number">02 / 核心</span><h3>音频文件转写</h3><p>处理已有音频，导出纯文本、JSON 或 SRT / VTT 字幕。</p><span class="capability-meta">录音 · 播客 · 视频素材</span></article>
+            <article class="capability-card"><span class="capability-number">03 / 可选</span><h3>说话人区分</h3><p>给文字片段标记说话人编号，帮助整理多人对话。</p><span class="capability-meta">谁在什么时候说话</span></article>
+            <article class="capability-card"><span class="capability-number">04 / 可选</span><h3>多语种翻译</h3><p>识别原文后输出目标语言文字，用于跨语言字幕和理解。</p><span class="capability-meta">转写 → 翻译</span></article>
+            <article class="capability-card"><span class="capability-number">05 / 接入</span><h3>多种调用方式</h3><p>提供原生 WebSocket、Python 接口和部分兼容的常见转写接口。</p><span class="capability-meta">接到已有网页或后端</span></article>
+            <article class="capability-card"><span class="capability-number">06 / 选型</span><h3>可切换识别后端</h3><p>按语言、设备和时延要求选择 Whisper 系列或其他已支持模型。</p><span class="capability-meta">能力随模型而变化</span></article>
+          </div>
+          <p class="section-footnote">“说话人区分”输出的是编号，并不自动知道真实姓名；接口兼容是功能子集，不能假定所有第三方参数都可用。 <a href="#source-3">依据 [3]</a> <a href="#source-5">[5]</a></p>
+        </section>
+
+        <section class="content-section section-block principle-section" id="principle" aria-labelledby="principle-title">
+          <div class="section-head"><p class="section-index">04 / HOW IT WORKS</p><h2 id="principle-title">为什么能边说边出字？</h2><p>普通识别模型更擅长处理相对完整的音频；实时服务必须决定什么时候可以放心显示和确认文字。</p></div>
+          <div class="pipeline" aria-label="处理流程">
+            <button type="button" class="pipeline-step is-selected" data-step="capture" aria-pressed="true"><span>01</span><strong>接收音频</strong></button>
+            <button type="button" class="pipeline-step" data-step="vad" aria-pressed="false"><span>02</span><strong>发现语音</strong></button>
+            <button type="button" class="pipeline-step" data-step="asr" aria-pressed="false"><span>03</span><strong>模型识别</strong></button>
+            <button type="button" class="pipeline-step" data-step="commit" aria-pressed="false"><span>04</span><strong>确认文字</strong></button>
+            <button type="button" class="pipeline-step" data-step="output" aria-pressed="false"><span>05</span><strong>推送结果</strong></button>
+          </div>
+          <div class="pipeline-detail" id="pipeline-detail" aria-live="polite"><div><span class="detail-kicker">STEP 01 · INPUT</span><h3>接收持续到来的音频</h3><p>浏览器或应用把音频分批送入服务，再转换为 16 kHz 单声道音频；已有文件也可以直接转写。</p></div><span class="detail-glyph" aria-hidden="true">◂ ))</span></div>
+          <div class="timing-insight">
+            <span class="mini-label">停顿到底起什么作用？</span>
+            <h3>它不必等你停下来，才开始识别。</h3>
+            <p>系统一边接收语音，一边运行识别并更新候选文字。停顿是语音边界和句尾收尾的信号；文字能否正式确认，还要看识别结果是否足够稳定。</p>
+          </div>
+          <div class="decision-grid" aria-label="实时识别的四项判断">
+            <article class="decision-card"><span>01 / 语音检测</span><h3>有没有人在说话？</h3><p>Silero VAD 根据音频判断说话开始与结束。它帮助跳过静音、记录时间位置，但不负责辨认文字。</p></article>
+            <article class="decision-card"><span>02 / 识别时机</span><h3>什么时候交给模型？</h3><p>说话中的音频块进入缓存后，处理器持续调用 ASR；也可以先合并一些音频，减少模型调用。连续讲话时同样会出字。</p></article>
+            <article class="decision-card"><span>03 / 文字确认</span><h3>哪些字已经稳定？</h3><p>默认 AlignAtt 策略暂缓靠近当前音频末尾的词；可选 LocalAgreement 比较前后两次识别的一致前缀。未确认的尾部文字仍可能修订。</p></article>
+            <article class="decision-card"><span>04 / 段落边界</span><h3>什么时候结束这一段？</h3><p>检测到静音会通知识别器处理句尾；默认超过 5 秒的停顿结束后形成稳定段落边界，音频结束时也会提交剩余内容。5 秒不是开始识别的等待时间。</p></article>
+          </div>
+          <div class="speech-example">
+            <span class="mini-label">连续讲话示例</span>
+            <p><strong>“我想预订……明天的车票”</strong>：说到“我想预订”时，界面就可能显示暂定文字；后面的音频进入后，末尾可被修正并逐步确认。中间的短暂停顿帮助发现边界，却不要求说完整句才开始转写。</p>
+          </div>
+          <div class="principle-explainer">
+            <div><span class="mini-label">关键问题</span><h3>刚听到的字，可能还会变。</h3><p>例如先听到“我们今天订……”，下一秒才知道后面是“机票”还是“会议室”。WhisperLiveKit 会保留临时结果，再按实时策略确认稳定内容。</p></div>
+            <div class="commit-demo"><div><span class="commit-label confirmed">已确认</span><strong>我们今天讨论</strong></div><div><span class="commit-label tentative">临时结果</span><strong>下一步的……</strong></div><p>界面可以显示两者；保存记录或触发业务动作时，优先使用已确认文字。</p></div>
+          </div>
+          <div class="dependency-heading"><span class="mini-label">运行这一套服务时</span><h3>底层需要什么？</h3><p>依赖随识别后端和可选功能变化，下面区分基础服务与按需扩展。</p></div>
+          <div class="dependency-grid" aria-label="运行依赖">
+            <article><span>01 / 服务</span><h4>Python 与实时接口</h4><p>项目声明 Python ≥3.11、&lt;3.14；FastAPI、Uvicorn、WebSockets 负责提供网页、API 与实时连接。</p></article>
+            <article><span>02 / 听与识别</span><h4>音频处理、VAD、模型</h4><p>基础依赖含 librosa、soundfile、PyTorch、faster-whisper；Silero VAD 辅助语音检测。实际识别还需要所选后端的模型权重。</p></article>
+            <article><span>03 / 输入与设备</span><h4>格式与算力</h4><p>压缩音频等非 PCM 输入需要 FFmpeg 解码；CPU 或 GPU 需求取决于模型、后端、延迟和并发目标。</p></article>
+            <article><span>04 / 可选功能</span><h4>按需安装附加组件</h4><p>翻译、说话人区分、MLX 或其他识别后端有各自依赖。LiveKit 不在该库的必需依赖中，接会议音频需另做桥接。</p></article>
+          </div>
+          <p class="dependency-note">本网页只是静态研究导读；部署到 GitHub Pages 不会运行识别服务。<a href="#source-9">依赖清单 [9]</a> · <a href="#source-8">后端说明 [8]</a> · <a href="#source-1">运行说明 [1]</a></p>
+          <p class="section-footnote">语音检测、模型调用、文字确认和段落分界是不同的判断.上面的具体流程依据 <a href="#source-10">[10] 处理器源码</a>、<a href="#source-11">[11] VAD 源码</a>、<a href="#source-12">[12] AlignAtt 实现</a>、<a href="#source-13">[13] LocalAgreement 实现</a>；Whisper 的模型结构见 <a href="#source-14">[14]</a>。不同后端可能使用各自的流式策略。</p>
+        </section>
+
+        <section class="content-section section-block" id="scenarios" aria-labelledby="scenarios-title">
+          <div class="section-head"><p class="section-index">05 / USE CASES</p><h2 id="scenarios-title">把它放到什么产品里？</h2><p>选择一个场景，看看它负责哪一段，以及你还需要接上什么。</p></div>
+          <div class="scenario-layout">
+            <div class="scenario-tabs" role="tablist" aria-label="使用场景">
+              <button id="tab-meeting" type="button" role="tab" aria-controls="scenario-panel" aria-selected="true" tabindex="0" data-scenario="meeting"><span>01</span> 会议与访谈字幕</button>
+              <button id="tab-media" type="button" role="tab" aria-controls="scenario-panel" aria-selected="false" tabindex="-1" data-scenario="media"><span>02</span> 内容整理与检索</button>
+              <button id="tab-agent" type="button" role="tab" aria-controls="scenario-panel" aria-selected="false" tabindex="-1" data-scenario="agent"><span>03</span> 语音助手</button>
+              <button id="tab-translation" type="button" role="tab" aria-controls="scenario-panel" aria-selected="false" tabindex="-1" data-scenario="translation"><span>04</span> 跨语言交流</button>
+              <button id="tab-support" type="button" role="tab" aria-controls="scenario-panel" aria-selected="false" tabindex="-1" data-scenario="support"><span>05</span> 客服通话记录</button>
+            </div>
+            <article id="scenario-panel" class="scenario-panel" role="tabpanel" aria-labelledby="tab-meeting" tabindex="0"><span class="panel-overline">SCENARIO 01</span><h3>会议与访谈字幕</h3><p class="panel-lead">让参与者在讲话过程中看到字幕，结束后留下可整理的文字记录。</p><div class="scenario-path"><span>麦克风或会议音频</span><i aria-hidden="true">→</i><span>WhisperLiveKit</span><i aria-hidden="true">→</i><span>实时字幕</span></div><div class="panel-columns"><div><span class="mini-label">它负责</span><p>持续识别、输出临时与已确认文字；可选说话人编号。</p></div><div><span class="mini-label">你的项目负责</span><p>音频来源、字幕界面、会议记录保存与权限。</p></div></div></article>
+          </div>
+          <p class="section-footnote">场景中的应用组合是基于该库接口能力所做的接入建议。 <a href="#source-1">依据 [1]</a> <a href="#source-3">[3]</a></p>
+        </section>
+
+        <section class="content-section section-block" id="extensions" aria-labelledby="extensions-title">
+          <div class="section-head"><p class="section-index">06 / EXTEND</p><h2 id="extensions-title">从“转写”继续往上搭</h2><p>把语音文字当作产品的输入，后续能力由你的业务场景决定。</p></div>
+          <div class="extension-grid">
+            <article><span class="extension-type">准确度</span><h3>专业词汇与模型选择</h3><p>为产品名、人名、行业词提供上下文；比较已支持的识别后端在你自己的音频上的表现。</p><span class="extension-arrow" aria-hidden="true">↗</span></article>
+            <article><span class="extension-type">理解</span><h3>摘要、待办与问答</h3><p>把已确认的文字交给大模型，生成会议摘要、待办事项或可检索的知识记录。</p><span class="extension-arrow" aria-hidden="true">↗</span></article>
+            <article><span class="extension-type">连接</span><h3>接入现有音频系统</h3><p>从网页、桌面端或现有会议系统获取音频，再把字幕或事件送回产品界面。</p><span class="extension-arrow" aria-hidden="true">↗</span></article>
+            <article><span class="extension-type">规模</span><h3>监控与并发能力</h3><p>围绕延迟、错误、资源占用和连接数做容量测试，再决定部署方式。</p><span class="extension-arrow" aria-hidden="true">↗</span></article>
+          </div>
+          <p class="section-footnote">这些是扩展方向；摘要、问答、业务流程和音频桥接需要额外实现。现有接口支持按会话传入术语上下文，但并非所有后端均支持。 <a href="#source-3">依据 [3]</a></p>
+        </section>
+
+        <section class="content-section section-block fit-section" id="fit" aria-labelledby="fit-title">
+          <div class="section-head"><p class="section-index">07 / YOUR PROJECT</p><h2 id="fit-title">对你现在的意义有多大？</h2><p>先判断当前是否需要实时转写，再看它能怎样接到已有项目。</p></div>
+          <div class="priority-callout"><span class="priority-kicker">当前判断 · 个人内容制作阶段</span><h3>先看效果，暂不深挖。</h3><p>如果主要工作是录制口述、制作配音和成片，003 Voicebox 已覆盖一部分听写需求。此时看一次演示、用自己的中文音频试转写效果，就足以判断是否值得保留。只有出现直播字幕、多人会议记录或数字人实时对话需求时，才值得深入研究它的流式确认、延迟和系统接入。</p></div>
+          <div class="ecosystem-block">
+            <div class="ecosystem-heading"><span class="mini-label">当你需要实时交互时</span><h3>它补在实时语音输入这一端</h3><p>这时它能把“用户正在讲话”变成可交给交互系统的文字；下面是一条可探索的组合路径。</p></div>
+            <div class="ecosystem-flow" aria-label="已有项目的可探索组合路径">
+              <a href="../005-whisperlivekit/index.html#principle"><small>005 · 本项目</small><strong>讲话 → 实时文字</strong><span>WhisperLiveKit</span></a>
+              <b aria-hidden="true">→</b>
+              <div class="ecosystem-middle"><small>你的业务层</small><strong>理解与生成回复</strong><span>LLM / 业务逻辑</span></div>
+              <b aria-hidden="true">→</b>
+              <a href="../003-voicebox/index.html"><small>003 · 已研究</small><strong>文字 → 配音</strong><span>Voicebox / TTS</span></a>
+              <b aria-hidden="true">→</b>
+              <a href="../004-livetalking/index.html"><small>004 · 已研究</small><strong>音频 → 数字人画面</strong><span>LiveTalking</span></a>
+            </div>
+            <p class="ecosystem-caption">若制作成片，可继续研究 <a href="../002-social-auto-upload/index.html">002 内容分发</a>；若要改变已有音频的声线，可另看 <a href="../001-rvc-voice-conversion/index.html">001 RVC 换声</a>。这是一条可探索路径，尚未验证跨项目集成。</p>
+            <p class="ecosystem-overlap"><strong>研究价值在哪里：</strong>003 已有本地 Whisper 听写。若只处理录音，005 的新增价值有限；若做实时互动，值得研究的是持续音频、临时与确认结果、延迟及产品接口，而不是再研究一遍 Whisper 模型本身。</p>
+          </div>
+          <div class="fit-selector" role="group" aria-label="选择项目的音频入口">
+            <button type="button" data-fit="web" class="is-selected" aria-pressed="true">已有网页或 App 麦克风</button>
+            <button type="button" data-fit="livekit" aria-pressed="false">已有 LiveKit 会议</button>
+            <button type="button" data-fit="files" aria-pressed="false">目前只有录音文件</button>
+          </div>
+          <div class="fit-answer" id="fit-answer" aria-live="polite"><div class="fit-flow"><span>你的网页 / App</span><b>→</b><span>WhisperLiveKit</span><b>→</b><span>字幕与业务功能</span></div><div class="fit-copy"><div><span class="mini-label">推荐接法</span><h3>先接原生实时接口</h3><p>把麦克风音频发送到它的 WebSocket；用临时文字更新界面，用已确认文字保存记录或交给后续流程。</p></div><div class="fit-value"><span>你能省下</span><strong>实时分段、模型调用与结果推送的基础工作</strong></div></div></div>
+          <div class="fit-note"><span aria-hidden="true">✳</span><p><strong>选型结论：</strong>当前把它当作可试用的候选工具即可。未来只有在“边说边出字”、多人字幕或实时数字人交互成为明确需求时，再投入集成与性能研究。</p></div>
+        </section>
+
+        <section class="content-section section-block evaluation-section" id="evaluation" aria-labelledby="evaluation-title">
+          <div class="section-head"><p class="section-index">08 / DECISION</p><h2 id="evaluation-title">用真实音频做一次小验证</h2><p>这比只看首页的模型速度图更能回答“适不适合我的项目”。</p></div>
+          <div class="evaluation-grid">
+            <div class="evaluation-checks"><div><span>01</span><p>准备几段真实音频：安静、嘈杂、多人交谈各一段。</p></div><div><span>02</span><p>先跑基础转写，再按需要打开翻译或说话人区分。</p></div><div><span>03</span><p>记录中文错字率、首字出现时间、文字确认时间及设备占用。</p></div><div><span>04</span><p>在目标设备上测试并发，确认延迟是否仍可接受。</p></div></div>
+            <div class="evaluation-aside"><span class="evaluation-mark">“</span><p>实时不是零延迟。更大的模型、更复杂的翻译和多人说话，都会影响体验。</p><span class="aside-caption">选型时看自己的音频和设备</span></div>
+          </div>
+          <div class="boundary-box"><strong>留意边界</strong><p>临时文字会修订；说话人编号不等于身份识别；单个词目前只会归到一个说话人。项目的旧版公开基准图也不足以可靠比较当前后端，建议用自己的样本复测。</p><a href="#source-5">依据 [5]</a><a href="#source-7">[7]</a></div>
+        </section>
+
+        <section class="content-section section-block sources-section" id="sources" aria-labelledby="sources-title">
+          <div class="section-head"><p class="section-index">09 / REFERENCES</p><h2 id="sources-title">资料来源</h2><p>内容依据项目仓库、官方文档和所用技术的原始说明整理；扩展建议已在正文中注明。</p></div>
+          <ol class="sources-list">
+            <li id="source-1"><span>[1]</span><a href="https://github.com/QuentinFuxa/WhisperLiveKit" target="_blank" rel="noopener noreferrer">WhisperLiveKit 项目主页 <span aria-hidden="true">↗</span></a><small>定位、功能、运行方式</small></li>
+            <li id="source-2"><span>[2]</span><a href="https://github.com/openai/whisper" target="_blank" rel="noopener noreferrer">OpenAI Whisper 项目主页 <span aria-hidden="true">↗</span></a><small>Whisper 模型的作用</small></li>
+            <li id="source-3"><span>[3]</span><a href="https://github.com/QuentinFuxa/WhisperLiveKit/blob/main/docs/API.md" target="_blank" rel="noopener noreferrer">WhisperLiveKit API 文档 <span aria-hidden="true">↗</span></a><small>实时消息、文件格式与接口限制</small></li>
+            <li id="source-4"><span>[4]</span><a href="https://docs.livekit.io/intro/about/" target="_blank" rel="noopener noreferrer">LiveKit 官方介绍 <span aria-hidden="true">↗</span></a><small>音视频传输与会议平台</small></li>
+            <li id="source-5"><span>[5]</span><a href="https://github.com/QuentinFuxa/WhisperLiveKit/blob/main/docs/alignement_principles.md" target="_blank" rel="noopener noreferrer">说话人与文字对齐说明 <span aria-hidden="true">↗</span></a><small>时间对齐和重叠说话限制</small></li>
+            <li id="source-6"><span>[6]</span><a href="https://github.com/ufal/SimulStreaming" target="_blank" rel="noopener noreferrer">SimulStreaming 项目说明 <span aria-hidden="true">↗</span></a><small>AlignAtt 与 LocalAgreement 策略</small></li>
+            <li id="source-7"><span>[7]</span><a href="https://github.com/QuentinFuxa/WhisperLiveKit/blob/main/benchmarks/README.md" target="_blank" rel="noopener noreferrer">基准测试说明 <span aria-hidden="true">↗</span></a><small>测量指标与旧版图表限制</small></li>
+            <li id="source-8"><span>[8]</span><a href="https://github.com/QuentinFuxa/WhisperLiveKit/blob/main/docs/backends.md" target="_blank" rel="noopener noreferrer">识别后端说明 <span aria-hidden="true">↗</span></a><small>Whisper 以外的模型选择</small></li>
+            <li id="source-9"><span>[9]</span><a href="https://github.com/QuentinFuxa/WhisperLiveKit/blob/main/pyproject.toml" target="_blank" rel="noopener noreferrer">项目依赖清单 <span aria-hidden="true">↗</span></a><small>Web 服务依赖与后端依赖</small></li>
+            <li id="source-10"><span>[10]</span><a href="https://github.com/QuentinFuxa/WhisperLiveKit/blob/main/whisperlivekit/audio_processor.py" target="_blank" rel="noopener noreferrer">音频处理器源码 <span aria-hidden="true">↗</span></a><small>音频块、停顿事件、识别调用与结果状态</small></li>
+            <li id="source-11"><span>[11]</span><a href="https://github.com/QuentinFuxa/WhisperLiveKit/blob/main/whisperlivekit/silero_vad_iterator.py" target="_blank" rel="noopener noreferrer">Silero VAD 适配源码 <span aria-hidden="true">↗</span></a><small>说话开始与结束检测</small></li>
+            <li id="source-12"><span>[12]</span><a href="https://github.com/QuentinFuxa/WhisperLiveKit/blob/main/whisperlivekit/simul_whisper/align_att_base.py" target="_blank" rel="noopener noreferrer">AlignAtt 实现 <span aria-hidden="true">↗</span></a><small>音频末端的文字确认策略</small></li>
+            <li id="source-13"><span>[13]</span><a href="https://github.com/QuentinFuxa/WhisperLiveKit/blob/main/whisperlivekit/local_agreement/online_asr.py" target="_blank" rel="noopener noreferrer">LocalAgreement 实现 <span aria-hidden="true">↗</span></a><small>连续识别结果的一致前缀</small></li>
+            <li id="source-14"><span>[14]</span><a href="https://openai.com/index/whisper/" target="_blank" rel="noopener noreferrer">OpenAI Whisper 技术介绍 <span aria-hidden="true">↗</span></a><small>声学特征、编码器与文字解码器</small></li>
+          </ol>
+          <p class="source-date">核对日期：2026 年 9 月 25 日 · 项目持续更新，实际能力以所部署版本的文档为准。</p>
+        </section>
+        <footer class="site-footer"><span>VOICE / STACK</span><p>一页看懂 WhisperLiveKit，找到它在产品中的位置。</p><a href="#top">回到顶部 ↑</a></footer>
+      </main>
+    </div>
+  </body>
+</html>
