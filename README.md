@@ -21,6 +21,7 @@
 | 009 | [system-design-primer](https://github.com/donnemartin/system-design-primer) | **定位与能力：** 高性能与大规模系统设计资料库，涵盖性能、扩展、可用性、一致性、缓存、数据库等主题，以及设计方法、案例练习和 Anki 卡片。**对我的意义：** 为现有项目的并发、延迟与扩容讨论提供知识索引和提问清单；它不是可直接部署的框架。 | [摘要笔记](projects/009-system-design-primer/README.md) · [查看引导图](docs/projects/009-system-design-primer/assets/overview.png) · [网页导读](https://yydshly.github.io/0925_codex_project/#guide-system-design-primer) |
 | 010 | [Jellyfish](https://github.com/Forget-C/Jellyfish) | **定位：** 以分章剧本为入口的 AI 短剧生产工作台。**能力：** 剧本拆镜头与要素提取、导演分镜提示、人物和场景资产复用、人工确认、图片与视频生成任务追踪。**出口：** 分镜与提示词、图片、单镜头视频及可追溯素材。**对我的意义：** 可补上系列内容从剧本到镜头素材的生产环节；小说改编与完整成片仍需另行处理或实测。 | [完整研究](projects/010-jellyfish/README.md) · [在线导读](https://yydshly.github.io/0925_codex_project/projects/010-jellyfish/) · [完整引导图](https://yydshly.github.io/0925_codex_project/projects/010-jellyfish/assets/overview.svg) |
 | 011 | [RD-Agent](https://github.com/microsoft/RD-Agent) | **能力：** 把论文或研报推进到初版代码；在量化、数据科学和微调任务中反复提出方案、运行实验并比较结果。**原理：** 外部大模型多次理解、假设和写代码，RD-Agent 调度执行器、评价器与历史反馈形成循环。**对我的意义：** 先用于理解方法；等语音或 3D 任务有固定数据、基线和指标，再回顾是否值得小规模试用。 | [完整研究](projects/011-rd-agent/README.md) · [能力网页](https://yydshly.github.io/0925_codex_project/projects/011-rd-agent/) · [完整导图](https://yydshly.github.io/0925_codex_project/projects/011-rd-agent/rd-agent-guide.svg) |
+| 012 | [MoneyPrinterTurbo](https://github.com/harry0703/MoneyPrinterTurbo) | **能力：** 输入主题、脚本或自有素材，自动完成文案、画面、配音、字幕、配乐和短视频合成。**原理：** 大模型生成脚本与素材线索；画面可用现成视频、静态图片加动画，或外部模型生成的短视频片段，再由程序剪辑合成。**场景：** 知识科普、品牌内容初稿、系列短视频。**对我的意义：** 复用成片流水线验证自有产品；精确的物理图解需另加规则与图形动画层。 | [完整研究](projects/012-moneyprinterturbo/README.md) · [在线网页与真实案例](https://yydshly.github.io/0925_codex_project/projects/012-moneyprinterturbo/) · [完整引导图](docs/projects/012-moneyprinterturbo/assets/capability-map.png) |
 
 ## 001 · Retrieval-based-Voice-Conversion-WebUI 图文导读
 
@@ -176,6 +177,18 @@ HuBERT 等特征模型从输入录音中提取与发音相关的线索；使用�
 图：RD-Agent 的能力、底层循环、适用场景与后期试用判断；3D 人物是需要自定义执行和评价的扩展示例。
 
 [查看交互式能力网页](https://yydshly.github.io/0925_codex_project/projects/011-rd-agent/) · [查看完整引导图](https://yydshly.github.io/0925_codex_project/projects/011-rd-agent/rd-agent-guide.svg) · [阅读研究笔记](projects/011-rd-agent/README.md)
+
+## 012 · MoneyPrinterTurbo 一图导读
+
+MoneyPrinterTurbo 是从创作意图到短视频成片的自动化流水线，题材不限于 AI。输入主题、脚本或自有素材后，大模型可生成文案与画面搜索词；画面来自图库或自有视频、静态图片配合程序化动画，或可选视频模型生成的短片段；配音、字幕、音乐和剪辑由预先编写的程序串联，最终合成视频。
+
+适合知识科普、品牌内容初稿和系列视频批量制作。对我而言，它可以作为自有视频产品的生成底座；如果要准确讲解物理规律，还需要额外加入由公式和参数驱动的图形动画或仿真模块。画面贴题、事实与素材授权仍需人工审核。
+
+![MoneyPrinterTurbo 完整引导图：输入、模型与素材分工、处理流程、成片、运行环境、使用场景和自有产品价值。](docs/projects/012-moneyprinterturbo/assets/capability-map.png)
+
+图：MoneyPrinterTurbo 的能力与技术原理概览。图中的视频画面为结构示意；[网页中的手冲咖啡视频](https://yydshly.github.io/0925_codex_project/projects/012-moneyprinterturbo/#demo)是上游公开的真实生成案例，本站未运行上游程序复现。
+
+[查看在线网页](https://yydshly.github.io/0925_codex_project/projects/012-moneyprinterturbo/) · [打开引导图原图](docs/projects/012-moneyprinterturbo/assets/capability-map.svg) · [阅读完整研究](projects/012-moneyprinterturbo/README.md)
 
 ## 添加项目
 
