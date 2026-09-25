@@ -23,14 +23,16 @@
  .source-owner{display:block;color:#5a6b80;font-size:.86rem;margin:10px 0}.summary-cell{width:47%}
  dl{margin:0}dl>div+div{margin-top:16px}dt{font-weight:750;color:#1c3c63}dd{margin:4px 0 0;color:#52657c}
  .result-links{min-width:135px}.result-links a{display:block;margin-bottom:16px;font-weight:650}
- .guides{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px}
- .guide-card{display:flex;flex-direction:column;padding:22px;border:1px solid #d8e1ee;border-radius:16px;background:#fff;text-decoration:none;color:#1d3049;box-shadow:0 8px 24px #1d304908}
- .guide-card:hover{border-color:#5a82bc}.guide-label{color:#3762b6;font-size:.78rem;letter-spacing:.1em;font-weight:750}
- .guide-card h3{margin:6px 0 16px;font-size:1.3rem}.guide-card img{display:block;width:100%;height:310px;object-fit:contain;background:#eef2f6;padding:8px;border-radius:9px}
- .guide-card p{font-size:.95rem;color:#52657c;flex:1;margin:16px 0}.guide-card strong{font-size:.94rem;color:#2354b6}
+ .guide-stories{display:grid;gap:32px}
+ .guide-story{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.35fr);gap:32px;align-items:start;padding:32px;background:#fff;border:1px solid #d8e1ee;border-radius:16px}
+ .guide-copy h3{font-size:1.45rem;line-height:1.55;margin:0 0 22px;color:#1c3c63}
+ .guide-copy p{margin:0 0 20px;color:#52657c}.guide-copy .takeaway{padding:18px;background:#e9f3f2;border-left:3px solid #238988;color:#345d58}
+ .detail-link{font-weight:650}.guide-story figure{margin:0;min-width:0}.guide-story img{display:block;width:100%;height:auto;border:1px solid #e2e8f0;border-radius:8px}
+ .guide-story figcaption{font-size:.86rem;color:#52657c;margin-top:12px}.guide-story figcaption span{display:block;color:#2354b6;margin-top:6px}
+ #guides-title{overflow-wrap:anywhere}article[id]{scroll-margin-top:24px}
  .note{margin-top:24px;padding:18px 22px;border-left:3px solid #238988;background:#e9f3f2;color:#45645f;font-size:.92rem}
  footer{margin-top:42px;padding-top:22px;border-top:1px solid #d8e1ee;color:#5a6b80;font-size:.88rem}
- @media(max-width:760px){.guides{grid-template-columns:1fr}.guide-card img{height:330px}main{padding-top:38px}th,td{padding:16px}.section-heading{margin-top:36px}}
+ @media(max-width:760px){.guide-story{grid-template-columns:1fr;padding:20px;gap:24px}.guide-copy h3{font-size:1.25rem}main{padding-top:38px}th,td{padding:16px}.section-heading{margin-top:36px}}
  </style>
 </head>
 <body><main>
@@ -41,10 +43,22 @@
  <div class="table-wrap" role="region" aria-label="项目索引表，可横向滚动" tabindex="0"><table>
  <thead><tr><th scope="col">编号</th><th scope="col">源库</th><th scope="col">研究摘要</th><th scope="col">研究成果</th></tr></thead>
  <tbody><tr><th scope="row" class="project-id">001</th><td class="source-cell"><a class="source-name" href="https://github.com/RVC-Project/Retrieval-based-Voice-Conversion-WebUI" target="_blank" rel="noopener">Retrieval-based-Voice-Conversion-WebUI</a><span class="source-owner">RVC-Project · 音色转换</span></td>
- <td class="summary-cell"><dl><div><dt>能力</dt><dd>把已有讲话或歌声转换成目标声线，支持离线批量转换、实时变声和目标声线训练，并提供人声分离等辅助功能。</dd></div><div><dt>实现原理</dt><dd>HuBERT 提取发音特征，RMVPE 等方法估计音高，RVC 目标声线模型生成新波形；可选特征检索减轻原声残留，多个模型通过同一套程序协作。</dd></div><div><dt>对我的意义</dt><dd>可作为自建软件的换声模块，也可借鉴预训练模型、目标微调与检索协作的方法。当前以理解为主，无需立即安装；实际音质、相似度和设备延迟需日后验证。</dd></div></dl></td>
- <td class="result-links"><a href="projects/001-rvc-voice-conversion/index.html#research-abstract">图文研究 →</a><a href="https://github.com/yydshly/0925_codex_project/blob/main/projects/001-rvc-voice-conversion/README.md">研究笔记 ↗</a><a href="#guide-images">三张引导图 ↓</a></td></tr></tbody>
+ <td class="summary-cell"><dl><div><dt>能力</dt><dd>已有语音与歌声换声，支持实时变声、批量转换和声线训练。</dd></div><div><dt>实现原理</dt><dd>多个模型提取发音、音高等线索，由目标声线模型生成新波形，可用检索辅助。</dd></div><div><dt>对我的意义</dt><dd>可复用为换声模块，也可学习模型协作思路；当前先理解，有明确用途时再验证效果。</dd></div></dl></td>
+ <td class="result-links"><a href="projects/001-rvc-voice-conversion/index.html#research-abstract">图文研究 →</a><a href="https://github.com/yydshly/0925_codex_project/blob/main/projects/001-rvc-voice-conversion/README.md">研究笔记 ↗</a></td></tr></tbody>
  </table></div></section>
- <section id="guide-images" aria-labelledby="guides-title"><div class="section-heading"><h2 id="guides-title">001 · 三张图理解 RVC</h2><p>按能力、原理、模型与环境的顺序阅读；每张图都附有完整展示和必要讲解。</p></div><div class="guides"><a class="guide-card" href="projects/001-rvc-voice-conversion/index.html#capability-diagram"><span class="guide-label">图 01</span><h3>能力总览</h3><img src="projects/001-rvc-voice-conversion/assets/rvc-capabilities-overview.png" width="1070" height="1470" alt="能力总览完整引导图" loading="lazy"><p>输入、输出、适用场景，以及还需要配合什么工具。</p><strong>阅读完整图片与说明 →</strong></a><a class="guide-card" href="projects/001-rvc-voice-conversion/index.html#principle-diagram"><span class="guide-label">图 02</span><h3>完整原理</h3><img src="projects/001-rvc-voice-conversion/assets/rvc-principle-overview.png" width="2400" height="3420" alt="完整原理完整引导图" loading="lazy"><p>声音基础 → 学习目标声线 → 从来源录音生成新声音。</p><strong>阅读完整图片与说明 →</strong></a><a class="guide-card" href="projects/001-rvc-voice-conversion/index.html#environment-diagram"><span class="guide-label">图 03</span><h3>模型与环境</h3><img src="projects/001-rvc-voice-conversion/assets/rvc-model-environment-map.png" width="2700" height="4410" alt="模型与环境完整引导图" loading="lazy"><p>核心模型、权重文件、软件依赖和计算设备的对应关系。</p><strong>阅读完整图片与说明 →</strong></a></div>
+ <section id="guide-images" aria-labelledby="guides-title"><div class="section-heading"><p class="eyebrow">001 · 图文导读</p><h2 id="guides-title">理解 Retrieval-based-Voice-Conversion-WebUI</h2><p>先了解它能做什么，再理解如何实现，最后判断运行条件与自己的使用价值。三张引导图分别搭配对应说明，按顺序阅读。</p></div>
+ <div class="guide-stories"><article class="guide-story" id="guide-capability" aria-labelledby="title-capability">
+ <div class="guide-copy"><h3 id="title-capability">01 · 能力：把已有声音转换成目标声线</h3><p>先用一个例子理解：你录下“今天的天气很好”，RVC 接收这段录音和目标声线模型，生成一段听起来具有目标音色的新录音。它也能处理歌声，尽量保留原来的歌词、节奏和旋律走向。</p><p>围绕这个核心能力，仓库提供离线转换、批量处理、实时变声和目标声线训练。人声分离等辅助工具可以先把歌曲中的人声与伴奏分开，再进行换声。</p><p>输入主要是声音，输出也是声音。它本身不负责从文字写出并朗读内容，也不自动完成翻译、作词或作曲；这些需求需要与其他工具组合。</p><p class="takeaway"><strong>这一部分的理解：</strong>理解为“AI 换声工具”是合适的：它主要改变声音的身份特征，而转换效果仍取决于输入质量和目标模型。</p><a class="detail-link" href="projects/001-rvc-voice-conversion/index.html#capability-diagram">继续阅读详细说明 →</a></div>
+ <figure><a href="projects/001-rvc-voice-conversion/assets/rvc-capabilities-overview.png" target="_blank" rel="noopener" aria-label="打开01 · 能力：把已有声音转换成目标声线完整图片"><img src="projects/001-rvc-voice-conversion/assets/rvc-capabilities-overview.png" width="1070" height="1470" alt="能力图：先看输入和输出，再看围绕换声展开的功能与场景。" loading="lazy"></a><figcaption>能力图：先看输入和输出，再看围绕换声展开的功能与场景。<span>点击图片查看原图 ↗</span></figcaption></figure>
+ </article>
+<article class="guide-story" id="guide-principle" aria-labelledby="title-principle">
+ <div class="guide-copy"><h3 id="title-principle">02 · 原理：提取线索，再生成目标音色的声音</h3><p>声音是随时间变化的波形。振幅与响度相关，基频与音高相关；谐波的强弱分布、声道共振、气声噪声及其随时间的变化共同影响音色。它们相互关联，不能把人的声音简单看成三个互不影响的旋钮。</p><p>HuBERT 等特征模型从输入录音中提取与发音相关的线索；使用音高条件的模型还会通过 RMVPE 等方法估计音高轨迹。这里得到的是模型使用的数值特征，不是先把录音转成文字，也不是把“原来的音色”完整剥离出来。</p><p>目标声线模型把这些特征与音高作为条件，生成一段新的声音波形。可选的检索索引会在目标声音的特征库中寻找相似片段并融合特征，帮助减少来源音色的残留；它不是直接剪贴目标录音。</p><p>目标模型来自训练：用目标声线录音提取特征，让模型学习如何由特征还原这类声音，不断调整参数后保存为权重文件。使用现成且兼容的目标模型时，可以直接转换，无需重新训练。</p><p class="takeaway"><strong>这一部分的理解：</strong>可以概括为“分析 → 条件化重建”：多个模型与算法协作，保留发音和韵律线索，重新合成具有目标音色的波形。</p><a class="detail-link" href="projects/001-rvc-voice-conversion/index.html#principle-diagram">继续阅读详细说明 →</a></div>
+ <figure><a href="projects/001-rvc-voice-conversion/assets/rvc-principle-overview.png" target="_blank" rel="noopener" aria-label="打开02 · 原理：提取线索，再生成目标音色的声音完整图片"><img src="projects/001-rvc-voice-conversion/assets/rvc-principle-overview.png" width="2400" height="3420" alt="原理图：从声音基础读到训练，再沿转换流程理解各模块的输入和输出。" loading="lazy"></a><figcaption>原理图：从声音基础读到训练，再沿转换流程理解各模块的输入和输出。<span>点击图片查看原图 ↗</span></figcaption></figure>
+ </article>
+<article class="guide-story" id="guide-environment" aria-labelledby="title-environment">
+ <div class="guide-copy"><h3 id="title-environment">03 · 环境与意义：模型如何运行，什么时候值得尝试</h3><p>软件环境负责让程序运行：Python、PyTorch、音频处理库、FFmpeg，以及与所选计算设备匹配的运行支持。浏览器中的 WebUI 是操作界面，实际计算由运行程序的电脑或服务器完成。</p><p>模型资源承担不同工作：HuBERT 等基础权重提取特征，RMVPE 权重用于所选音高提取方案，目标声线 .pth 文件决定要转换成的声音。部分音高算法不依赖额外神经网络模型，.index 则是可选的检索数据，并不是另一个生成模型。</p><p>这些资源通常由同一套程序加载，不需要为每个模型分别安装一个软件。转换前就要准备好所选流程必需的模型；训练用预训练权重、人声分离模型等，则随功能需求增加。整合包是否包含它们，需要检查具体版本。</p><p>对我而言，它既是可以复用的换声模块，也是理解“通用特征模型 + 目标声线训练 + 检索辅助”的实例。当前是能力探索，理解这些关系就能帮助判断用途；等出现明确场景，再实际验证声音相似度、清晰度、速度和设备开销。</p><p class="takeaway"><strong>这一部分的理解：</strong>本地模型是一种运行方式，也可以放在服务器。现在发布的是研究网页；部署网页并不等于已经安装并运行 RVC。</p><a class="detail-link" href="projects/001-rvc-voice-conversion/index.html#environment-diagram">继续阅读详细说明 →</a></div>
+ <figure><a href="projects/001-rvc-voice-conversion/assets/rvc-model-environment-map.png" target="_blank" rel="noopener" aria-label="打开03 · 环境与意义：模型如何运行，什么时候值得尝试完整图片"><img src="projects/001-rvc-voice-conversion/assets/rvc-model-environment-map.png" width="2700" height="4410" alt="环境图：区分运行环境、核心模型、目标声线文件和按功能增加的资源。" loading="lazy"></a><figcaption>环境图：区分运行环境、核心模型、目标声线文件和按功能增加的资源。<span>点击图片查看原图 ↗</span></figcaption></figure>
+ </article></div>
  <p class="note">当前成果是能力研究、原理图解和声音基础教学试听。网页尚未接入 RVC 换声模型；是否部署，可在有明确用途时再决定。</p></section>
  <footer>按收录顺序编号 · 非官方研究整理 · 2026-09-25</footer>
 </main></body></html>

@@ -8,9 +8,59 @@
 
 编号按收录顺序递增，并与 projects/ 中的目录名一致。已有编号不复用。
 
-| 编号 | 源库（关联原仓库） | 研究摘要 | 研究笔记 | 三张引导图与说明 | 在线网页 |
-| :--: | --- | --- | --- | --- | --- |
-| 001 | [Retrieval-based-Voice-Conversion-WebUI](https://github.com/RVC-Project/Retrieval-based-Voice-Conversion-WebUI) | **能力：** 已有语音 / 歌声换声、实时变声与声线训练。**原理：** 提取发音与音高，由目标模型重建波形，并可用检索辅助。**对我的意义：** 可复用为换声模块；先理解方案，实际效果按需验证。 | [完整研究](projects/001-rvc-voice-conversion/README.md) | [能力图](https://yydshly.github.io/0925_codex_project/projects/001-rvc-voice-conversion/#capability-diagram) · [原理图](https://yydshly.github.io/0925_codex_project/projects/001-rvc-voice-conversion/#principle-diagram) · [环境图](https://yydshly.github.io/0925_codex_project/projects/001-rvc-voice-conversion/#environment-diagram) | [查看网页](https://yydshly.github.io/0925_codex_project/projects/001-rvc-voice-conversion/) |
+| 编号 | 源库（关联原仓库） | 研究摘要 | 阅读入口 |
+| :--: | --- | --- | --- |
+| 001 | [Retrieval-based-Voice-Conversion-WebUI](https://github.com/RVC-Project/Retrieval-based-Voice-Conversion-WebUI) | **能力：** 已有语音 / 歌声换声、实时变声与声线训练。**原理：** 提取发音与音高，由目标模型重建波形，并可用检索辅助。**对我的意义：** 可复用为换声模块；先理解方案，实际效果按需验证。 | [完整研究](projects/001-rvc-voice-conversion/README.md) · [查看网页](https://yydshly.github.io/0925_codex_project/projects/001-rvc-voice-conversion/) |
+
+## 001 · Retrieval-based-Voice-Conversion-WebUI 图文导读
+
+源库：[Retrieval-based-Voice-Conversion-WebUI](https://github.com/RVC-Project/Retrieval-based-Voice-Conversion-WebUI)。下面依次说明能力、实现原理、环境与使用意义，三张图分别配合对应文字阅读。
+
+### 01 · 能力：把已有声音转换成目标声线
+
+先用一个例子理解：你录下“今天的天气很好”，RVC 接收这段录音和目标声线模型，生成一段听起来具有目标音色的新录音。它也能处理歌声，尽量保留原来的歌词、节奏和旋律走向。
+
+围绕这个核心能力，仓库提供离线转换、批量处理、实时变声和目标声线训练。人声分离等辅助工具可以先把歌曲中的人声与伴奏分开，再进行换声。
+
+输入主要是声音，输出也是声音。它本身不负责从文字写出并朗读内容，也不自动完成翻译、作词或作曲；这些需求需要与其他工具组合。
+
+**这一部分的理解：** 理解为“AI 换声工具”是合适的：它主要改变声音的身份特征，而转换效果仍取决于输入质量和目标模型。
+
+![能力图：先看输入和输出，再看围绕换声展开的功能与场景。](docs/projects/001-rvc-voice-conversion/assets/rvc-capabilities-overview.png)
+
+能力图：先看输入和输出，再看围绕换声展开的功能与场景。
+
+### 02 · 原理：提取线索，再生成目标音色的声音
+
+声音是随时间变化的波形。振幅与响度相关，基频与音高相关；谐波的强弱分布、声道共振、气声噪声及其随时间的变化共同影响音色。它们相互关联，不能把人的声音简单看成三个互不影响的旋钮。
+
+HuBERT 等特征模型从输入录音中提取与发音相关的线索；使用音高条件的模型还会通过 RMVPE 等方法估计音高轨迹。这里得到的是模型使用的数值特征，不是先把录音转成文字，也不是把“原来的音色”完整剥离出来。
+
+目标声线模型把这些特征与音高作为条件，生成一段新的声音波形。可选的检索索引会在目标声音的特征库中寻找相似片段并融合特征，帮助减少来源音色的残留；它不是直接剪贴目标录音。
+
+目标模型来自训练：用目标声线录音提取特征，让模型学习如何由特征还原这类声音，不断调整参数后保存为权重文件。使用现成且兼容的目标模型时，可以直接转换，无需重新训练。
+
+**这一部分的理解：** 可以概括为“分析 → 条件化重建”：多个模型与算法协作，保留发音和韵律线索，重新合成具有目标音色的波形。
+
+![原理图：从声音基础读到训练，再沿转换流程理解各模块的输入和输出。](docs/projects/001-rvc-voice-conversion/assets/rvc-principle-overview.png)
+
+原理图：从声音基础读到训练，再沿转换流程理解各模块的输入和输出。
+
+### 03 · 环境与意义：模型如何运行，什么时候值得尝试
+
+软件环境负责让程序运行：Python、PyTorch、音频处理库、FFmpeg，以及与所选计算设备匹配的运行支持。浏览器中的 WebUI 是操作界面，实际计算由运行程序的电脑或服务器完成。
+
+模型资源承担不同工作：HuBERT 等基础权重提取特征，RMVPE 权重用于所选音高提取方案，目标声线 .pth 文件决定要转换成的声音。部分音高算法不依赖额外神经网络模型，.index 则是可选的检索数据，并不是另一个生成模型。
+
+这些资源通常由同一套程序加载，不需要为每个模型分别安装一个软件。转换前就要准备好所选流程必需的模型；训练用预训练权重、人声分离模型等，则随功能需求增加。整合包是否包含它们，需要检查具体版本。
+
+对我而言，它既是可以复用的换声模块，也是理解“通用特征模型 + 目标声线训练 + 检索辅助”的实例。当前是能力探索，理解这些关系就能帮助判断用途；等出现明确场景，再实际验证声音相似度、清晰度、速度和设备开销。
+
+**这一部分的理解：** 本地模型是一种运行方式，也可以放在服务器。现在发布的是研究网页；部署网页并不等于已经安装并运行 RVC。
+
+![环境图：区分运行环境、核心模型、目标声线文件和按功能增加的资源。](docs/projects/001-rvc-voice-conversion/assets/rvc-model-environment-map.png)
+
+环境图：区分运行环境、核心模型、目标声线文件和按功能增加的资源。
 
 ## 添加项目
 
