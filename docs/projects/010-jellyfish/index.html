@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Jellyfish 是 AI 短剧生产工作台：以分章剧本为入口，支持剧本理解、分镜与导演提示、资产复用、镜头级图片和视频生成，输出结构化资料和镜头素材。">
+  <meta name="theme-color" content="#102a28">
+  <title>Jellyfish 短剧工作台能力导读 · 010 开源项目研究</title>
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body id="top">
+  <a class="skip-link" href="#main">跳到正文</a>
+  <header class="site-header"><div class="shell nav-row">
+    <a class="brand" href="../../index.html"><span class="brand-number">010</span><span>PROJECT RESEARCH<small>JELLYFISH / 短剧工作台</small></span></a>
+    <nav aria-label="页面导航"><a href="#overview">一图总览</a><a href="#input-output">输入与输出</a><a href="#capabilities">处理能力</a><a href="#principle">底层原理</a><a href="#value">对我的价值</a><a href="#limits">能力边界</a></nav>
+  </div></header>
+  <main id="main">
+    <section class="hero"><div class="shell">
+      <p class="eyebrow">010 / AI SHORT DRAMA STUDIO</p>
+      <h1>从剧本到镜头素材的<br><em>短剧生产工作台。</em></h1>
+      <p class="hero-lead">Jellyfish 以分章剧本为入口，组织剧本拆解、分镜与导演提示、角色和场景复用、人工确认及图片／视频生成。它主要交付结构化制作资料与单镜头素材，供后续审片和剪辑使用。</p>
+      <div class="hero-actions"><a class="button button-primary" href="#overview">看完整引导图 ↓</a><a class="button button-outline" href="https://github.com/Forget-C/Jellyfish" target="_blank" rel="noopener noreferrer">查看原仓库 ↗</a></div>
+      <p class="hero-note">依据上游 README 与关键代码整理 · 2026-09-25 · 静态研究，未部署实测</p>
+    </div></section>
+
+    <section class="section" id="overview" aria-labelledby="overview-title"><div class="shell">
+      <p class="eyebrow">ONE-PAGE GUIDE</p><h2 id="overview-title">一张图看清入口、处理、出口与边界</h2>
+      <p class="section-lead">顺着图中箭头阅读：剧本由文本模型转成分镜候选；创作者确认设定与镜头；工作台再调度外部图像和视频模型，保存结果与任务上下文。</p>
+      <figure class="overview-figure"><a href="./assets/overview.svg" target="_blank" rel="noopener noreferrer" aria-label="打开 Jellyfish 高清引导图"><img src="./assets/overview.svg" width="1600" height="1990" alt="Jellyfish 一图总览：分章剧本为入口，经过剧本理解、导演分镜辅助、镜头与资产确认、外部模型生成，输出分镜资料、图片、单镜头视频和任务记录；下方标出模型分工、使用价值以及小说改编和成片导出的边界。" loading="eager"></a><figcaption>我们依据上游资料绘制的能力图。<a href="./assets/overview.svg" target="_blank" rel="noopener noreferrer">打开高清原图 ↗</a></figcaption></figure>
+    </div></section>
+
+    <section class="section tint" id="input-output" aria-labelledby="input-output-title"><div class="shell">
+      <p class="eyebrow">INPUT → OUTPUT</p><h2 id="input-output-title">入口是剧本，出口是制作资料和镜头素材</h2>
+      <div class="io-grid">
+        <article><span class="step">01 / 输入</span><h3>分章或分集剧本</h3><p>拆镜头接口接收完整剧本文本。项目还可补充角色、场景、服装、风格和参考图，并配置要调用的文本、图片、视频模型。</p><p class="minor">小说段落可作为文本提交，但现有拆镜头提示词以剧本为对象；正式制作建议先完成小说改编。</p></article>
+        <article><span class="step">02 / 输出</span><h3>数据、媒体与任务记录</h3><p>数据包括分镜、对白、实体关联、候选确认和提示词；媒体包括参考／生成图片及单镜头视频；任务中心保留进度、结果与项目上下文。</p><p class="minor">完整自动剪辑、配音、字幕与成片导出需单独核验。</p></article>
+      </div>
+      <p class="source-line">依据：<a href="https://github.com/Forget-C/Jellyfish/blob/main/backend/app/api/v1/routes/script_processing.py" target="_blank" rel="noopener noreferrer">剧本处理接口 ↗</a>、<a href="https://github.com/Forget-C/Jellyfish#readme" target="_blank" rel="noopener noreferrer">项目功能说明 ↗</a></p>
+    </div></section>
+
+    <section class="section" id="capabilities" aria-labelledby="capabilities-title"><div class="shell">
+      <p class="eyebrow">PRODUCTION FLOW</p><h2 id="capabilities-title">支持的五类处理</h2>
+      <div class="cap-grid">
+        <article><span class="step">01 / 理解</span><h3>拆镜头与提取要素</h3><p>文本模型提取镜头、角色、场景、道具、服装和对白，另有剧本优化、精简、一致性检查与专项分析。</p></article>
+        <article><span class="step">02 / 导演辅助</span><h3>设计镜头画面</h3><p>支持修订镜头信息；帧提示词考虑景别、机位、运镜、动作、相邻镜头和导演指令，生成首帧、关键帧与尾帧的画面描述。</p></article>
+        <article><span class="step">03 / 人工确认</span><h3>准备镜头、复用资产</h3><p>接受、忽略或关联候选资产与对白；复用已确认的角色和场景，管理关键帧与参考图，并检查镜头是否准备好。</p></article>
+        <article><span class="step">04 / 模型生成</span><h3>出图与镜头视频</h3><p>预览视频提示词，执行单镜头或批量预检查，向配置好的图像／视频服务发起生成任务，再将结果回写镜头。</p></article>
+        <article><span class="step">05 / 制片管理</span><h3>跟踪长耗时任务</h3><p>统一查看文本、图片、视频任务的状态、进度、耗时和结果；支持取消并返回对应项目、章节或镜头。</p></article>
+      </div>
+      <p class="source-line">依据：<a href="https://github.com/Forget-C/Jellyfish#readme" target="_blank" rel="noopener noreferrer">主要功能 ↗</a>、<a href="https://github.com/Forget-C/Jellyfish/blob/main/backend/app/chains/agents/shot_frame_prompt_agents.py" target="_blank" rel="noopener noreferrer">镜头帧提示词代码 ↗</a></p>
+    </div></section>
+
+    <section class="section tint" id="principle" aria-labelledby="principle-title"><div class="shell">
+      <p class="eyebrow">HOW IT WORKS</p><h2 id="principle-title">模型生成内容，工作台组织流程</h2>
+      <div class="principle"><span>剧本文本</span><b aria-hidden="true">→</b><span>文本模型结构化提取</span><b aria-hidden="true">→</b><span>人工确认与资产关联</span><b aria-hidden="true">→</b><span>图像／视频模型生成</span><b aria-hidden="true">→</b><span>结果回写与追踪</span></div>
+      <p class="wide-copy">后端以 FastAPI、SQLAlchemy、Pydantic 和 LangChain 系列组件管理接口、数据与文本模型输出；Celery / Redis 承担异步任务，Docker Compose 方案配置 MySQL 与 S3 兼容存储。前端使用 React、TypeScript、Vite。模型由外部 Provider 提供，Jellyfish 不随仓库附带自研基础视频模型。</p>
+      <p class="source-line">依据：<a href="https://github.com/Forget-C/Jellyfish/blob/main/backend/pyproject.toml" target="_blank" rel="noopener noreferrer">后端依赖 ↗</a>、<a href="https://github.com/Forget-C/Jellyfish/blob/main/backend/app/services/llm/provider_bootstrap.py" target="_blank" rel="noopener noreferrer">模型接入 ↗</a>、<a href="https://github.com/Forget-C/Jellyfish/blob/main/deploy/compose/docker-compose.yml" target="_blank" rel="noopener noreferrer">部署编排 ↗</a></p>
+    </div></section>
+
+    <section class="section" id="value" aria-labelledby="value-title"><div class="shell">
+      <p class="eyebrow">WHY IT MATTERS</p><h2 id="value-title">对我：补上剧本到镜头素材这一段</h2>
+      <p class="section-lead">当内容需要多个镜头、反复出现同一人物或批量制作时，统一实体库、人工确认和任务追踪比单次生成更有价值。</p>
+      <div class="value-grid"><article><h3>连续短剧</h3><p>复用人设、场景和参考图，减少反复描述与跨镜头漂移，最终效果仍需审片。</p></article><article><h3>批量制片</h3><p>按镜头跟踪准备状态、生成结果和返工位置，方便团队协作与成本复盘。</p></article><article><h3>现有工具链</h3><p>可探索将镜头片段交给 <a href="../008-video-use/">008 video-use</a> 剪辑，再由 <a href="../002-social-auto-upload/">002 social-auto-upload</a> 发布；跨项目集成尚未验证。</p></article></div>
+    </div></section>
+
+    <section class="section limits" id="limits" aria-labelledby="limits-title"><div class="shell">
+      <p class="eyebrow">BOUNDARIES</p><h2 id="limits-title">采用前要验证的三件事</h2>
+      <ol><li><strong>小说改编：</strong>目前明确的主入口是剧本；整本小说到分集剧本需要前置流程。</li><li><strong>导演质量：</strong>系统可辅助镜头与画面提示词，节奏、表演和镜头取舍仍需创作者决定。</li><li><strong>完整交付：</strong>仓库介绍提到导出，但自动剪辑、配音、字幕和成片效果应以真实样片核验；同时记录模型费用与失败重试。</li></ol>
+      <div class="bottom-links"><a href="https://github.com/yydshly/0925_codex_project/blob/main/projects/010-jellyfish/README.md" target="_blank" rel="noopener noreferrer">阅读完整研究笔记 ↗</a><a href="https://github.com/Forget-C/Jellyfish" target="_blank" rel="noopener noreferrer">访问 Jellyfish 原仓库 ↗</a><a href="../../index.html">返回项目索引 ↗</a></div>
+    </div></section>
+  </main>
+  <footer><div class="shell">010 / JELLYFISH · 非官方研究整理 · 2026-09-25 · 尚未运行端到端样片</div></footer>
+</body>
+</html>

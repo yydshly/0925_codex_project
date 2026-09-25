@@ -19,6 +19,7 @@
 | 007 | [Calibre-Web](https://github.com/janeczku/calibre-web) | **定位与能力：** 自托管图书管理库，接入已有 Calibre 藏书，提供编目、查找、阅读、下载、OPDS 与 Kobo 供书；软件本身不附带书籍。**场景：** 个人藏书、家庭共读、阅读器供书和内容创作资料管理。**对我的意义：** 给现有内容创作项目补上长期资料入口；正文检索与 AI 问答仍需另建。 | [在线网页](https://yydshly.github.io/0925_codex_project/projects/007-calibre-web/) · [我们生成的引导图](https://yydshly.github.io/0925_codex_project/projects/007-calibre-web/assets/overview.svg) · [完整研究](projects/007-calibre-web/README.md) |
 | 008 | [video-use](https://github.com/browser-use/video-use) | **能力：** 逐词转写辅助选段，按 EDL 粗剪、调色、叠加动画、加字幕并渲染。**原理：** Scribe 识别音频与时间戳，代码代理理解文本并生成 EDL，FFmpeg 同步剪辑音画。**隐患：** 时间对齐不保证画面连续，切点可能跳变；原版转写依赖云 API。**场景：** 口播、访谈、教程、产品讲解。**对我的意义：** 有望衔接 Voicebox / LiveTalking 素材与 social-auto-upload 发布；中文和 Windows 效果待实测。 | [完整研究](projects/008-video-use/README.md) · [能力网页（部署后）](https://yydshly.github.io/0925_codex_project/projects/008-video-use/) |
 | 009 | [system-design-primer](https://github.com/donnemartin/system-design-primer) | **定位与能力：** 高性能与大规模系统设计资料库，涵盖性能、扩展、可用性、一致性、缓存、数据库等主题，以及设计方法、案例练习和 Anki 卡片。**对我的意义：** 为现有项目的并发、延迟与扩容讨论提供知识索引和提问清单；它不是可直接部署的框架。 | [摘要笔记](projects/009-system-design-primer/README.md) · [查看引导图](docs/projects/009-system-design-primer/assets/overview.png) · [网页导读](https://yydshly.github.io/0925_codex_project/#guide-system-design-primer) |
+| 010 | [Jellyfish](https://github.com/Forget-C/Jellyfish) | **定位：** 以分章剧本为入口的 AI 短剧生产工作台。**能力：** 剧本拆镜头与要素提取、导演分镜提示、人物和场景资产复用、人工确认、图片与视频生成任务追踪。**出口：** 分镜与提示词、图片、单镜头视频及可追溯素材。**对我的意义：** 可补上系列内容从剧本到镜头素材的生产环节；小说改编与完整成片仍需另行处理或实测。 | [完整研究](projects/010-jellyfish/README.md) · [在线导读](https://yydshly.github.io/0925_codex_project/projects/010-jellyfish/) · [完整引导图](https://yydshly.github.io/0925_codex_project/projects/010-jellyfish/assets/overview.svg) |
 
 ## 001 · Retrieval-based-Voice-Conversion-WebUI 图文导读
 
@@ -154,6 +155,16 @@ HuBERT 等特征模型从输入录音中提取与发音相关的线索；使用�
 图：我们制作的能力摘要图；扩展方向是后续建议，不是上游现成功能。
 
 [阅读摘要笔记](projects/009-system-design-primer/README.md) · [打开引导图](docs/projects/009-system-design-primer/assets/overview.png)
+
+## 010 · Jellyfish AI 短剧工作台导读
+
+源库：[Forget-C/Jellyfish](https://github.com/Forget-C/Jellyfish)。它以分章剧本为主要入口，将剧本拆镜头、角色与场景提取、导演分镜提示、资产确认和复用、图片及视频模型生成任务组织成一套短剧生产流程。出口是分镜、提示词、图片和单镜头视频素材。小说原文可作为改编的上游材料，但完整小说到分集剧本的改编流程并非已验证的现成功能；完整成片导出也有待实测。
+
+**对我的意义：** 可补上系列内容从剧本到镜头素材的生产环节，再与配音、剪辑和发布工具衔接；跨项目连接需要小样验证。
+
+![Jellyfish 短剧工作台引导图：输入、处理、模型分工、输出、价值和能力边界](docs/projects/010-jellyfish/assets/overview.svg)
+
+[查看在线图文导读](https://yydshly.github.io/0925_codex_project/projects/010-jellyfish/) · [打开完整引导图](docs/projects/010-jellyfish/assets/overview.svg) · [阅读完整研究笔记](projects/010-jellyfish/README.md)
 
 ## 添加项目
 
