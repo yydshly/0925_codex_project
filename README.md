@@ -80,6 +80,8 @@ HuBERT 等特征模型从输入录音中提取与发音相关的线索；使用�
 
 源库：[jamiepine/voicebox](https://github.com/jamiepine/voicebox)。Voicebox 把“语音 → 文字”和“文字 → 指定音色语音”放在同一套本地工作台中，还提供 REST/MCP 接口。它与 001 RVC 的“已有语音换声”不同，适合研究中文口述输入、自己的声音配音及 AI 助手发声；与 002 的多平台发布工具可组合成内容工作流。具体语言和克隆能力取决于所选引擎，实际音质与速度仍需在本机验证。
 
+![Voicebox 完整引导图：本地模型、主要能力、实现原理、克隆与预置区别、个人内容工作流及能力边界。](docs/projects/003-voicebox/overview.svg)
+
 [查看在线能力地图](https://yydshly.github.io/0925_codex_project/projects/003-voicebox/) · [打开完整引导图](https://yydshly.github.io/0925_codex_project/projects/003-voicebox/overview.svg) · [阅读完整研究笔记](projects/003-voicebox/README.md)
 ## 添加项目
 
