@@ -171,6 +171,10 @@ HuBERT 等特征模型从输入录音中提取与发音相关的线索；使用�
 
 源库：[microsoft/RD-Agent](https://github.com/microsoft/RD-Agent)。它借助外部大模型多次理解问题、提出假设、生成和修复代码，再用实际训练、检查或回测的结果推动下一轮。它适合论文方法实现，也适合有固定数据和指标的持续实验；现有场景覆盖量化、数据科学和大模型微调。对当前项目组合，建议先用它理解研究方法，后期在 Voicebox / WhisperLiveKit 有中文样本、基线、词错率与延迟指标后回顾试用价值。3D 人物则要先确定目标、论文、公开实现和完整资产流程；跨项目集成尚未进行。
 
+![RD-Agent 完整引导图：输入与前提、外部大模型和框架及程序的分工、Copilot 论文实现与 Agent 数据集探索的多轮流程、八类场景、3D 人物实现缺口，以及何时值得重新尝试。](docs/projects/011-rd-agent/rd-agent-guide.svg)
+
+图：RD-Agent 的能力、底层循环、适用场景与后期试用判断；3D 人物是需要自定义执行和评价的扩展示例。
+
 [查看交互式能力网页](https://yydshly.github.io/0925_codex_project/projects/011-rd-agent/) · [查看完整引导图](https://yydshly.github.io/0925_codex_project/projects/011-rd-agent/rd-agent-guide.svg) · [阅读研究笔记](projects/011-rd-agent/README.md)
 
 ## 添加项目
