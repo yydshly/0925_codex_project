@@ -15,6 +15,7 @@
 | 003 | [Voicebox](https://github.com/jamiepine/voicebox) | **能力：** 本地 Whisper 听写、7 类 TTS 引擎的克隆或预置音色配音、本地 Qwen3 文本整理，并通过 REST/MCP 接入应用。**原理：** 首次下载模型后，由本地 FastAPI 调度 MLX/PyTorch 推理；参考录音只为克隆提供音色条件。**对我的意义：** 可放在个人 IP 的口述与配音环节，衔接换声与发布工具。 | [完整研究](projects/003-voicebox/README.md) · [在线网页](https://yydshly.github.io/0925_codex_project/projects/003-voicebox/) · [完整引导图](https://yydshly.github.io/0925_codex_project/projects/003-voicebox/overview.svg) |
 | 004 | [LiveTalking](https://github.com/lipku/LiveTalking) | **能力：** 图片或视频制作人物 avatar，文字或音频驱动口型，输出实时流或 MP4。**原理：** 音频特征驱动 Wav2Lip、MuseTalk 等模型生成面部画面，再贴回人物素材并同步声音。**场景：** 讲解、客服、直播和短视频。**对我的意义：** 在此前 MuseTalk 成片练习上，按需验证实时会话与推流。 | [在线网页](https://yydshly.github.io/0925_codex_project/projects/004-livetalking/) · [完整引导图](https://yydshly.github.io/0925_codex_project/projects/004-livetalking/assets/architecture.svg) · [完整研究](projects/004-livetalking/README.md) |
 | 005 | [WhisperLiveKit](https://github.com/QuentinFuxa/WhisperLiveKit) | **能力：** 音频实时转写，输出临时与已确认文字；可选字幕、翻译、说话人区分。**原理：** VAD 检测语音，Whisper 等模型识别，流式策略确认稳定文字并推送。**场景：** 直播/会议字幕、访谈、语音助手输入。**底层依赖：** Python Web 服务、音频组件、识别模型及权重；LiveKit 非必需。**对我的意义：** 当前录制成片先复用 003 Voicebox，试效果即可；有实时互动需求再研究延迟与集成。 | [完整研究](projects/005-whisperlivekit/README.md) · [在线网页](https://yydshly.github.io/0925_codex_project/projects/005-whisperlivekit/) · [我们生成的引导图](https://yydshly.github.io/0925_codex_project/projects/005-whisperlivekit/assets/overview.svg) |
+| 006 | [Fay](https://github.com/xszyou/Fay) | **能力：** 接收语音与文字，管理会话、长期记忆和主动播报，按需查询知识或调用 MCP 业务工具，输出文字、语音与终端信号。**本质：** 面向数字人等终端的 Agent 交互编排框架；人物画面由终端渲染，RAG 是可选知识分支。**场景：** 导览、教学、客服、虚拟主播和语音硬件。**对我的意义：** 可串联 005 实时转写与 004 数字人画面；先跑通最小闭环，再验证延迟和接口。 | [完整研究](projects/006-fay/README.md) · [在线网页](https://yydshly.github.io/0925_codex_project/projects/006-fay/) · [摘要架构图](https://yydshly.github.io/0925_codex_project/projects/006-fay/assets/fay-internal-architecture.svg) |
 
 ## 001 · Retrieval-based-Voice-Conversion-WebUI 图文导读
 
@@ -112,3 +113,11 @@ HuBERT 等特征模型从输入录音中提取与发音相关的线索；使用�
 ## 添加项目
 
 从 [子项目模板](projects/_template/README.md) 开始，按 [收录说明](ADDING_PROJECTS.md) 更新索引。静态网页演示统一放在 docs/projects/ 下，便于通过一个 GitHub Pages 站点按子路径访问。
+
+## 006 · Fay 数字人交互与业务连接导读
+
+**能力：** 接收文字和语音，管理会话、长期记忆与主动播报，按需查询知识或调用 MCP 业务工具，再把回复送往数字人等终端。**本质：** 一个 Agent 交互编排框架；RAG 是可选知识分支，角色画面由接入终端渲染。**场景：** 导览、教学、客服、虚拟主播与语音硬件。**对我的意义：** 可连接 005 实时转写与 004 数字人画面；先实测一条最小交互链，再决定如何组合现有项目。
+
+![Fay 内部架构与能力摘要图](docs/projects/006-fay/assets/fay-internal-architecture.svg)
+
+[打开在线 Fay 研究网页](https://yydshly.github.io/0925_codex_project/projects/006-fay/) · [阅读完整研究笔记](projects/006-fay/README.md) · [放大架构图](https://yydshly.github.io/0925_codex_project/projects/006-fay/assets/fay-internal-architecture.svg)
