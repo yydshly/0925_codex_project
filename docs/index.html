@@ -30,6 +30,7 @@
  .detail-link{font-weight:650}.guide-story figure{margin:0;min-width:0}.guide-story img{display:block;width:100%;height:auto;border:1px solid #e2e8f0;border-radius:8px}
  .guide-story figcaption{font-size:.86rem;color:#52657c;margin-top:12px}.guide-story figcaption span{display:block;color:#2354b6;margin-top:6px}
  .social-guide{grid-template-columns:1fr}.social-guide .guide-copy{max-width:970px}.social-guide figure{width:100%}
+ .video-guide{grid-template-columns:1fr}.video-guide .guide-copy{max-width:970px}.video-guide figure{width:min(100%,900px);margin:0 auto}
  #guides-title{overflow-wrap:anywhere}article[id]{scroll-margin-top:24px}
  .note{margin-top:24px;padding:18px 22px;border-left:3px solid #238988;background:#e9f3f2;color:#45645f;font-size:.92rem}
  footer{margin-top:42px;padding-top:22px;border-top:1px solid #d8e1ee;color:#5a6b80;font-size:.88rem}
@@ -39,7 +40,7 @@
 <body><main>
  <header><p class="eyebrow">GITHUB PROJECT RESEARCH</p><h1>开源项目研究索引</h1>
  <p class="intro">从源库出发，整理它具备的能力、实现这些能力的方法，以及对自己学习和开发的意义。每个项目保留原仓库关联、研究摘要与图文说明。</p>
- <div class="header-links"><a href="https://github.com/yydshly/0925_codex_project">研究仓库与笔记 ↗</a><a href="#guide-images">阅读 001 图文导读 ↓</a><a href="#guide-social-auto-upload">查看 002 发布引导图 ↓</a><a href="projects/004-livetalking/index.html">查看 004 能力地图 →</a><a href="projects/005-whisperlivekit/index.html">查看 005 实时转写 →</a><a href="projects/006-fay/index.html">查看 006 Fay 能力图谱 →</a><a href="projects/007-calibre-web/index.html">查看 007 书库研究 →</a><a href="projects/008-video-use/index.html">查看 008 视频剪辑 →</a></div></header>
+ <div class="header-links"><a href="https://github.com/yydshly/0925_codex_project">研究仓库与笔记 ↗</a><a href="#guide-images">阅读 001 图文导读 ↓</a><a href="#guide-social-auto-upload">查看 002 发布引导图 ↓</a><a href="projects/004-livetalking/index.html">查看 004 能力地图 →</a><a href="projects/005-whisperlivekit/index.html">查看 005 实时转写 →</a><a href="projects/006-fay/index.html">查看 006 Fay 能力图谱 →</a><a href="projects/007-calibre-web/index.html">查看 007 书库研究 →</a><a href="#guide-video-use">查看 008 图文导读 ↓</a></div></header>
  <section aria-labelledby="index-title"><div class="section-heading"><h2 id="index-title">项目索引</h2><p>项目名称使用源库原名；点击库名访问原仓库，点击图文研究查看我们的整理。</p></div>
  <div class="table-wrap" role="region" aria-label="项目索引表，可横向滚动" tabindex="0"><table>
  <thead><tr><th scope="col">编号</th><th scope="col">源库</th><th scope="col">研究摘要</th><th scope="col">研究成果</th></tr></thead>
@@ -63,7 +64,7 @@
 <td class="summary-cell"><dl><div><dt>定位与能力</dt><dd>自托管图书管理库。接入已有 Calibre 藏书，编目、搜索、网页阅读、下载，并通过 OPDS 或 Kobo 供书；软件不附带书籍。</dd></div><div><dt>使用场景</dt><dd>个人藏书、家庭共读、阅读器供书，以及选题和写作的参考资料管理。</dd></div><div><dt>对我的意义</dt><dd>为现有内容创作项目补上长期资料入口；书籍正文检索和 AI 问答仍需独立建设。</dd></div></dl></td>
 <td class="result-links"><a class="result-image" href="projects/007-calibre-web/assets/overview.svg" aria-label="打开我们生成的 Calibre-Web 引导图"><img src="projects/007-calibre-web/assets/overview.svg" width="180" height="326" alt="Calibre-Web 图书管理库能力、使用方式与个人价值引导图" loading="lazy"></a><a href="projects/007-calibre-web/index.html">查看完整网页 →</a><a href="projects/007-calibre-web/assets/overview.svg">我们生成的引导图 →</a><a href="https://github.com/yydshly/0925_codex_project/blob/main/projects/007-calibre-web/README.md">研究笔记 ↗</a></td></tr><tr><th scope="row" class="project-id">008</th><td class="source-cell"><a class="source-name" href="https://github.com/browser-use/video-use" target="_blank" rel="noopener noreferrer">video-use</a><span class="source-owner">browser-use · 代理视频剪辑</span></td>
 <td class="summary-cell"><dl><div><dt>能力</dt><dd>逐词转写、局部抽帧辅助选段；EDL 驱动粗剪、字幕、基础调色与 MP4 渲染。</dd></div><div><dt>技术原理</dt><dd>Scribe 识别音频和时间戳，代码代理理解内容并生成 EDL，FFmpeg 同步剪辑音画。</dd></div><div><dt>隐藏问题</dt><dd>切点可能让画面跳变；原版转写依赖云 API，中文和 Windows 效果待实测。</dd></div><div><dt>使用场景</dt><dd>口播、访谈、教程和产品讲解等讲话主导的视频。</dd></div><div><dt>对我的意义</dt><dd>有望连接 Voicebox / LiveTalking 的讲述素材与 social-auto-upload 的发布环节；跨项目衔接待验证。</dd></div></dl></td>
-<td class="result-links"><a class="result-image" href="projects/008-video-use/assets/overview.svg" aria-label="打开我们生成的 video-use 一图总览"><img src="projects/008-video-use/assets/overview.svg" width="180" height="257" alt="video-use 的输入输出、工作原理、能力、适用场景与项目价值总览图" loading="lazy"></a><a href="projects/008-video-use/index.html">查看能力地图 →</a><a href="projects/008-video-use/assets/overview.svg">一图总览 →</a><a href="https://github.com/yydshly/0925_codex_project/blob/main/projects/008-video-use/README.md">研究笔记 ↗</a></td></tr></tbody>
+<td class="result-links"><a class="result-image" href="projects/008-video-use/assets/overview.svg" aria-label="打开我们生成的 video-use 一图总览"><img src="projects/008-video-use/assets/overview.svg" width="180" height="257" alt="video-use 的输入输出、工作原理、能力、适用场景与项目价值总览图" loading="lazy"></a><a href="#guide-video-use">下方查看引导图 ↓</a><a href="projects/008-video-use/index.html">查看能力地图 →</a><a href="projects/008-video-use/assets/overview.svg">打开原图 ↗</a><a href="https://github.com/yydshly/0925_codex_project/blob/main/projects/008-video-use/README.md">研究笔记 ↗</a></td></tr></tbody>
  </table></div></section>
  <section id="guide-images" aria-labelledby="guides-title"><div class="section-heading"><p class="eyebrow">001 · 图文导读</p><h2 id="guides-title">理解 Retrieval-based-Voice-Conversion-WebUI</h2><p>先了解它能做什么，再理解如何实现，最后判断运行条件与自己的使用价值。三张引导图分别搭配对应说明，按顺序阅读。</p></div>
  <div class="guide-stories"><article class="guide-story" id="guide-capability" aria-labelledby="title-capability">
@@ -86,6 +87,14 @@
  <p class="takeaway"><strong>对个人 IP 的意义：</strong>内容和平台定位明确后，可把重复上传与排期交给工具；选题、按平台改写、结果核对和反馈迭代仍由你掌握。</p>
  <a class="detail-link" href="projects/002-social-auto-upload/index.html#overview">继续阅读完整能力地图 →</a></div>
  <figure><a href="projects/002-social-auto-upload/overview.svg" target="_blank" rel="noopener" aria-label="打开 social-auto-upload 完整引导图"><img src="projects/002-social-auto-upload/overview.svg" width="1600" height="1100" alt="social-auto-upload 引导图：11 个平台、三类接入路径、登录态复用、根据网页元素发布，以及对个人 IP 的价值。" loading="lazy"></a><figcaption>social-auto-upload 能力与原理引导图。<span>点击图片查看原图 ↗</span></figcaption></figure>
+ </article></section>
+ <section id="guide-video-use" aria-labelledby="video-guide-title"><div class="section-heading"><p class="eyebrow">008 · 一图导读</p><h2 id="video-guide-title">理解 video-use 如何按语音内容剪视频</h2><p>下面直接展示我们制作的总览图，顺着输入、处理过程和输出看清能力与边界。</p></div>
+ <article class="guide-story video-guide" aria-labelledby="video-story-title"><div class="guide-copy"><h3 id="video-story-title">识别音频、生成 EDL，再同步剪辑音画</h3>
+ <p>输入是原视频、剪辑目标及可选创作素材。ElevenLabs Scribe 把音频转成带逐词时间戳的文本；代码代理据此挑选片段、写出 EDL；FFmpeg 按 EDL 处理声音和画面，导出成片、字幕和可追溯的剪辑资料。</p>
+ <p>它适合口播、访谈、教程和产品讲解。时间戳保证音画使用相应的素材区间，但切点处的人物姿态或屏幕画面仍可能跳变，必须预览和修订；原版转写还需要云 API。</p>
+ <p class="takeaway"><strong>对我们的意义：</strong>可尝试连接 Voicebox / LiveTalking 的讲述素材与 social-auto-upload 的发布环节。中文、Windows 和跨项目效果仍待真实素材验证。</p>
+ <a class="detail-link" href="projects/008-video-use/index.html#overview">继续阅读完整能力网页 →</a></div>
+ <figure><a href="projects/008-video-use/assets/overview.svg" target="_blank" rel="noopener noreferrer" aria-label="打开 video-use 一图总览原图"><img src="projects/008-video-use/assets/overview.svg" width="1600" height="2280" alt="video-use 总览图：从原视频和剪辑目标输入，到语音识别、代理生成 EDL、FFmpeg 剪辑，再到成片输出；并说明能力、风险、场景和项目价值。" loading="lazy"></a><figcaption>我们制作的 video-use 一图总览。<span>点击图片查看原图 ↗</span></figcaption></figure>
  </article></section>
  <footer>按收录顺序编号 · 非官方研究整理 · 2026-09-25</footer>
 </main></body></html>

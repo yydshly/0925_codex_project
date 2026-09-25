@@ -136,6 +136,10 @@ HuBERT 等特征模型从输入录音中提取与发音相关的线索；使用�
 
 源库：[browser-use/video-use](https://github.com/browser-use/video-use)。它用 ElevenLabs Scribe 把音频识别成带时间戳的文字；代码代理据此挑选内容、生成 EDL，FFmpeg 再同步剪辑音画并制作字幕和成片。适合产品讲解、访谈、课程等讲话主导的素材。画面在切点处仍可能跳变，原版转写要上传音频到云端；中文效果、Windows 运行和跨项目衔接尚未实测。对当前个人 IP 工作流，它有望连接 Voicebox / LiveTalking 的素材制作与 social-auto-upload 的发布环节。
 
+![video-use 一图总览：能力、音频转写到 EDL 的原理、隐藏问题、使用场景及我们的价值](docs/projects/008-video-use/assets/overview.svg)
+
+图：我们制作的 video-use 总览图。点击图片可查看原始 SVG。
+
 [查看在线能力网页](https://yydshly.github.io/0925_codex_project/projects/008-video-use/) · [打开我们生成的一图总览](docs/projects/008-video-use/assets/overview.svg) · [阅读完整研究笔记](projects/008-video-use/README.md) · [查看能力清单](projects/008-video-use/docs/capabilities.md) · [查看技术原理](projects/008-video-use/docs/architecture.md)
 
 ## 添加项目
