@@ -1,6 +1,6 @@
-# GitHub 项目研究
+# 项目与 AI 产品研究
 
-这里按顺序记录值得深入研究的 GitHub 项目。每个子项目保留原仓库链接、简要介绍、关键发现、图片说明和实践记录；有可展示的静态网页时，也会附上演示入口。
+这里按顺序记录值得深入研究的开源项目与 AI 产品目录。每个子项目保留原仓库或来源网站、简要介绍、关键发现和实践记录；有可展示的静态网页时，也会附上演示入口。
 
 [访问在线研究索引](https://yydshly.github.io/0925_codex_project/)
 
@@ -8,7 +8,7 @@
 
 编号按收录顺序递增，并与 projects/ 中的目录名一致。已有编号不复用。
 
-| 编号 | 源库（关联原仓库） | 研究摘要 | 阅读入口 |
+| 编号 | 来源（原仓库或网站） | 研究摘要 | 阅读入口 |
 | :--: | --- | --- | --- |
 | 001 | [Retrieval-based-Voice-Conversion-WebUI](https://github.com/RVC-Project/Retrieval-based-Voice-Conversion-WebUI) | **能力：** 已有语音 / 歌声换声、实时变声与声线训练。**原理：** 提取发音与音高，由目标模型重建波形，并可用检索辅助。**对我的意义：** 可复用为换声模块；先理解方案，实际效果按需验证。 | [完整研究](projects/001-rvc-voice-conversion/README.md) · [查看网页](https://yydshly.github.io/0925_codex_project/projects/001-rvc-voice-conversion/) |
 | 002 | [social-auto-upload](https://github.com/dreammis/social-auto-upload) | **能力：** 11 个平台列有视频上传能力，抖音、小红书、快手还支持图文。**原理：** 用户先登录并保存状态；9 个平台由 Patchright / Playwright 根据网页元素操作创作者后台，B站委托 biliup，TikTok 为旧示例。**对我的意义：** 内容做好后可减少个人 IP 多平台重复上传与排期。 | [完整研究](projects/002-social-auto-upload/README.md) · [在线网页](https://yydshly.github.io/0925_codex_project/projects/002-social-auto-upload/) · [一图总览](https://yydshly.github.io/0925_codex_project/projects/002-social-auto-upload/overview.svg) |
@@ -22,6 +22,7 @@
 | 010 | [Jellyfish](https://github.com/Forget-C/Jellyfish) | **定位：** 以分章剧本为入口的 AI 短剧生产工作台。**能力：** 剧本拆镜头与要素提取、导演分镜提示、人物和场景资产复用、人工确认、图片与视频生成任务追踪。**出口：** 分镜与提示词、图片、单镜头视频及可追溯素材。**对我的意义：** 可补上系列内容从剧本到镜头素材的生产环节；小说改编与完整成片仍需另行处理或实测。 | [完整研究](projects/010-jellyfish/README.md) · [在线导读](https://yydshly.github.io/0925_codex_project/projects/010-jellyfish/) · [完整引导图](https://yydshly.github.io/0925_codex_project/projects/010-jellyfish/assets/overview.svg) |
 | 011 | [RD-Agent](https://github.com/microsoft/RD-Agent) | **能力：** 把论文或研报推进到初版代码；在量化、数据科学和微调任务中反复提出方案、运行实验并比较结果。**原理：** 外部大模型多次理解、假设和写代码，RD-Agent 调度执行器、评价器与历史反馈形成循环。**对我的意义：** 先用于理解方法；等语音或 3D 任务有固定数据、基线和指标，再回顾是否值得小规模试用。 | [完整研究](projects/011-rd-agent/README.md) · [能力网页](https://yydshly.github.io/0925_codex_project/projects/011-rd-agent/) · [完整导图](https://yydshly.github.io/0925_codex_project/projects/011-rd-agent/rd-agent-guide.svg) |
 | 012 | [MoneyPrinterTurbo](https://github.com/harry0703/MoneyPrinterTurbo) | **能力：** 输入主题、脚本或自有素材，自动完成文案、画面、配音、字幕、配乐和短视频合成。**原理：** 大模型生成脚本与素材线索；画面可用现成视频、静态图片加动画，或外部模型生成的短视频片段，再由程序剪辑合成。**场景：** 知识科普、品牌内容初稿、系列短视频。**对我的意义：** 复用成片流水线验证自有产品；精确的物理图解需另加规则与图形动画层。 | [完整研究](projects/012-moneyprinterturbo/README.md) · [在线网页与真实案例](https://yydshly.github.io/0925_codex_project/projects/012-moneyprinterturbo/) · [完整引导图](docs/projects/012-moneyprinterturbo/assets/capability-map.png) |
+| 013 | [Toolify](https://www.toolify.ai/) | **目录能力：** Toolify 通过类别、榜单和产品页帮助发现 AI 工具；实际生成、识别和执行能力由所收录产品提供。**产品方向：** 本次快照的 22 个大类、459 个细分类可按对话与知识、多媒体创作、开发与流程、增长与商业、研究与识别、生活与专业场景六条方向理解，并有 57 款精选案例。**对我的意义：** 为现有语音、数字人、视频、知识与智能体项目定位候选能力和缺口，用同题测试决定如何接入。 | [研究笔记](projects/013-toolify-ai-atlas/README.md) · [整体引导图](https://yydshly.github.io/0925_codex_project/projects/013-toolify-ai-atlas/overview.html) · [能力网页](https://yydshly.github.io/0925_codex_project/projects/013-toolify-ai-atlas/) |
 
 ## 001 · Retrieval-based-Voice-Conversion-WebUI 图文导读
 

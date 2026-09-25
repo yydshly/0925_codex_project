@@ -1,0 +1,173 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1600" height="2300" viewBox="0 0 1600 2300" role="img" aria-labelledby="title desc">
+<title id="title">Toolify AI 产品能力整体引导图</title>
+<desc id="desc">把 Toolify 分类页快照中可见的 22 个大类和 459 个细分类归入六个学习方向，说明输入、AI 处理、交付、场景，以及与已有内容生产、实时数字人和产品验证项目的关系。57 款产品为精选案例。</desc>
+<rect width="1600" height="2300" fill="#f7f5ef"/>
+
+<rect x="0" y="0" width="1600" height="206" rx="0" fill="#193e36"/>
+<text x="70" y="50" fill="#e8ba6c" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="19" font-weight="700">013 / TOOLIFY · AI PRODUCT ATLAS</text>
+<text x="70" y="112" fill="#fffdf3" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="55" font-weight="800">AI 产品能力整体引导图</text>
+<text x="70" y="159" fill="#d6e7dc" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="24" font-weight="400">目录负责发现产品；具体能力由所收录产品实现。用输入 → 处理 → 交付 → 场景理解方向。</text>
+<text x="1270" y="70" fill="#f2c371" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="26" font-weight="800">22 大类</text>
+<text x="1270" y="107" fill="#f2c371" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="26" font-weight="800">459 细分类</text>
+<text x="1270" y="144" fill="#f2c371" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="26" font-weight="800">57 款案例</text>
+<text x="70" y="250" fill="#193e36" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="27" font-weight="800">01 / 一条任务链，看懂 AI 能力</text>
+<rect x="70" y="277" width="343" height="184" rx="13" fill="#fffdf7" stroke="#cadbce" stroke-width="1"/>
+<text x="93" y="314" fill="#205344" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="24" font-weight="800">01 / 输入材料</text>
+<text x="93" y="348" fill="#3f6450" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="19" font-weight="500">问题 · 文档 · 数据</text>
+<text x="93" y="376" fill="#3f6450" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="19" font-weight="500">图片 · 录音 · 视频</text>
+<text x="93" y="404" fill="#3f6450" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="19" font-weight="500">参考图 · 业务规则</text>
+<line x1="93" y1="421" x2="390" y2="421" stroke="#d9e4d7" stroke-width="1"/>
+<text x="93" y="447" fill="#667d6d" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="16" font-weight="400">确认素材和使用授权</text>
+<text x="427" y="382" fill="#b9744e" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="27" font-weight="800" text-anchor="middle">→</text>
+<rect x="447" y="277" width="343" height="184" rx="13" fill="#e7eee4" stroke="#cadbce" stroke-width="1"/>
+<text x="470" y="314" fill="#205344" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="24" font-weight="800">02 / AI 处理动作</text>
+<text x="470" y="348" fill="#3f6450" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="19" font-weight="500">生成 · 编辑 · 转换</text>
+<text x="470" y="376" fill="#3f6450" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="19" font-weight="500">识别 · 抽取 · 检索</text>
+<text x="470" y="404" fill="#3f6450" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="19" font-weight="500">分析 · 预测 · 执行</text>
+<line x1="470" y1="421" x2="767" y2="421" stroke="#d9e4d7" stroke-width="1"/>
+<text x="470" y="447" fill="#667d6d" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="16" font-weight="400">区分产品真正做的事</text>
+<text x="804" y="382" fill="#b9744e" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="27" font-weight="800" text-anchor="middle">→</text>
+<rect x="824" y="277" width="343" height="184" rx="13" fill="#fffdf7" stroke="#cadbce" stroke-width="1"/>
+<text x="847" y="314" fill="#205344" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="24" font-weight="800">03 / 可交付结果</text>
+<text x="847" y="348" fill="#3f6450" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="19" font-weight="500">回答 · 文稿 · 代码</text>
+<text x="847" y="376" fill="#3f6450" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="19" font-weight="500">图像 · 3D · 音视频</text>
+<text x="847" y="404" fill="#3f6450" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="19" font-weight="500">字段 · 报告 · 已执行动作</text>
+<line x1="847" y1="421" x2="1144" y2="421" stroke="#d9e4d7" stroke-width="1"/>
+<text x="847" y="447" fill="#667d6d" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="16" font-weight="400">检查能否编辑和复用</text>
+<text x="1181" y="382" fill="#b9744e" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="27" font-weight="800" text-anchor="middle">→</text>
+<rect x="1201" y="277" width="343" height="184" rx="13" fill="#fffdf7" stroke="#cadbce" stroke-width="1"/>
+<text x="1224" y="314" fill="#205344" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="24" font-weight="800">04 / 应用场景</text>
+<text x="1224" y="348" fill="#3f6450" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="19" font-weight="500">知识 · 内容创作</text>
+<text x="1224" y="376" fill="#3f6450" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="19" font-weight="500">软件 · 企业流程</text>
+<text x="1224" y="404" fill="#3f6450" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="19" font-weight="500">研究 · 生活 · 专业领域</text>
+<line x1="1224" y1="421" x2="1521" y2="421" stroke="#d9e4d7" stroke-width="1"/>
+<text x="1224" y="447" fill="#667d6d" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="16" font-weight="400">用实际任务制定验收标准</text>
+<text x="70" y="518" fill="#193e36" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="31" font-weight="800">02 / 六条方向，覆盖全部 22 个大类</text>
+<text x="70" y="551" fill="#627367" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="20" font-weight="400">下列 459 是分类页快照中可见的细分类入口数；一个产品可以跨多个标签。</text>
+<rect x="70" y="578" width="720" height="331" rx="13" fill="#fffdf7" stroke="#d2dfd1" stroke-width="1"/>
+<text x="95" y="616" fill="#1d4c3d" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="30" font-weight="800">01 / 对话与知识工作</text>
+<text x="760" y="616" fill="#a46145" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="18" font-weight="700" text-anchor="end">4 大类 · 126 细分</text>
+<text x="95" y="654" fill="#526a5a" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="19" font-weight="400">把问题与资料变成答案、文稿、演示和知识。</text>
+<line x1="95" y1="674" x2="765" y2="674" stroke="#e3ebe0" stroke-width="1"/>
+<text x="99" y="704" fill="#294e40" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="21" font-weight="500">对话与虚拟陪伴</text>
+<text x="745" y="704" fill="#5b8466" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="19" font-weight="700" text-anchor="end">9</text>
+<text x="99" y="738" fill="#294e40" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="21" font-weight="500">办公与生产力</text>
+<text x="745" y="738" fill="#5b8466" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="19" font-weight="700" text-anchor="end">38</text>
+<text x="99" y="772" fill="#294e40" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="21" font-weight="500">写作与编辑</text>
+<text x="745" y="772" fill="#5b8466" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="19" font-weight="700" text-anchor="end">55</text>
+<text x="99" y="806" fill="#294e40" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="21" font-weight="500">学习辅助与翻译</text>
+<text x="745" y="806" fill="#5b8466" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="19" font-weight="700" text-anchor="end">24</text>
+<line x1="95" y1="867" x2="765" y2="867" stroke="#e3ebe0" stroke-width="1"/>
+<text x="95" y="894" fill="#65766b" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="17" font-weight="400">产品样本  ChatGPT · Gamma · GitBook · QuillBot</text>
+<rect x="810" y="578" width="720" height="331" rx="13" fill="#fffdf7" stroke="#d2dfd1" stroke-width="1"/>
+<text x="835" y="616" fill="#1d4c3d" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="30" font-weight="800">02 / 多媒体创作</text>
+<text x="1500" y="616" fill="#a46145" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="18" font-weight="700" text-anchor="end">5 大类 · 169 细分</text>
+<text x="835" y="654" fill="#526a5a" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="19" font-weight="400">从文字、参考图和素材生成图像、3D、声音与视频。</text>
+<line x1="835" y1="674" x2="1505" y2="674" stroke="#e3ebe0" stroke-width="1"/>
+<text x="839" y="704" fill="#294e40" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="21" font-weight="500">艺术与创意设计</text>
+<text x="1485" y="704" fill="#5b8466" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="19" font-weight="700" text-anchor="end">54</text>
+<text x="839" y="738" fill="#294e40" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="21" font-weight="500">图像生成与编辑</text>
+<text x="1485" y="738" fill="#5b8466" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="19" font-weight="700" text-anchor="end">43</text>
+<text x="839" y="772" fill="#294e40" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="21" font-weight="500">视频与动画</text>
+<text x="1485" y="772" fill="#5b8466" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="19" font-weight="700" text-anchor="end">29</text>
+<text x="839" y="806" fill="#294e40" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="21" font-weight="500">语音生成与转换</text>
+<text x="1485" y="806" fill="#5b8466" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="19" font-weight="700" text-anchor="end">20</text>
+<text x="839" y="840" fill="#294e40" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="21" font-weight="500">音乐与音频</text>
+<text x="1485" y="840" fill="#5b8466" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="19" font-weight="700" text-anchor="end">23</text>
+<line x1="835" y1="867" x2="1505" y2="867" stroke="#e3ebe0" stroke-width="1"/>
+<text x="835" y="894" fill="#65766b" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="17" font-weight="400">产品样本  Meshy · Tripo AI · ElevenLabs · Suno</text>
+<rect x="70" y="929" width="720" height="331" rx="13" fill="#fffdf7" stroke="#d2dfd1" stroke-width="1"/>
+<text x="95" y="967" fill="#1d4c3d" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="30" font-weight="800">03 / 开发与流程</text>
+<text x="760" y="967" fill="#a46145" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="18" font-weight="700" text-anchor="end">2 大类 · 25 细分</text>
+<text x="95" y="1005" fill="#526a5a" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="19" font-weight="400">把需求变成代码、应用、智能体和业务动作。</text>
+<line x1="95" y1="1025" x2="765" y2="1025" stroke="#e3ebe0" stroke-width="1"/>
+<text x="99" y="1055" fill="#294e40" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="21" font-weight="500">编程与开发</text>
+<text x="745" y="1055" fill="#5b8466" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="19" font-weight="700" text-anchor="end">15</text>
+<text x="99" y="1089" fill="#294e40" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="21" font-weight="500">企业管理</text>
+<text x="745" y="1089" fill="#5b8466" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="19" font-weight="700" text-anchor="end">10</text>
+<line x1="95" y1="1218" x2="765" y2="1218" stroke="#e3ebe0" stroke-width="1"/>
+<text x="95" y="1245" fill="#65766b" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="17" font-weight="400">产品样本  Replit · Zapier · Coze</text>
+<rect x="810" y="929" width="720" height="331" rx="13" fill="#fffdf7" stroke="#d2dfd1" stroke-width="1"/>
+<text x="835" y="967" fill="#1d4c3d" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="30" font-weight="800">04 / 增长与商业</text>
+<text x="1500" y="967" fill="#a46145" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="18" font-weight="700" text-anchor="end">3 大类 · 58 细分</text>
+<text x="835" y="1005" fill="#526a5a" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="19" font-weight="400">从品牌、广告和社媒触达到获客与经营。</text>
+<line x1="835" y1="1025" x2="1505" y2="1025" stroke="#e3ebe0" stroke-width="1"/>
+<text x="839" y="1055" fill="#294e40" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="21" font-weight="500">商业营销与广告</text>
+<text x="1485" y="1055" fill="#5b8466" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="19" font-weight="700" text-anchor="end">24</text>
+<text x="839" y="1089" fill="#294e40" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="21" font-weight="500">社交媒体</text>
+<text x="1485" y="1089" fill="#5b8466" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="19" font-weight="700" text-anchor="end">25</text>
+<text x="839" y="1123" fill="#294e40" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="21" font-weight="500">商业研究</text>
+<text x="1485" y="1123" fill="#5b8466" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="19" font-weight="700" text-anchor="end">9</text>
+<line x1="835" y1="1218" x2="1505" y2="1218" stroke="#e3ebe0" stroke-width="1"/>
+<text x="835" y="1245" fill="#65766b" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="17" font-weight="400">产品样本  Creads · Brevo · Beacons · Namelix</text>
+<rect x="70" y="1280" width="720" height="331" rx="13" fill="#fffdf7" stroke="#d2dfd1" stroke-width="1"/>
+<text x="95" y="1318" fill="#1d4c3d" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="30" font-weight="800">05 / 研究与识别</text>
+<text x="760" y="1318" fill="#a46145" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="18" font-weight="700" text-anchor="end">3 大类 · 27 细分</text>
+<text x="95" y="1356" fill="#526a5a" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="19" font-weight="400">从论文、数据和图像中找证据、识别与分析。</text>
+<line x1="95" y1="1376" x2="765" y2="1376" stroke="#e3ebe0" stroke-width="1"/>
+<text x="99" y="1406" fill="#294e40" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="21" font-weight="500">研究与数据分析</text>
+<text x="745" y="1406" fill="#5b8466" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="19" font-weight="700" text-anchor="end">8</text>
+<text x="99" y="1440" fill="#294e40" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="21" font-weight="500">图像分析</text>
+<text x="745" y="1440" fill="#5b8466" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="19" font-weight="700" text-anchor="end">8</text>
+<text x="99" y="1474" fill="#294e40" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="21" font-weight="500">AI 检测与反检测</text>
+<text x="745" y="1474" fill="#5b8466" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="19" font-weight="700" text-anchor="end">11</text>
+<line x1="95" y1="1569" x2="765" y2="1569" stroke="#e3ebe0" stroke-width="1"/>
+<text x="95" y="1596" fill="#65766b" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="17" font-weight="400">产品样本  Elicit · Semantic Scholar · ZeroGPT</text>
+<rect x="810" y="1280" width="720" height="331" rx="13" fill="#fffdf7" stroke="#d2dfd1" stroke-width="1"/>
+<text x="835" y="1318" fill="#1d4c3d" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="30" font-weight="800">06 / 生活与专业场景</text>
+<text x="1500" y="1318" fill="#a46145" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="18" font-weight="700" text-anchor="end">5 大类 · 54 细分</text>
+<text x="835" y="1356" fill="#526a5a" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="19" font-weight="400">把通用能力放进旅行、健康、法律、空间等任务。</text>
+<line x1="835" y1="1376" x2="1505" y2="1376" stroke="#e3ebe0" stroke-width="1"/>
+<text x="839" y="1406" fill="#294e40" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="21" font-weight="500">日常生活</text>
+<text x="1485" y="1406" fill="#5b8466" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="19" font-weight="700" text-anchor="end">20</text>
+<text x="839" y="1440" fill="#294e40" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="21" font-weight="500">医疗与健康</text>
+<text x="1485" y="1440" fill="#5b8466" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="19" font-weight="700" text-anchor="end">6</text>
+<text x="839" y="1474" fill="#294e40" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="21" font-weight="500">法律与财务</text>
+<text x="1485" y="1474" fill="#5b8466" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="19" font-weight="700" text-anchor="end">11</text>
+<text x="839" y="1508" fill="#294e40" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="21" font-weight="500">室内与建筑设计</text>
+<text x="1485" y="1508" fill="#5b8466" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="19" font-weight="700" text-anchor="end">6</text>
+<text x="839" y="1542" fill="#294e40" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="21" font-weight="500">其他与跨类工具</text>
+<text x="1485" y="1542" fill="#5b8466" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="19" font-weight="700" text-anchor="end">11</text>
+<line x1="835" y1="1569" x2="1505" y2="1569" stroke="#e3ebe0" stroke-width="1"/>
+<text x="835" y="1596" fill="#65766b" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="17" font-weight="400">产品样本  Trip Planner AI · Heidi Health · Planner 5D</text>
+<text x="70" y="1682" fill="#193e36" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="31" font-weight="800">03 / 对你的意义：把类别接成可验证的任务链</text>
+<rect x="70" y="1710" width="473" height="266" rx="12" fill="#e7eee4" stroke="#c8dbc9" stroke-width="1"/>
+<text x="92" y="1750" fill="#1e503f" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="26" font-weight="800">内容生产到发布</text>
+<text x="93" y="1790" fill="#3d614b" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="18" font-weight="400">01  资料与主题 · 007</text>
+<text x="93" y="1820" fill="#3d614b" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="18" font-weight="400">02  脚本与分镜 · 010/012</text>
+<text x="93" y="1850" fill="#3d614b" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="18" font-weight="400">03  声音/3D/画面 · 001/003</text>
+<text x="93" y="1880" fill="#3d614b" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="18" font-weight="400">04  视频成片 · 004/008</text>
+<text x="93" y="1910" fill="#3d614b" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="18" font-weight="400">05  多平台发布 · 002</text>
+<line x1="92" y1="1939" x2="521" y2="1939" stroke="#c9d9c8" stroke-width="1"/>
+<text x="92" y="1964" fill="#a46145" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="17" font-weight="700">机会：补齐可编辑 3D 资产与效果复盘。</text>
+<rect x="563" y="1710" width="473" height="266" rx="12" fill="#e7eee4" stroke="#c8dbc9" stroke-width="1"/>
+<text x="585" y="1750" fill="#1e503f" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="26" font-weight="800">实时语音与数字人</text>
+<text x="586" y="1790" fill="#3d614b" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="18" font-weight="400">01  实时转写 · 005</text>
+<text x="586" y="1820" fill="#3d614b" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="18" font-weight="400">02  知识/工具调度 · 006/007</text>
+<text x="586" y="1850" fill="#3d614b" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="18" font-weight="400">03  语音回应 · 003/001</text>
+<text x="586" y="1880" fill="#3d614b" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="18" font-weight="400">04  数字人画面 · 004</text>
+<line x1="585" y1="1939" x2="1014" y2="1939" stroke="#c9d9c8" stroke-width="1"/>
+<text x="585" y="1964" fill="#a46145" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="17" font-weight="700">机会：先验证最小交互闭环与延迟。</text>
+<rect x="1056" y="1710" width="473" height="266" rx="12" fill="#e7eee4" stroke="#c8dbc9" stroke-width="1"/>
+<text x="1078" y="1750" fill="#1e503f" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="26" font-weight="800">新方向的产品验证</text>
+<text x="1079" y="1790" fill="#3d614b" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="18" font-weight="400">01  定义任务与交付</text>
+<text x="1079" y="1820" fill="#3d614b" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="18" font-weight="400">02  同题比较 2–3 个产品</text>
+<text x="1079" y="1850" fill="#3d614b" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="18" font-weight="400">03  接入应用与工作流</text>
+<text x="1079" y="1880" fill="#3d614b" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="18" font-weight="400">04  固定样本复测 · 011/009</text>
+<line x1="1078" y1="1939" x2="1507" y2="1939" stroke="#c9d9c8" stroke-width="1"/>
+<text x="1078" y="1964" fill="#a46145" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="17" font-weight="700">机会：从工具清单走向可衡量的交付。</text>
+<text x="70" y="2035" fill="#193e36" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="31" font-weight="800">04 / 用这张图做三个判断</text>
+<rect x="70" y="2063" width="473" height="154" rx="12" fill="#fffdf7" stroke="#d2dfd1" stroke-width="1"/>
+<text x="93" y="2100" fill="#1e503f" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="25" font-weight="800">01 / 看全机会</text>
+<text x="93" y="2138" fill="#5c7062" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="18" font-weight="400">22 大类 / 459 细分类，让 3D、智能体、知识库、</text>
+<text x="93" y="2166" fill="#5c7062" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="18" font-weight="400">文档抽取等方向不再被首页标签遮住。</text>
+<rect x="563" y="2063" width="473" height="154" rx="12" fill="#fffdf7" stroke="#d2dfd1" stroke-width="1"/>
+<text x="586" y="2100" fill="#1e503f" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="25" font-weight="800">02 / 找到连接</text>
+<text x="586" y="2138" fill="#5c7062" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="18" font-weight="400">把语音、视频、知识、发布和研发项目放回</text>
+<text x="586" y="2166" fill="#5c7062" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="18" font-weight="400">任务链，辨认已具备和仍缺的环节。</text>
+<rect x="1056" y="2063" width="473" height="154" rx="12" fill="#fffdf7" stroke="#d2dfd1" stroke-width="1"/>
+<text x="1079" y="2100" fill="#1e503f" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="25" font-weight="800">03 / 同题选型</text>
+<text x="1079" y="2138" fill="#5c7062" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="18" font-weight="400">用真实材料比较质量、可编辑性、成本、</text>
+<text x="1079" y="2166" fill="#5c7062" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="18" font-weight="400">接口、授权和人工复核工作量。</text>
+<text x="70" y="2261" fill="#65786b" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="18" font-weight="400">来源：Toolify 完整分类页 · 2026-09-26 查阅快照。六个学习方向、任务链及中文解释为本站归纳；57 款产品为精选案例，非全库或实测排名。</text>
+</svg>
